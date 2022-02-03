@@ -1,0 +1,4 @@
+Your group should have the following documentation items in this folder:
+ * Class Diagram - covers general architecture of the system (excluding .fxml files)
+ * Use Case Diagram - high level view with all use cases and actors for the system
+ * Use Case Scenarios - one use case scenario per document, title of document should be same as the use case scenario (e.g., Login).
