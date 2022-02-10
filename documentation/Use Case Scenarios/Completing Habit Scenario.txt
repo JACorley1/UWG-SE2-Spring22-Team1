@@ -1,0 +1,10 @@
+Context: The user has loaded the application and has added a scenario
+Primary Flow:
+1.	The user selects a habit
+2.	The user selects the circle next to the habit
+3.	The habit is marked as complete 
+4.	The habit is sent to the bottom of the list with the other completed habits.
+5.	The user receives coins for successfully completing the task.
+6.	The coin amount increases by the coins gained.
+Alternative Flow(s):
+	None
