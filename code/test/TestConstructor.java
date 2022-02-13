@@ -14,7 +14,7 @@ class TestConstructor {
 		Habit habit = new Habit(testString, Frequency.DAILY);
 		
 		assertAll(
-			()->{assertEquals(false, habit.getCompletionStatus(), "checking completion status");},
+			()->{assertEquals(false, habit.isComplete(), "checking completion status");},
 			()->{assertEquals(Frequency.DAILY, habit.getFrequency(), "checking completion frequency");},
 			()->{assertEquals(testString, habit.getText(), "checking the habits text");}
 		);

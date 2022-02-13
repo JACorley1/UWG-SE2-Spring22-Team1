@@ -9,17 +9,17 @@ public class Habit {
 	public static final String NULL_TEXT_ERROR = "text for the habit cannot be null";
 	public static final String EMPTY_TEXT_ERROR = "text for the habit cannot be empty";
 	private String text;
-	private boolean isComplete;
+	private boolean complete;
 	private Frequency completionFrequency;
 
 	/** Creates a new habit
 	 * @precondition: string != null && string != string.isEmpty()
-	 * @postcondition: this.getText() = string, this.getCompletionStatus() = false, this.getFrequency() = frequency;
+	 * @postcondition: this.getText() = string, this.isComplete() = false, this.getFrequency() = frequency;
 	 */
 	public Habit (String string, Frequency frequency) {
 		this.checkString(string);
 		this.text = string;
-		this.isComplete = false;
+		this.complete = false;
 		this.completionFrequency = frequency;
 	}
 
@@ -38,8 +38,8 @@ public class Habit {
 	 * @postcondition: none
 	 * @return: the completion status of the habit
 	 */
-	public boolean getCompletionStatus() {
-		return this.isComplete;
+	public boolean isComplete() {
+		return this.complete;
 	}
 
 	/** gets the completion frequency of the habit
@@ -70,14 +70,10 @@ public class Habit {
 
 	/** toggles the completion status of the habit
 	 * @precondition: none
-	 * @postcondition: this.getIsComplete
+	 * @postcondition: this.isComplete() == !this.isComplete()@pre
 	 */
 	public void toggleCompletionStatus() {
-		if (this.isComplete) {
-			this.isComplete = false;
-			return;
-		} 
-		this.isComplete = true;
+		this.complete = !this.complete;
 	}
 
 	private void checkString(String string) {

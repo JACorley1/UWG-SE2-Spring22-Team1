@@ -21,11 +21,11 @@ class TestSetters {
 	void testToggleCompletionStatusWhenFalse() {
 		Habit habit = new Habit("Hello!", Frequency.DAILY);
 
-        	habit.toggleCompletionStatus();
-        	assertEquals(true, habit.getCompletionStatus(), "Checking that the completion status was changed to true");
+        	habit.isComplete();
+        	assertEquals(true, habit.isComplete(), "Checking that the completion status was changed to true");
         
-        	habit.toggleCompletionStatus();
-        	assertEquals(false, habit.getCompletionStatus(), "Checking that the completion status was changed to false");
+        	habit.isComplete();
+        	assertEquals(false, habit.isComplete(), "Checking that the completion status was changed to false");
 	}
 
     
