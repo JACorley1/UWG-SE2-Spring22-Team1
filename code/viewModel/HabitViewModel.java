@@ -14,7 +14,7 @@ import javafx.collections.FXCollections;
  * @version Spring 2022
  */
 public class HabitViewModel {
-    private ObjectProperty<Frequency> frequencyProperty;
+  private ObjectProperty<Frequency> frequencyProperty;
 	private ObjectProperty<Habit> selectedHabitProperty;
 	private ListProperty<Habit> habitListProperty;
 	private StringProperty habitNameProperty;
@@ -60,7 +60,7 @@ public class HabitViewModel {
 		}
 		this.selectedHabitProperty.getValue().toggleCompletionStatus();
 	}
-
+  
 	/** the frequency property
 	 * @precondition none
 	 * @postcondition none
