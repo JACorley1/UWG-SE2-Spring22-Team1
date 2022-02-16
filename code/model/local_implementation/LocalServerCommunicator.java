@@ -8,6 +8,8 @@ import code.model.ServerCommunicator;
 import code.model.SudokuPuzzle;
 
 /** Stores server information locally, allowing for easy testing without the need of a live server.
+ *  All instances access the same static information, as though communicating with the same server.
+ *  To clear the information for unit testing, please use LocalServerCommunicator::reset().
  * 
  * @author	Team 1
  * @version Spring 2022
@@ -25,6 +27,12 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static SudokuPuzzle PUZZLE = null;
     private static List<Habit> HABITS = new ArrayList<>();
 
+    public static void reset() {
+        COINS = 0;
+        PUZZLE = null;
+        HABITS.clear();
+    }
+    
 	@Override
 	public boolean validateLogin(String username, String password) {
         if (username == null) {
@@ -124,5 +132,4 @@ public class LocalServerCommunicator extends ServerCommunicator {
         COINS = amount;
 		return true;
 	}
-    
 }
