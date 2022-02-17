@@ -1,11 +1,11 @@
-package code.test.viewmodel;
+package code.test.ViewModel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import code.model.Habit;
-import code.viewmodel.HabitViewModel;
+import code.viewModel.HabitViewModel;
 import code.model.Frequency;
 
 class TestSetHabitCompletion {

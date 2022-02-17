@@ -1,4 +1,4 @@
-package code.test.model.habit;
+package code.test.Model.Habit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
