@@ -20,7 +20,6 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static String NULL_PASSWORD_ERROR = "password must not be null";
     private static String BLANK_PASSWORD_ERROR = "password must not be blank";
     private static String NULL_HABIT_ERROR = "habit must not be null";
-    private static String NULL_PUZZLE_ERROR = "habit must not be null";
     private static String NEGATIVE_COIN_AMOUNT = "coins must not be negative";
 
     private static int COINS = 0;
@@ -101,6 +100,8 @@ public class LocalServerCommunicator extends ServerCommunicator {
             return false;
         }
 
+        //Ensures that we edit the habit stored in the "server" when the "server" and the client 
+        //have different objects
         int index = HABITS.indexOf(habit);
         Habit storedHabit = HABITS.get(index);
 
@@ -114,12 +115,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
 	@Override
 	public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        if (puzzle == null) {
-            throw new IllegalArgumentException(NULL_PUZZLE_ERROR);
-        }
-
         PUZZLE = puzzle;
-
 		return true;
 	}
 
