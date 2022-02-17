@@ -1,3 +1,4 @@
+package code.model.sudoku;
 /**
  * The soduku move class
  *

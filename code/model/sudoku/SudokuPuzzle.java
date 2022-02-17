@@ -1,3 +1,5 @@
+package code.model.sudoku;
+
 import java.util.Stack;
 import code.model.*;
 
