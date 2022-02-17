@@ -1,39 +1,39 @@
-package code.test.ViewModel;
+package code.test.viewmodel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import edu.westga.cs3212.habit_mode.model.Habit;
-import edu.westga.cs3212.habit_mode.model.Frequency;
-import code.viewModel.HabitViewModel;
+import code.model.Habit;
+import code.viewmodel.HabitViewModel;
+import code.model.Frequency;
 
 class TestSetHabitCompletion {
 	@Test
 	void testSetHabitCompletionWithAValueSelected() {
         HabitViewModel viewModel = new HabitViewModel();
-		String testString = "Hello!"
-        this.viewModel.habitNameProperty().set(testString);
-		this.viewModel.frequencyProperty().set(Frequency.WEEKLY)
-        this.viewModel.addHabit();
-        this.viewModel.selectedHabitProperty().set(this.viewModel.habitListProperty().getValue().get(0);)
+		String testString = "Hello!";
+        viewModel.habitNameProperty().set(testString);
+		viewModel.frequencyProperty().set(Frequency.WEEKLY);
+        viewModel.addHabit();
+        viewModel.selectedHabitProperty().set(viewModel.habitListProperty().getValue().get(0));
 
-        this.viewModel.setHabitCompletion();
+        viewModel.setHabitCompletion();
 
-        assertEquals(true, this.viewModel.selectedHabitProperty.isComplete(), "Checking that the completion state of the selected habit was changed");
+        assertEquals(true, viewModel.selectedHabitProperty().getValue().isComplete(), "Checking that the completion state of the selected habit was changed");
 	}
 
     @Test
 	void testSetHabitCompletionWithNoValueSelected() {
 		HabitViewModel viewModel = new HabitViewModel();
-		this.viewModel.frequencyProperty().set(Frequency.MONTHLY);
-        this.viewModel.habitNameProperty().set("Test");
-        this.viewModel.addHabit();
+		viewModel.frequencyProperty().set(Frequency.MONTHLY);
+        viewModel.habitNameProperty().set("Test");
+        viewModel.addHabit();
 
 		assertThrows(
 						IllegalArgumentException.class, 
 						()->{
-							this.viewModel.setHabitCompletion();
+							viewModel.setHabitCompletion();
 						}
 					);
 	}
@@ -42,12 +42,12 @@ class TestSetHabitCompletion {
 	void testSetHabitCompletionWithEmptyCollection() {
 		HabitViewModel viewModel = new HabitViewModel();
         Habit selectedHabit = new Habit("TestHabit", Frequency.DAILY);
-        this.viewModel.selectedHabitProperty().set(selectedHabit);
+        viewModel.selectedHabitProperty().set(selectedHabit);
          
 		assertThrows(
 						IllegalArgumentException.class, 
 						()->{
-							this.viewModel.setHabitCompletion();
+							viewModel.setHabitCompletion();
 						}
 					);
 	}
