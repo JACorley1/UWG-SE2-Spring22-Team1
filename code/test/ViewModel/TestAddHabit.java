@@ -1,11 +1,11 @@
-package code.test.viewmodel;
+package code.test.ViewModel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import code.model.Frequency;
-import code.viewmodel.HabitViewModel;
+import code.viewModel.HabitViewModel;
 
 class TestAddHabit {
 	@Test
@@ -26,11 +26,11 @@ class TestAddHabit {
 		viewModel.habitNameProperty().set(null);
 		viewModel.frequencyProperty().set(Frequency.MONTHLY);
 		assertThrows(
-						IllegalArgumentException.class, 
-						()->{
-							viewModel.addHabit();
-						}
-					);
+			IllegalArgumentException.class, 
+			()->{
+				viewModel.addHabit();
+			}
+		);
 	}
 
 	@Test
@@ -39,10 +39,10 @@ class TestAddHabit {
 		viewModel.habitNameProperty().set("");
 		viewModel.frequencyProperty().set(Frequency.MONTHLY);
 		assertThrows(
-						IllegalArgumentException.class, 
-						()->{
-							viewModel.addHabit();
-						}
-					);
+			IllegalArgumentException.class, 
+			()->{
+				viewModel.addHabit();
+			}
+		);
 	}
 }

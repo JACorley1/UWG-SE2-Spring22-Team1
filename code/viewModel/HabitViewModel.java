@@ -1,4 +1,4 @@
-package code.viewmodel;
+package code.viewModel;
 
 import code.model.Habit;
 
