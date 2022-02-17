@@ -1,0 +1,31 @@
+Context: The user has logged in and has done enough of their habits to gain a total of 1,000 coins
+Primary Flow:
+1.	The user selects the “play sudoku” option
+2.	The user is taken to the play sudoku game page
+3.	The user selects the “shop” option
+4.	The user is taken to the shop page
+5.	The user selects an item on the store that they can afford with their points
+6.	The user selects the “buy” option
+7.	The user’s amount of coins is deducted by the selected item’s price
+8.	The user gains that item from the shop
+9.	The user is returned to the play sudoku game page
+Alternative Flow:
+	The user cannot afford a shop product:
+		7a. The user receives a prompt saying they cannot afford that item
+		8a. The user is taken to the shop page
+	The user purchases a hint for the puzzle:
+		3b. The user selects either “New Game” or “Continue” option
+		4b. The user is taken to their respective game
+		5b. The user selects “hint”
+		6b. The user receives a pop-up menu informing them that it will cost coins for it
+		7b. The user selects “yes” 
+		8b. The user’s amount of coins is deducted by the hint’s cost
+		9b. The user receives the hint
+	The user cannot afford a hint:
+		3c. The user selects either “New Game” or “Continue” option
+		4c. The user is taken to their respective game
+		5c. The user selects “hint”
+		6c. The user receives a pop-up menu informing them that it will cost coins for it
+		7c. The user selects “yes” 
+		8c. The user receives a prompt stating that they cannot afford the hint
+		9c. The user is returned to their game

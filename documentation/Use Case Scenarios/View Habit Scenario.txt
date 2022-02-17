@@ -1,0 +1,9 @@
+Context: has loaded the app and has added habits before
+Primary Flow:
+1.	The user selects the “home” page button
+2.	The user is taken to the home page
+3.	The home page displays the habits the user has added
+Alternative Flow:
+	No Habits to display:
+		3a. A message is displayed for the user encouraging them to add a habit.
+	
