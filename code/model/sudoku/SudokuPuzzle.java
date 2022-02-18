@@ -1,10 +1,12 @@
 package code.model.sudoku;
 
 import java.util.Stack;
-import code.model.*;
 
 /**
  * Sudoku puzzle class
+ * 
+ * @author Matthew Thompson
+ * @version spring 2022
  */
 public class SudokuPuzzle {
 
@@ -21,7 +23,7 @@ public class SudokuPuzzle {
         this.numbers = new int[9][9];
         this.numberLocks = new boolean[9][9];
         this.defaultAnswer = new int[9][9];
-        this.selectedNumber = null;
+        this.selectedNumber = -1;
         this.moveHistory = new Stack<SudokuMove>();
     }
 
@@ -30,8 +32,37 @@ public class SudokuPuzzle {
      * 
      * @return this.numbers
      */
-    public int[][] getNumber() {
+    public int[][] getNumbers() {
         return this.numbers;
+    }
+
+    /**
+     * Gets the move history
+     * 
+     * @return this.moveHistory
+     */
+    public Stack<SudokuMove> getMoveHistory() {
+        return this.moveHistory;
+    }
+
+    /**
+     * Gets the selected number
+     * 
+     * @return selected number
+     */
+    public int getSelectedNumber() {
+        return this.selectedNumber;
+    }
+
+    /**
+     * Gets the number at specified location
+     * 
+     * @param column the column
+     * @param row    the row
+     * @return number at specified position
+     */
+    public int getNumber(int column, int row) {
+        return this.numbers[row][column];
     }
 
     /**
@@ -60,7 +91,7 @@ public class SudokuPuzzle {
      * @param row
      */
     public void setNumber(int value, int column, int row) {
-        this.numbers[column][row] = value;
+        this.numbers[row][column] = value;
     }
 
     /***
@@ -71,7 +102,7 @@ public class SudokuPuzzle {
      * @param row
      */
     public void setNumberLock(boolean lock, int column, int row) {
-        this.numberLocks[column][row] = lock;
+        this.numberLocks[row][column] = lock;
     }
 
     /***
@@ -100,7 +131,7 @@ public class SudokuPuzzle {
      * @return true or false depending on locked state
      */
     public boolean isNumberLocked(int column, int row) {
-        return false;
+        return this.numberLocks[row][column];
     }
 
     /***
@@ -111,6 +142,6 @@ public class SudokuPuzzle {
      * @return the answer for the coord
      */
     public int getAnswerForPosition(int column, int row) {
-        return null;
+        return this.defaultAnswer[row][column];
     }
 }

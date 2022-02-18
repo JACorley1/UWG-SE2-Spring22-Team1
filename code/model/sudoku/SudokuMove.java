@@ -1,7 +1,10 @@
 package code.model.sudoku;
+
 /**
  * The soduku move class
- *
+ * 
+ * @author Matthew Thompson
+ * @version spring 2022
  */
 public class SudokuMove {
     private int column;
