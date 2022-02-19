@@ -13,7 +13,7 @@
    <children>
       <ImageView fx:id="birdImage" fitHeight="197.0" fitWidth="264.0" layoutX="134.0" layoutY="498.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../BirdImageForLoginScreen.png" />
+            <Image url="@../../assets/images/BirdImageForLoginScreen.png" />
          </image></ImageView>
       <Text layoutX="116.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Habit Mode" wrappingWidth="264.0">
          <font>
