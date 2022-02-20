@@ -14,8 +14,8 @@ public class Habit {
 
 	/** Creates a new habit.
 	 * 
-	 * @precondition string != null && string != string.isEmpty()
-	 * @postcondition this.getText() = string, this.isComplete() = false, this.getFrequency() = frequency;
+	 * @precondition text != null && text != string.isEmpty()
+	 * @postcondition this.getText() = text, this.isComplete() = false, this.getFrequency() = frequency;
 	 * 
 	 * @param text The text to display for the habit.
 	 * @param frequency How frequently the habit should be completed.
@@ -73,7 +73,7 @@ public class Habit {
 
 	/** Sets the text for the habit with the text provided
 	 * 
-	 * @precondition string != string.isEmpty() && string != null
+	 * @precondition text != string.isEmpty() && text != null
 	 * @postcondition this.getText() = string;
 	 * 
 	 * @param text The display text for the habit.

@@ -115,7 +115,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
 	@Override
 	public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        puzzle = puzzle;
+        LocalServerCommunicator.puzzle = puzzle;
 		return true;
 	}
 
