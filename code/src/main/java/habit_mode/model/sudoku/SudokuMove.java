@@ -3,8 +3,8 @@ package habit_mode.model.sudoku;
 /**
  * The soduku move class
  * 
- * @author Matthew Thompson
- * @version spring 2022
+ * @author Team 1
+ * @version Spring 2022
  */
 public class SudokuMove {
     private int column;
@@ -12,7 +12,7 @@ public class SudokuMove {
     private int prevNumber;
 
     /**
-     * Sudoku move constructor
+     * Sudoku move constructor.
      * 
      * @precondition column >= 0 && row >= 0 && prevNumber >= 0
      * @postcondition this.column == column && this.row == row && this.prevNumber == prevNumber
@@ -50,36 +50,36 @@ public class SudokuMove {
     }
 
     /**
-     * gets the column for the move
+     * Gets the column for the move.
      * 
      * @precondition none
      * @postcondition none
      * 
-     * @return the column
+     * @return the column.
      */
     public int getColumn() {
         return this.column;
     }
 
     /**
-     * gets the row for the move
+     * Gets the row for the move.
      * 
      * @precondition none
      * @postcondition none
      * 
-     * @return the row
+     * @return the row.
      */
     public int getRow() {
         return this.row;
     }
 
     /**
-     * gets the previous number for the move
+     * Gets the previous number for the move.
      * 
      * @precondition none
      * @postcondition none
      * 
-     * @return the previous number
+     * @return the previous number.
      */
     public int getPrevNumber() {
         return this.prevNumber;
