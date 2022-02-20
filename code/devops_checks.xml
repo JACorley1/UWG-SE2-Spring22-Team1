@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+  <property name="severity" value="error"/>
+  <module name="TreeWalker">
+    <property name="tabWidth" value="4"/>
+    <module name="JavadocMethod">
+      <property name="scope" value="public"/>
+    </module>
+    <module name="JavadocType">
+      <property name="scope" value="public"/>
+      <property name="authorFormat" value="\S"/>
+      <message key="type.tagFormat" value="Type Javadoc tag {0} is empty."/>
+    </module>
+    <module name="JavadocVariable">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="JavadocStyle">
+      <property name="scope" value="public"/>
+      <property name="checkEmptyJavadoc" value="true"/>
+      <property name="checkFirstSentence" value="false"/>
+    </module>
+    <module name="ConstantName">
+      <message key="name.invalidPattern" value="Constant name ''{0}'' should be all upper case letters, digits and underscores."/>
+    </module>
+    <module name="LocalVariableName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]+|(e|i|j|k|x|y)$"/>
+      <message key="name.invalidPattern" value="Variable name ''{0}'' should start with a lower case letter and use only letters and digits. The only one letter names allowed is e, i, j, k, x, and y."/>
+    </module>
+    <module name="MemberName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
+      <message key="name.invalidPattern" value="Instance variable name ''{0}'' should start with a lower case letter and use only letters and digits. It must have more than one letter."/>
+    </module>
+    <module name="MethodName">
+      <message key="name.invalidPattern" value="Method name ''{0}'' should start with a lower case letter and use only letters and digits."/>
+    </module>
+    <module name="ParameterName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]+|(x|y)$"/>
+      <message key="name.invalidPattern" value="Parameter names ''{0}'' should start with a lower case letter and use only letters and digits. It must have more than one letter."/>
+    </module>
+    <module name="StaticVariableName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>
+      <message key="name.invalidPattern" value="Static variables ''{0}'' should start with a lower case letter and use only letters and digits. It must have more than one letter."/>
+    </module>
+    <module name="TypeName">
+      <message key="name.invalidPattern" value="Class name ''{0}'' should start with a capital letter and use only letters and digits."/>
+    </module>
+    <module name="AvoidStarImport"/>
+    <module name="IllegalImport"/>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+    <module name="MethodLength">
+      <property name="max" value="35"/>
+    </module>
+    <module name="ParameterNumber">
+      <property name="max" value="6"/>
+      <property name="tokens" value="METHOD_DEF"/>
+    </module>
+    <module name="EmptyForIteratorPad"/>
+    <module name="GenericWhitespace"/>
+    <module name="MethodParamPad"/>
+    <module name="NoWhitespaceAfter">
+      <property name="tokens" value="BNOT,DEC,DOT,INC,LNOT,UNARY_MINUS,UNARY_PLUS"/>
+    </module>
+    <module name="NoWhitespaceBefore"/>
+    <module name="OperatorWrap"/>
+    <module name="ParenPad"/>
+    <module name="TypecastParenPad"/>
+    <module name="WhitespaceAfter"/>
+    <module name="WhitespaceAround">
+      <property name="tokens" value="ASSIGN,BAND,BAND_ASSIGN,BOR,BOR_ASSIGN,BSR,BSR_ASSIGN,BXOR,BXOR_ASSIGN,COLON,DIV,DIV_ASSIGN,EQUAL,GE,GT,LAND,LCURLY,LE,LITERAL_ASSERT,LITERAL_CATCH,LITERAL_DO,LITERAL_ELSE,LITERAL_FINALLY,LITERAL_FOR,LITERAL_IF,LITERAL_RETURN,LITERAL_SYNCHRONIZED,LITERAL_TRY,LITERAL_WHILE,LOR,LT,MINUS,MINUS_ASSIGN,MOD,MOD_ASSIGN,NOT_EQUAL,PLUS,PLUS_ASSIGN,QUESTION,RCURLY,SL,SLIST,SL_ASSIGN,SR,SR_ASSIGN,STAR,STAR_ASSIGN,LITERAL_ASSERT,TYPE_EXTENSION_AND"/>
+    </module>
+    <module name="ModifierOrder"/>
+    <module name="RedundantModifier"/>
+    <module name="AvoidNestedBlocks"/>
+    <module name="EmptyBlock"/>
+    <module name="LeftCurly"/>
+    <module name="NeedBraces"/>
+    <module name="RightCurly"/>
+    <module name="EmptyStatement"/>
+    <module name="EqualsHashCode"/>
+    <module name="HiddenField">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="IllegalInstantiation"/>
+    <module name="InnerAssignment"/>
+    <module name="MagicNumber">
+      <property name="severity" value="ignore"/>
+      <message key="magic.number" value="''{0}'' is a magic value."/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="MissingSwitchDefault"/>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
+    <module name="DesignForExtension">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="FinalClass"/>
+    <module name="HideUtilityClassConstructor">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="InterfaceIsType"/>
+    <module name="VisibilityModifier"/>
+    <module name="Indentation">
+      <property name="severity" value="warning"/>
+      <property name="lineWrappingIndentation" value="2"/>
+    </module>
+    <module name="MultipleStringLiterals">
+      <property name="ignoreStringsRegexp" value="^(&quot;&quot;|&quot;\\n&quot;|&quot; &quot;)$"/>
+      <property name="ignoreOccurrenceContext" value="METHOD_CALL,ANNOTATION"/>
+    </module>
+    <module name="NestedIfDepth">
+      <property name="max" value="1"/>
+    </module>
+    <module name="RequireThis">
+      <property name="validateOnlyOverlapping" value="false"/>
+    </module>
+    <module name="TrailingComment"/>
+    <module name="Indentation">
+      <property name="lineWrappingIndentation" value="2"/>
+    </module>
+    <module name="ArrayTypeStyle"/>
+    <module name="TodoComment">
+      <property name="format" value="TODO"/>
+    </module>
+    <module name="UpperEll"/>
+  </module>
+  <module name="JavadocPackage">
+    <property name="severity" value="ignore"/>
+    <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+  </module>
+  <module name="NewlineAtEndOfFile">
+    <property name="severity" value="ignore"/>
+    <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+  </module>
+  <module name="Translation"/>
+  <module name="FileLength"/>
+  <module name="FileTabCharacter">
+    <property name="severity" value="ignore"/>
+    <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="severity" value="ignore"/>
+    <property name="format" value="\s+$"/>
+    <property name="message" value="Line has trailing spaces."/>
+    <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+  </module>
+  <module name="SuppressionFilter">
+    <property name="file" value="https://www.westga.edu/~astanesc/cs1302/UWG_checks.xml"/>
+  </module>
+</module>
