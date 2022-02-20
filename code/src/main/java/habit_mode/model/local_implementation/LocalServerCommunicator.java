@@ -5,7 +5,7 @@ import java.util.List;
 
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
-import habit_mode.model.SudokuPuzzle;
+import habit_mode.model.sudoku.SudokuPuzzle;
 
 /** Stores server information locally, allowing for easy testing without the need of a live server.
  *  All instances access the same static information, as though communicating with the same server.
