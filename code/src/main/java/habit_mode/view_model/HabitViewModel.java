@@ -1,5 +1,10 @@
-package code.viewModel
+package habit_mode.view_model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import habit_mode.model.Frequency;
+import habit_mode.model.Habit;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -23,11 +28,11 @@ public class HabitViewModel {
 	 * @precondition: none
 	 * @postcondition: this.frequencyProperty() = new SimpleObjectProperty<Frequency>(), this.habitNameProperty() =  new SimpleStringProperty(""), this.habitListProperty() = 
 	 */
-	public HabitViewModel () {
+	public HabitViewModel() {
 		this.frequencyProperty = new SimpleObjectProperty<Frequency>();
 		this.selectedHabitProperty = new SimpleObjectProperty<Habit>();
 		this.habitNameProperty =  new SimpleStringProperty("");
-		List<Habit> habitList = new List<Habit>();
+		List<Habit> habitList = new ArrayList<Habit>();
 		this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList(habitList));
 	}
 

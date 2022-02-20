@@ -1,4 +1,4 @@
-package code.model;
+package habit_mode.model;
 
 /** The Rate of which the habit can be updated
  * 
