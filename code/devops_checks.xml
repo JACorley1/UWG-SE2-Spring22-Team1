@@ -151,7 +151,7 @@
     <property name="message" value="Line has trailing spaces."/>
     <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
   </module>
-  <!--module name="SuppressionFilter">
+  <module name="SuppressionFilter">
     <property name="file" value="https://www.westga.edu/~astanesc/cs1302/UWG_checks.xml"/>
-  </module-->
+  </module>
 </module>
