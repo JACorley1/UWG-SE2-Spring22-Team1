@@ -1,15 +1,16 @@
 package habit_mode.model.local_implementation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import habit_mode.model.Habit;
+import habit_mode.model.HabitManager;
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.SudokuPuzzle;
 
-/** Stores server information locally, allowing for easy testing without the need of a live server.
- *  All instances access the same static information, as though communicating with the same server.
- *  To clear the information for unit testing, please use LocalServerCommunicator::reset().
+/** 
+ * Stores server information locally, allowing for easy testing without the need of a live server.
+ * All instances access the same static information, as though communicating with the same server.
+ * To clear the information for unit testing, please use LocalServerCommunicator::reset().
  * 
  * @author	Team 1
  * @version Spring 2022
@@ -24,7 +25,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
     private static int coins = 0;
     private static SudokuPuzzle puzzle = null;
-    private static List<Habit> habits = new ArrayList<>();
+    private static HabitManager habits = new HabitManager();
 
     public static void reset() {
         coins = 0;

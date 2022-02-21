@@ -1,8 +1,9 @@
 package habit_mode.model;
 
-/** The habit class
+/** 
+ * The habit class.
  * 
- * @author	CS 3212
+ * @author	Team 1
  * @version Spring 2022
  */
 public class Habit {
@@ -12,10 +13,11 @@ public class Habit {
 	private boolean complete;
 	private Frequency completionFrequency;
 
-	/** Creates a new habit.
+	/** 
+	 * Creates a new habit.
 	 * 
-	 * @precondition text != null && text != string.isEmpty()
-	 * @postcondition this.getText() = text, this.isComplete() = false, this.getFrequency() = frequency;
+	 * @precondition text != null && text != string.isEmpty();
+	 * @postcondition this.getText() == text, this.isComplete() == false, this.getFrequency() == frequency;
 	 * 
 	 * @param text The text to display for the habit.
 	 * @param frequency How frequently the habit should be completed.
@@ -27,21 +29,23 @@ public class Habit {
 		this.completionFrequency = frequency;
 	}
 
-	/** Gets the text of the habit.
+	/** 
+	 * Gets the text of the habit.
 	 * 
-	 * @precondition None
-	 * @postcondition None
+	 * @precondition None.
+	 * @postcondition None.
 	 * 
-	 * @return The text of the habit
+	 * @return The text of the habit.
 	 */
 	public String getText() {
 		return this.text;
 	}
 
-	/** Gets the completion status of the habit.
+	/** 
+	 * Gets the completion status of the habit.
 	 * 
-	 * @precondition None
-	 * @postcondition None
+	 * @precondition None.
+	 * @postcondition None.
 	 * 
 	 * @return the completion status of the habit.
 	 */
@@ -49,21 +53,23 @@ public class Habit {
 		return this.complete;
 	}
 
-	/** Gets the completion frequency of the habit
+	/** 
+	 * Gets the completion frequency of the habit.
 	 * 
-	 * @precondition none
-	 * @postcondition none
+	 * @precondition None.
+	 * @postcondition None.
 	 * 
-	 * @return the completion frequency of the habit
+	 * @return The completion frequency of the habit.
 	 */
 	public Frequency getFrequency() {
 		return this.completionFrequency;
 	}
 
-	/** Sets the completion frequency of the habit to the desired frequency
+	/** 
+	 * Sets the completion frequency of the habit to the desired frequency.
 	 * 
-	 * @precondition none
-	 * @postcondition this.getFrequency() = frequency
+	 * @precondition None.
+	 * @postcondition this.getFrequency() == frequency;
 	 * 
 	 * @param frequency How frequently the habit should be completed.
 	 */
@@ -71,9 +77,10 @@ public class Habit {
 		this.completionFrequency = frequency;
 	}
 
-	/** Sets the text for the habit with the text provided
+	/** 
+	 * Sets the text for the habit with the text provided.
 	 * 
-	 * @precondition text != string.isEmpty() && text != null
+	 * @precondition text != string.isEmpty() && text != null;
 	 * @postcondition this.getText() = string;
 	 * 
 	 * @param text The display text for the habit.
@@ -83,10 +90,11 @@ public class Habit {
 		this.text = text;
 	}
 
-	/** Toggles the completion status of the habit
+	/** 
+	 * Toggles the completion status of the habit.
 	 * 
-	 * @precondition none
-	 * @postcondition this.isComplete() == !this.isComplete()@pre
+	 * @precondition None.
+	 * @postcondition this.isComplete() == !this.isComplete()@pre;
 	 */
 	public void toggleCompletionStatus() {
 		this.complete = !this.complete;
