@@ -83,10 +83,10 @@ public class SudokuPuzzle {
 
     private void checkColumnAndRow(int column, int row) {
         if (column < 0) {
-            throw new IllegalArgumentException("column can not be less than 0");
+            throw new IndexOutOfBoundsException("column can not be less than 0");
         }
         if (row < 0) {
-            throw new IllegalArgumentException("row can not be less than 0");
+            throw new IndexOutOfBoundsException("row can not be less than 0");
         }
     }
 

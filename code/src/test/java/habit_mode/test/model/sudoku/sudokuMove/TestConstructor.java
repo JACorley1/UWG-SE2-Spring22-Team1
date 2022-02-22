@@ -22,7 +22,7 @@ public class TestConstructor {
 	@Test
 	void testConstructorWithInvalidColumnLowerBound() {
 		assertThrows(
-			IllegalArgumentException.class, 
+			IndexOutOfBoundsException.class, 
 			()->{
 				new SudokuMove(-1, 2, 2);
 			}
@@ -32,7 +32,7 @@ public class TestConstructor {
 	@Test
 	void testConstructorWithInvalidRowLowerBound() {
 		assertThrows(
-			IllegalArgumentException.class, 
+			IndexOutOfBoundsException.class, 
 			()->{
 				new SudokuMove(2, -1, 3);
 			}
@@ -52,7 +52,7 @@ public class TestConstructor {
     @Test
 	void testConstructorWithInvalidColumnUpperBound() {
 		assertThrows(
-			IllegalArgumentException.class, 
+			IndexOutOfBoundsException.class, 
 			()->{
 				new SudokuMove(9, 2, 2);
 			}
@@ -62,7 +62,7 @@ public class TestConstructor {
 	@Test
 	void testConstructorWithInvalidRowUpperBound() {
 		assertThrows(
-			IllegalArgumentException.class, 
+			IndexOutOfBoundsException.class, 
 			()->{
 				new SudokuMove(2, 9, 3);
 			}

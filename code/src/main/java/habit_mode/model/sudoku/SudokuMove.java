@@ -30,16 +30,16 @@ public class SudokuMove {
 
     private void checkConstructor(int column, int row, int prevNumber) {
         if (column < 0) {
-            throw new IllegalArgumentException("column cannot be less than 0");
+            throw new IndexOutOfBoundsException("column cannot be less than 0");
         }
         if (column > 8) {
-            throw new IllegalArgumentException("column must be less than or equal to 8");
+            throw new IndexOutOfBoundsException("column must be less than or equal to 8");
         }
         if (row < 0) {
-            throw new IllegalArgumentException("row must be between 0 and 8");
+            throw new IndexOutOfBoundsException("row must be between 0 and 8");
         }
         if (row > 8) {
-            throw new IllegalArgumentException("row must be less than or equal to 8");
+            throw new IndexOutOfBoundsException("row must be less than or equal to 8");
         }
         if (prevNumber < 0) {
             throw new IllegalArgumentException("column can not be less than 0 and 9");
