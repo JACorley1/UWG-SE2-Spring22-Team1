@@ -24,7 +24,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static final String NEGATIVE_COIN_AMOUNT = "coins must not be negative";
 
     private static int coins = 0;
-    private static SudokuPuzzle puzzle = null;
+    private static SudokuPuzzle storedPuzzle = null;
     private static List<Habit> habits = new ArrayList<>();
 
     /**
@@ -37,7 +37,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
      */
     public static void reset() {
         coins = 0;
-        puzzle = null;
+        storedPuzzle = null;
         habits.clear();
     }
     
@@ -71,7 +71,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
     @Override
     public SudokuPuzzle getSudokuPuzzle() {
-        return puzzle;
+        return storedPuzzle;
     }
 
     @Override
@@ -124,7 +124,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
     @Override
     public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        LocalServerCommunicator.puzzle = puzzle;
+        LocalServerCommunicator.storedPuzzle = puzzle;
         return true;
     }
 
