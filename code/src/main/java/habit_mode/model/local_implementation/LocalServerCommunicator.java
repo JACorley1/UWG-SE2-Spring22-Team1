@@ -7,11 +7,12 @@ import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.SudokuPuzzle;
 
-/** Stores server information locally, allowing for easy testing without the need of a live server.
+/** 
+ *  Stores server information locally, allowing for easy testing without the need of a live server.
  *  All instances access the same static information, as though communicating with the same server.
  *  To clear the information for unit testing, please use LocalServerCommunicator::reset().
  * 
- * @author	Team 1
+ * @author  Team 1
  * @version Spring 2022
  */
 public class LocalServerCommunicator extends ServerCommunicator {
@@ -23,17 +24,25 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static final String NEGATIVE_COIN_AMOUNT = "coins must not be negative";
 
     private static int coins = 0;
-    private static SudokuPuzzle puzzle = null;
+    private static SudokuPuzzle storedPuzzle = null;
     private static List<Habit> habits = new ArrayList<>();
 
+    /**
+     * Resets static fields stored values to their default state.
+     * 
+     * @precondition None
+     * @postcondition LocalServerCommunicator.getCoins() == 0 &&
+     *                LocalServerCommunicator.getPuzzle() == null &&
+     *                LocalServerCommunicator.getHabits.isEmpty()
+     */
     public static void reset() {
         coins = 0;
-        puzzle = null;
+        storedPuzzle = null;
         habits.clear();
     }
     
-	@Override
-	public boolean validateLogin(String username, String password) {
+    @Override
+    public boolean validateLogin(String username, String password) {
         if (username == null) {
             throw new IllegalArgumentException(NULL_USERNAME_ERROR);
         }
@@ -47,26 +56,26 @@ public class LocalServerCommunicator extends ServerCommunicator {
             throw new IllegalArgumentException(BLANK_PASSWORD_ERROR);
         }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public int getCoins() {
-		return coins;
-	}
+    @Override
+    public int getCoins() {
+        return coins;
+    }
 
-	@Override
-	public List<Habit> getHabits() {
-		return habits;
-	}
+    @Override
+    public List<Habit> getHabits() {
+        return habits;
+    }
 
-	@Override
-	public SudokuPuzzle getSudokuPuzzle() {
-		return puzzle;
-	}
+    @Override
+    public SudokuPuzzle getSudokuPuzzle() {
+        return storedPuzzle;
+    }
 
-	@Override
-	public boolean addHabit(Habit habit) {
+    @Override
+    public boolean addHabit(Habit habit) {
         if (habit == null) {
             throw new IllegalArgumentException(NULL_HABIT_ERROR);
         }
@@ -75,11 +84,11 @@ public class LocalServerCommunicator extends ServerCommunicator {
         }
 
         habits.add(habit);
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean removeHabit(Habit habit) {
+    @Override
+    public boolean removeHabit(Habit habit) {
         if (habit == null) {
             throw new IllegalArgumentException(NULL_HABIT_ERROR);
         }
@@ -88,12 +97,12 @@ public class LocalServerCommunicator extends ServerCommunicator {
         }
 
         habits.remove(habit);
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean completeHabit(Habit habit) {
-		if (habit == null) {
+    @Override
+    public boolean completeHabit(Habit habit) {
+        if (habit == null) {
             throw new IllegalArgumentException(NULL_HABIT_ERROR);
         }
         if (!habits.contains(habit)) {
@@ -111,21 +120,21 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
         storedHabit.toggleCompletionStatus();
         return true;
-	}
+    }
 
-	@Override
-	public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        LocalServerCommunicator.puzzle = puzzle;
-		return true;
-	}
+    @Override
+    public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
+        LocalServerCommunicator.storedPuzzle = puzzle;
+        return true;
+    }
 
-	@Override
-	public boolean setCoins(int amount) {
+    @Override
+    public boolean setCoins(int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException(NEGATIVE_COIN_AMOUNT);
         }
 
         coins = amount;
-		return true;
-	}
+        return true;
+    }
 }
