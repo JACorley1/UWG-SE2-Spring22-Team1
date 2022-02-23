@@ -13,8 +13,8 @@ import habit_mode.model.HabitManager;
 
 class TestAdd {
     @Test
-	void testAddWithValidHabit() {
-		Habit habit = new Habit("Hello!", Frequency.DAILY);
+    void testAddWithValidHabit() {
+        Habit habit = new Habit("Hello!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
 
         boolean result = manager.add(habit);
@@ -23,7 +23,7 @@ class TestAdd {
             () -> {assertTrue(result, "Check if return is correct");},
             () -> {assertTrue(manager.contains(habit), "Check if habit was added");}
         );
-	}
+    }
 
     @Test
     void testAddWithAValidHabitAndIndex() {
@@ -60,12 +60,12 @@ class TestAdd {
         HabitManager manager = new HabitManager();
         Habit habit = new Habit("Hello!", Frequency.DAILY);
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.add(-1, habit);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.add(-1, habit);
+            }
+        );
     }
 
     @Test
@@ -73,23 +73,23 @@ class TestAdd {
         HabitManager manager = new HabitManager();
         Habit habit = new Habit("Hello!", Frequency.DAILY);
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.add(2, habit);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.add(2, habit);
+            }
+        );
     }
 
-	@Test
-	void testAddWhenTheHabitIsNull() {
+    @Test
+    void testAddWhenTheHabitIsNull() {
         HabitManager manager = new HabitManager();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.add(null);
-			}
-		);
-	}
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.add(null);
+            }
+        );
+    }
 }

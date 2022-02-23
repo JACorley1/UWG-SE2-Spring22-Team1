@@ -16,8 +16,8 @@ import habit_mode.model.HabitManager;
 
 class TestAddAll {
     @Test
-	void testWhenAddingValidHabitsInTheManager() {
-		Habit habit1 = new Habit("Hello!", Frequency.DAILY);
+    void testWhenAddingValidHabitsInTheManager() {
+        Habit habit1 = new Habit("Hello!", Frequency.DAILY);
         Habit habit2 = new Habit("Bye!", Frequency.DAILY);
 
         List<Habit> habits = new ArrayList<Habit>();
@@ -32,7 +32,7 @@ class TestAddAll {
             () -> {assertTrue(result, "Checking that the result is correct when the manager adds all of the habits.");},
             () -> {assertEquals(2, manager.size(), "Checking that the size of the manager is correct after testing.");}
         );
-	}
+    }
 
     @Test 
     void testAddAllWithAValidCollectionAndIndex() {
@@ -59,12 +59,12 @@ class TestAddAll {
         HabitManager manager = new HabitManager();
         List<Habit> habits = new ArrayList<Habit>();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.addAll(1, habits);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.addAll(1, habits);
+            }
+        );
     }
 
     @Test
@@ -72,35 +72,35 @@ class TestAddAll {
         HabitManager manager = new HabitManager();
         List<Habit> habits = new ArrayList<Habit>();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.addAll(-1, habits);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.addAll(-1, habits);
+            }
+        );
     }
 
     @Test
     void testWhenAddingANullCollectionOfHabitsWithAValidIndex() {
         HabitManager manager = new HabitManager();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.addAll(0, null);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.addAll(0, null);
+            }
+        );
     }
 
-	@Test
-	void testWhenAddingANullCollectionOfHabits() {
+    @Test
+    void testWhenAddingANullCollectionOfHabits() {
         HabitManager manager = new HabitManager();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.addAll(null);
-			}
-		);
-	}
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.addAll(null);
+            }
+        );
+    }
 }

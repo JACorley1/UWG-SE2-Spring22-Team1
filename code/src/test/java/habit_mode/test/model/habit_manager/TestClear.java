@@ -12,7 +12,7 @@ class TestClear {
     @Test
     void testWhenManagerHasHabits() {
         HabitManager manager = new HabitManager();
-		Habit habit1 = new Habit("Hello!", Frequency.DAILY);
+        Habit habit1 = new Habit("Hello!", Frequency.DAILY);
         Habit habit2 = new Habit("Bye!", Frequency.DAILY);
         manager.add(habit1);
         manager.add(habit2);

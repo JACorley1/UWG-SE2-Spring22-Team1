@@ -17,8 +17,8 @@ import habit_mode.model.HabitManager;
 
 class TestRemoveAll {
     @Test
-	void testWhenRemovingAllHabitsInTheManager() {
-		Habit habit1 = new Habit("Hello!", Frequency.DAILY);
+    void testWhenRemovingAllHabitsInTheManager() {
+        Habit habit1 = new Habit("Hello!", Frequency.DAILY);
         Habit habit2 = new Habit("Bye!", Frequency.DAILY);
 
         List<Habit> habits = new ArrayList<Habit>();
@@ -34,7 +34,7 @@ class TestRemoveAll {
             () -> {assertTrue(result, "Checking that the result is correct when the manager removes all of the habits.");},
             () -> {assertEquals(0, manager.size(), "Checking that the size of the manager is correct after testing.");}
         );
-	}
+    }
 
     @Test 
     void testWhenRemovingAllButOneHabitInTheManager() {
@@ -76,15 +76,15 @@ class TestRemoveAll {
         );
     }
 
-	@Test
-	void testWhenRemovingANullCollectionOfHabits() {
+    @Test
+    void testWhenRemovingANullCollectionOfHabits() {
         HabitManager manager = new HabitManager();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.removeAll(null);
-			}
-		);
-	}
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.removeAll(null);
+            }
+        );
+    }
 }

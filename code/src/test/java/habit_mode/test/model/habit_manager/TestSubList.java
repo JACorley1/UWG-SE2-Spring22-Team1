@@ -39,12 +39,12 @@ class TestSubList {
         manager.add(habit2);
         manager.add(habit1);
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.subList(-1, 2);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.subList(-1, 2);
+            }
+        );
     }
 
     @Test 
@@ -58,11 +58,11 @@ class TestSubList {
         manager.add(habit2);
         manager.add(habit1);
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.subList(0, manager.size() + 1);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.subList(0, manager.size() + 1);
+            }
+        );
     }
 }

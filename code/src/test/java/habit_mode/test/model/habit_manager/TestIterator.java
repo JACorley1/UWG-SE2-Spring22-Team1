@@ -11,14 +11,14 @@ import habit_mode.model.Habit;
 import habit_mode.model.HabitManager;
 
 class TestIterator {
-	@Test
-	void testIterator() {
+    @Test
+    void testIterator() {
         HabitManager manager = new HabitManager();
 
         Iterator<Habit> result = manager.iterator();
 
-		assertFalse(result.equals(manager.iterator()), "Checking that the manager returns different iterators.");
-	}
+        assertFalse(result.equals(manager.iterator()), "Checking that the manager returns different iterators.");
+    }
 
     @Test
     void testListIterator() {
@@ -26,12 +26,12 @@ class TestIterator {
 
         ListIterator<Habit> result = manager.listIterator();
         
-		assertFalse(result.equals(manager.listIterator()), "Checking that the manager returns different list iterators.");
+        assertFalse(result.equals(manager.listIterator()), "Checking that the manager returns different list iterators.");
     }
 
     @Test
     void testListIteratorWithAValidIndex() {
-		Habit habit1 = new Habit("Hello!", Frequency.DAILY);
+        Habit habit1 = new Habit("Hello!", Frequency.DAILY);
         Habit habit2 = new Habit("Bye!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
         manager.add(habit1);
@@ -39,7 +39,7 @@ class TestIterator {
 
         ListIterator<Habit> result = manager.listIterator(0);
         
-		assertFalse(result.equals(manager.listIterator(0)), "Checking that the manager returns different list iterators.");
+        assertFalse(result.equals(manager.listIterator(0)), "Checking that the manager returns different list iterators.");
     }
 
     @Test
@@ -48,12 +48,12 @@ class TestIterator {
         Habit habit = new Habit("Hello!", Frequency.DAILY);
         manager.add(habit);
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.listIterator(-1);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.listIterator(-1);
+            }
+        );
     }
 
     @Test
@@ -62,11 +62,11 @@ class TestIterator {
         Habit habit = new Habit("Hello!", Frequency.DAILY);
         manager.add(habit);
         
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.listIterator(2);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.listIterator(2);
+            }
+        );
     }
 }

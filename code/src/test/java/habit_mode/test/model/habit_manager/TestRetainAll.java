@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 import habit_mode.model.HabitManager;
 
 class TestRetainAll {
-	@Test
-	void testWhenRetainingANullCollectionOfHabits() {
+    @Test
+    void testWhenRetainingANullCollectionOfHabits() {
         HabitManager manager = new HabitManager();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.retainAll(null);
-			}
-		);
-	}
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.retainAll(null);
+            }
+        );
+    }
 }

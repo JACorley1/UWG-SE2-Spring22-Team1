@@ -33,8 +33,8 @@ public class LocalServerCommunicator extends ServerCommunicator {
         habits.clear();
     }
     
-	@Override
-	public boolean validateLogin(String username, String password) {
+    @Override
+    public boolean validateLogin(String username, String password) {
         if (username == null) {
             throw new IllegalArgumentException(NULL_USERNAME_ERROR);
         }
@@ -48,26 +48,26 @@ public class LocalServerCommunicator extends ServerCommunicator {
             throw new IllegalArgumentException(BLANK_PASSWORD_ERROR);
         }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public int getCoins() {
-		return coins;
-	}
+    @Override
+    public int getCoins() {
+        return coins;
+    }
 
-	@Override
-	public List<Habit> getHabits() {
-		return habits;
-	}
+    @Override
+    public List<Habit> getHabits() {
+        return habits;
+    }
 
-	@Override
-	public SudokuPuzzle getSudokuPuzzle() {
-		return puzzle;
-	}
+    @Override
+    public SudokuPuzzle getSudokuPuzzle() {
+        return puzzle;
+    }
 
-	@Override
-	public boolean addHabit(Habit habit) {
+    @Override
+    public boolean addHabit(Habit habit) {
         if (habit == null) {
             throw new IllegalArgumentException(NULL_HABIT_ERROR);
         }
@@ -76,11 +76,11 @@ public class LocalServerCommunicator extends ServerCommunicator {
         }
 
         habits.add(habit);
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean removeHabit(Habit habit) {
+    @Override
+    public boolean removeHabit(Habit habit) {
         if (habit == null) {
             throw new IllegalArgumentException(NULL_HABIT_ERROR);
         }
@@ -89,12 +89,12 @@ public class LocalServerCommunicator extends ServerCommunicator {
         }
 
         habits.remove(habit);
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean completeHabit(Habit habit) {
-		if (habit == null) {
+    @Override
+    public boolean completeHabit(Habit habit) {
+        if (habit == null) {
             throw new IllegalArgumentException(NULL_HABIT_ERROR);
         }
         if (!habits.contains(habit)) {
@@ -112,21 +112,21 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
         storedHabit.toggleCompletionStatus();
         return true;
-	}
+    }
 
-	@Override
-	public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
+    @Override
+    public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
         LocalServerCommunicator.puzzle = puzzle;
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean setCoins(int amount) {
+    @Override
+    public boolean setCoins(int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException(NEGATIVE_COIN_AMOUNT);
         }
 
         coins = amount;
-		return true;
-	}
+        return true;
+    }
 }

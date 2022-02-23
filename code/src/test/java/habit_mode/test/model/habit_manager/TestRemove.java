@@ -12,8 +12,8 @@ import habit_mode.model.HabitManager;
 
 class TestRemove {
     @Test
-	void testRemoveWithTheHabitInTheManager() {
-		Habit habit = new Habit("Hello!", Frequency.DAILY);
+    void testRemoveWithTheHabitInTheManager() {
+        Habit habit = new Habit("Hello!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
         manager.add(habit);
 
@@ -23,11 +23,11 @@ class TestRemove {
             () -> {assertTrue(result, "Check if return is correct.");},
             () -> {assertTrue(!manager.contains(habit), "Check if habit was removed.");}
         );
-	}
+    }
 
     @Test
-	void testRemoveWithoutTheHabitInTheManager() {
-		Habit habit = new Habit("Hello!", Frequency.DAILY);
+    void testRemoveWithoutTheHabitInTheManager() {
+        Habit habit = new Habit("Hello!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
 
         boolean result = manager.remove(habit);
@@ -36,11 +36,11 @@ class TestRemove {
             () -> {assertTrue(!result, "Check if return is correct.");},
             () -> {assertTrue(!manager.contains(habit), "Check that the habit is not in the manager.");}
         );
-	}
+    }
 
     @Test
     void testRemoveWithValidIndex() {
-		Habit habit = new Habit("Hello!", Frequency.DAILY);
+        Habit habit = new Habit("Hello!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
         manager.add(habit);
 
@@ -55,38 +55,38 @@ class TestRemove {
     @Test
     void testWhenIndexIsGreaterThanTheIndicesOfTheManager() {
         HabitManager manager = new HabitManager();
-		Habit habit = new Habit("Hello!", Frequency.DAILY);
+        Habit habit = new Habit("Hello!", Frequency.DAILY);
         manager.add(habit);
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.remove(manager.size());
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.remove(manager.size());
+            }
+        );
     }
 
     @Test
     void testWhenIndexIsLessThanZero() {
         HabitManager manager = new HabitManager();
         
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.remove(-1);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.remove(-1);
+            }
+        );
     }
 
-	@Test
-	void testRemoveWhenTheHabitIsNull() {
+    @Test
+    void testRemoveWhenTheHabitIsNull() {
         HabitManager manager = new HabitManager();
 
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.remove(null);
-			}
-		);
-	}
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.remove(null);
+            }
+        );
+    }
 }

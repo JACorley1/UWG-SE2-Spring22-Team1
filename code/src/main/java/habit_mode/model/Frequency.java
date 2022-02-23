@@ -7,7 +7,7 @@ package habit_mode.model;
  * @version Spring 2022
  */
 public enum Frequency {
-	DAILY,
-	WEEKLY,
-	MONTHLY
+    DAILY,
+    WEEKLY,
+    MONTHLY
 }

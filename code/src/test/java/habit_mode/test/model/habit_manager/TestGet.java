@@ -13,8 +13,8 @@ import habit_mode.model.HabitManager;
 
 class TestGet {
     @Test
-	void testWhenIndexIsValid() {
-		Habit habit = new Habit("Hello!", Frequency.DAILY);
+    void testWhenIndexIsValid() {
+        Habit habit = new Habit("Hello!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
         manager.add(habit);
         
@@ -24,42 +24,42 @@ class TestGet {
             () -> {assertEquals(result, habit, "Check if return is correct.");},
             () -> {assertTrue(manager.contains(habit), "Check if habit is still in the manager.");}
         );
-	}
+    }
 
     @Test
-	void testWhenTheManagerIsEmpty() {
+    void testWhenTheManagerIsEmpty() {
         HabitManager manager = new HabitManager();
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.get(0);
-			}
-		);
-	}
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.get(0);
+            }
+        );
+    }
 
-	@Test
-	void testWhenTheIndexIsLessThanZero() {
+    @Test
+    void testWhenTheIndexIsLessThanZero() {
         HabitManager manager = new HabitManager();
         Habit habit = new Habit("Hello!", Frequency.DAILY);
         manager.add(habit);
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.get(-1);
-			}
-		);
-	}
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.get(-1);
+            }
+        );
+    }
 
     @Test
     void testWhenTheIndexIsGreaterThanTheIndicesOfTheManager() {
         HabitManager manager = new HabitManager();
         Habit habit = new Habit("Hello!", Frequency.DAILY);
         manager.add(habit);
-		assertThrows(
-			IllegalArgumentException.class, 
-			()->{
-				manager.get(1);
-			}
-		);
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.get(1);
+            }
+        );
     }
 }
