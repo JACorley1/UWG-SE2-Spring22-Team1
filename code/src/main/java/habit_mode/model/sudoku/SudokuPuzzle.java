@@ -120,9 +120,9 @@ public class SudokuPuzzle {
      * @precondition 0 <= value <= 9 && 0 <= column <= 8 && 0 <= row <= 8
      * @postcondition this.numbers[row][column] == value
      * 
-     * @param value
-     * @param column
-     * @param row
+     * @param value the value being set to the specified position.
+     * @param column the column to be set.
+     * @param row the row to be set.
      */
     public void setNumber(int value, int column, int row) {
         this.checkNumber(value);
@@ -136,9 +136,9 @@ public class SudokuPuzzle {
      * @precondition column >= 0 && row >= 0
      * @postcondition this.numberLocks[row][column] == lock
      * 
-     * @param lock
-     * @param column
-     * @param row
+     * @param lock the boolean for the numberlock to be set.
+     * @param column the column to be set.
+     * @param row the row to be set.
      */
     public void setNumberLock(boolean lock, int column, int row) {
         this.checkColumnAndRow(column, row);
@@ -185,8 +185,8 @@ public class SudokuPuzzle {
      * @precondition 0 <= column <= 8 && 0 <= row <= 8
      * @postcondition none
      * 
-     * @param column
-     * @param row
+     * @param column the column to be set.
+     * @param row the row to be set.
      * @return true or false depending on locked state.
      */
     public boolean isNumberLocked(int column, int row) {
@@ -200,8 +200,8 @@ public class SudokuPuzzle {
      * @precondition 0 <= column <= 8 && 0 <= row <= 8
      * @postcondition none
      * 
-     * @param column
-     * @param row
+     * @param column the column to be set.
+     * @param row the row to be set.
      * @return the answer for the coord.
      */
     public int getAnswerForPosition(int column, int row) {
