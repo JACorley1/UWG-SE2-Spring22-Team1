@@ -31,9 +31,9 @@ public class Habit {
 
     /** 
      * Gets the text of the habit.
-     * 
-     * @precondition None.
-     * @postcondition None.
+     *
+     * @precondition None
+     * @postcondition None
      * 
      * @return The text of the habit.
      */
@@ -44,8 +44,8 @@ public class Habit {
     /** 
      * Gets the completion status of the habit.
      * 
-     * @precondition None.
-     * @postcondition None.
+     * @precondition None
+     * @postcondition None
      * 
      * @return the completion status of the habit.
      */
@@ -53,13 +53,12 @@ public class Habit {
         return this.complete;
     }
 
-    /** 
-     * Gets the completion frequency of the habit.
+    /** Gets the completion frequency of the habit.
      * 
-     * @precondition None.
-     * @postcondition None.
+     * @precondition none
+     * @postcondition none
      * 
-     * @return The completion frequency of the habit.
+     * @return the completion frequency of the habit.
      */
     public Frequency getFrequency() {
         return this.completionFrequency;
@@ -68,7 +67,7 @@ public class Habit {
     /** 
      * Sets the completion frequency of the habit to the desired frequency.
      * 
-     * @precondition None.
+     * @precondition none
      * @postcondition this.getFrequency() == frequency;
      * 
      * @param frequency How frequently the habit should be completed.
@@ -93,7 +92,7 @@ public class Habit {
     /** 
      * Toggles the completion status of the habit.
      * 
-     * @precondition None.
+     * @precondition none
      * @postcondition this.isComplete() == !this.isComplete()@pre;
      */
     public void toggleCompletionStatus() {

@@ -14,7 +14,7 @@ import javafx.collections.FXCollections;
 /** 
  * The habitViewModel class.
  * 
- * @author	Team 1
+ * @author    Team 1
  * @version Spring 2022
  */
 public class HabitViewModel {
@@ -28,7 +28,7 @@ public class HabitViewModel {
      * 
      * @precondition: None.
      * @postcondition: this.frequencyProperty() == new SimpleObjectProperty<Frequency>(), this.habitNameProperty() == new SimpleStringProperty(""), 
-     * 				   this.habitListProperty() == FXCollections.observableArrayList(new HabitManager());
+     * 				         this.habitListProperty() == FXCollections.observableArrayList(new HabitManager());
      */
     public HabitViewModel() {
         this.frequencyProperty = new SimpleObjectProperty<Frequency>();

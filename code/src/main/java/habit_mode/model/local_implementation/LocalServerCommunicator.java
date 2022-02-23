@@ -8,11 +8,11 @@ import habit_mode.model.ServerCommunicator;
 import habit_mode.model.SudokuPuzzle;
 
 /** 
- * Stores server information locally, allowing for easy testing without the need of a live server.
- * All instances access the same static information, as though communicating with the same server.
- * To clear the information for unit testing, please use LocalServerCommunicator::reset().
+ *  Stores server information locally, allowing for easy testing without the need of a live server.
+ *  All instances access the same static information, as though communicating with the same server.
+ *  To clear the information for unit testing, please use LocalServerCommunicator::reset().
  * 
- * @author	Team 1
+ * @author  Team 1
  * @version Spring 2022
  */
 public class LocalServerCommunicator extends ServerCommunicator {
@@ -24,12 +24,20 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static final String NEGATIVE_COIN_AMOUNT = "coins must not be negative";
 
     private static int coins = 0;
-    private static SudokuPuzzle puzzle = null;
     private static HabitManager habits = new HabitManager();
+    private static SudokuPuzzle storedPuzzle = null;
 
+    /**
+     * Resets static fields stored values to their default state.
+     * 
+     * @precondition None
+     * @postcondition LocalServerCommunicator.getCoins() == 0 &&
+     *                LocalServerCommunicator.getPuzzle() == null &&
+     *                LocalServerCommunicator.getHabits.isEmpty()
+     */
     public static void reset() {
         coins = 0;
-        puzzle = null;
+        storedPuzzle = null;
         habits.clear();
     }
     
@@ -63,7 +71,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
     @Override
     public SudokuPuzzle getSudokuPuzzle() {
-        return puzzle;
+        return storedPuzzle;
     }
 
     @Override
@@ -116,7 +124,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
     @Override
     public boolean updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        LocalServerCommunicator.puzzle = puzzle;
+        LocalServerCommunicator.storedPuzzle = puzzle;
         return true;
     }
 

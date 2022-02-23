@@ -4,7 +4,7 @@ import java.util.List;
 
 /** Contains the base functionality for communicating with the server.
  * 
- * @author	Team 1
+ * @author    Team 1
  * @version Spring 2022
  */
 public abstract class ServerCommunicator {
