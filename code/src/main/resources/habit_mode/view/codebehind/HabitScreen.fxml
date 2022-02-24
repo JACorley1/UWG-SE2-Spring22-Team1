@@ -7,8 +7,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="screenLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="screenLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="habit_mode.view.codebehind.HabitScreenCodeBehind">
    <children>
       <Line endX="202.0" layoutX="294.0" layoutY="602.0" startX="-294.0" />
       <Button id="sudokuButton" fx:id="sudokuButton" layoutX="36.0" layoutY="620.0" mnemonicParsing="false" onAction="#sudokuButtonSelected" prefHeight="65.0" prefWidth="98.0" text="Sudoku" />
