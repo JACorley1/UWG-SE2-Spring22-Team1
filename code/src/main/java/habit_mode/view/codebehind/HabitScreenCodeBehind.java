@@ -75,7 +75,7 @@ public class HabitScreenCodeBehind {
     void initialize() {
         this.viewModel = new HabitViewModel();
         
-        assert addHabitButton != null : "fx:id=\"addHabitButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.addHabitButton != null : "fx:id=\"addHabitButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.sudokuButton != null : "fx:id=\"sudokuButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
@@ -117,31 +117,72 @@ public class HabitScreenCodeBehind {
         private final StringProperty name = new SimpleStringProperty();
         private final BooleanProperty on = new SimpleBooleanProperty();
 
+        /**
+         * The 2-parameter constructor for Item
+         * 
+         * @precondition none
+         * @postcondition this.getName() == name, this.isOn() == on
+         * 
+         * @param name The name to be assigned to the item.
+         * @param on   The default on-status of the item.
+         */
         public Item(String name, boolean on) {
             this.setName(name);
             this.setOn(on);
         }
 
+        /**
+         * Getter for the item's NameProperty.
+         * 
+         * @return The item's name as a StringProperty.
+         */
         public final StringProperty nameProperty() {
             return this.name;
         }
 
+        /**
+         * Getter for the item's name.
+         * 
+         * @return The item's name as a string.
+         */
         public final String getName() {
             return this.nameProperty().get();
         }
 
+        /**
+         * Setter for the item's NameProperty.
+         * 
+         * @postcondition this.getName() == name
+         * 
+         * @param name The name to change the item to. 
+         */
         public final void setName(final String name) {
             this.nameProperty().set(name);
         }
 
+        /**
+         * Getter for the item's BooleanProperty.
+         * 
+         * @return A BooleanProperty that represents true if checked or false otherwise.
+         */
         public final BooleanProperty onProperty() {
             return this.on;
         }
 
+        /**
+         * Getter for the item's on status.
+         *  
+         * @return True if checked, false otherwise.
+         */
         public final boolean isOn() {
             return this.onProperty().get();
         }
 
+        /**
+         * Setter for the item's BooleanProperty.
+         * 
+         * @param on True if checked, false otherwise. 
+         */
         public final void setOn(final boolean on) {
             this.onProperty().set(on);
         }
