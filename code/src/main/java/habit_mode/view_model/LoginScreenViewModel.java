@@ -5,6 +5,12 @@ import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * The view model for the LoginScreen.
+ * 
+ * @author Team 1
+ * @version Spring 2022
+ */
 public class LoginScreenViewModel {
     private static final String NULL_SERVER_COMMUNICATOR_ERROR = "serverCommunicator must not be null";
 
@@ -12,6 +18,14 @@ public class LoginScreenViewModel {
     private StringProperty usernameProperty;
     private StringProperty passwordProperty;
 
+    /** 
+     * Creates a new LoginScreenViewModel
+     * 
+     * @precondition: None
+     * @postcondition: this.usernameProperty() != null && 
+     *                 this.passwordProperty() != null &&
+     *                 this.serverCommunicator() != null
+     */
     public LoginScreenViewModel() {
         this.serverCommunicator = new LocalServerCommunicator();
         this.usernameProperty = new SimpleStringProperty();
