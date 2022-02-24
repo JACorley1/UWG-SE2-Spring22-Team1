@@ -37,6 +37,9 @@ public class HabitScreenCodeBehind {
     private Button settingsButton;
 
     @FXML
+    private Button addHabitButton;
+
+    @FXML
     private Label moneyLabel;
 
     @FXML
@@ -47,6 +50,11 @@ public class HabitScreenCodeBehind {
 
     @FXML
     private ListView<Item> habitListView;
+
+    @FXML
+    void addButtonClicked(ActionEvent event) {
+
+    }
 
     @FXML
     void backButtonClicked(ActionEvent event) {
@@ -67,8 +75,7 @@ public class HabitScreenCodeBehind {
     void initialize() {
         this.viewModel = new HabitViewModel();
         
-        
-
+        assert addHabitButton != null : "fx:id=\"addHabitButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.sudokuButton != null : "fx:id=\"sudokuButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";

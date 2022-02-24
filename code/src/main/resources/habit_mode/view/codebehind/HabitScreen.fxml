@@ -29,5 +29,10 @@
          </font>
       </Label>
       <ListView fx:id="habitListView" layoutX="65.0" layoutY="77.0" prefHeight="491.0" prefWidth="366.0" />
+      <Button fx:id="addHabitButton" layoutX="435.0" layoutY="77.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="53.0" prefWidth="52.0" text="+">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
