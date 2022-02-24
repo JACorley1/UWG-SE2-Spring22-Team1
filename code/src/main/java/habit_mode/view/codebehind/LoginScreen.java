@@ -15,6 +15,12 @@ import javafx.scene.Node;
 
 import habit_mode.view_model.LoginScreenViewModel;
 
+/**
+ * The class LoginScreen.
+ * 
+ * @author Team 1
+ * @version Spring 2022
+ */
 public class LoginScreen {
 
     private LoginScreenViewModel viewModel;

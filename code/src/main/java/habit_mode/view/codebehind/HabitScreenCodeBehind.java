@@ -18,6 +18,12 @@ import javafx.util.Callback;
 import habit_mode.model.Habit;
 import habit_mode.view_model.HabitViewModel;
 
+/**
+ * The class HabitScreenCodeBehind.
+ * 
+ * @author Team 1
+ * @version Spring 2022
+ */
 public class HabitScreenCodeBehind {
     private HabitViewModel viewModel;
 
