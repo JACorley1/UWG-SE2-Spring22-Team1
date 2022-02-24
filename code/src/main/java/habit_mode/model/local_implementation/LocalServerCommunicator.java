@@ -1,9 +1,9 @@
 package habit_mode.model.local_implementation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import habit_mode.model.Habit;
+import habit_mode.model.HabitManager;
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.SudokuPuzzle;
 
@@ -24,8 +24,8 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static final String NEGATIVE_COIN_AMOUNT = "coins must not be negative";
 
     private static int coins = 0;
+    private static HabitManager habits = new HabitManager();
     private static SudokuPuzzle storedPuzzle = null;
-    private static List<Habit> habits = new ArrayList<>();
 
     /**
      * Resets static fields stored values to their default state.
