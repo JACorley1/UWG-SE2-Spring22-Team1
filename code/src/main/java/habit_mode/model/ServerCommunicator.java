@@ -2,6 +2,8 @@ package habit_mode.model;
 
 import java.util.List;
 
+import habit_mode.model.sudoku.SudokuPuzzle;
+
 /** Contains the base functionality for communicating with the server.
  * 
  * @author    Team 1
