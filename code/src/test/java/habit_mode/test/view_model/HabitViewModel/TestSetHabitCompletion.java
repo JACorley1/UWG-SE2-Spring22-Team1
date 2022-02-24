@@ -1,4 +1,4 @@
-package habit_mode.test.view_model;
+package habit_mode.test.view_model.HabitViewModel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
