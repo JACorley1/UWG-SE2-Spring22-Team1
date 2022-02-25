@@ -126,7 +126,7 @@ public class HabitScreenCodeBehind {
         /**
          * The 2-parameter constructor for Item
          * 
-         * @precondition none
+         * @precondition None
          * @postcondition this.getName() == name, this.isOn() == on
          * 
          * @param name The name to be assigned to the item.

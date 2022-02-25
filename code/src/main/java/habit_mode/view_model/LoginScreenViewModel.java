@@ -19,7 +19,7 @@ public class LoginScreenViewModel {
     private StringProperty passwordProperty;
 
     /** 
-     * Creates a new LoginScreenViewModel
+     * Creates a new LoginScreenViewModel.
      * 
      * @precondition: None
      * @postcondition: this.usernameProperty() != null && 
@@ -38,7 +38,7 @@ public class LoginScreenViewModel {
      * @precondition None
      * @postcondition None
      * 
-     * @return [true] iff the login credentials were validated, otherwise [false]
+     * @return [true] iff the login credentials were validated, otherwise [false].
      */
     public boolean validateLogin() {
         boolean result = this.serverCommunicator.validateLogin(this.usernameProperty.getValue(), this.passwordProperty.getValue());

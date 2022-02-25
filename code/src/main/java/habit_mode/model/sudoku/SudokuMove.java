@@ -15,7 +15,7 @@ public class SudokuMove {
      * Sudoku move constructor.
      * 
      * @precondition column >= 0 && row >= 0 && prevNumber >= 0
-     * @postcondition this.column == column && this.row == row && this.prevNumber == prevNumber
+     * @postcondition this.getColumn() == column && this.getRow() == row && this.getPrevNumber() == prevNumber
      * 
      * @param column     the column
      * @param row        the row
@@ -52,10 +52,10 @@ public class SudokuMove {
     /**
      * Gets the column for the move.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the column.
+     * @return The column.
      */
     public int getColumn() {
         return this.column;
@@ -64,10 +64,10 @@ public class SudokuMove {
     /**
      * Gets the row for the move.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the row.
+     * @return The row.
      */
     public int getRow() {
         return this.row;
@@ -76,10 +76,10 @@ public class SudokuMove {
     /**
      * Gets the previous number for the move.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the previous number.
+     * @return The previous number.
      */
     public int getPrevNumber() {
         return this.prevNumber;
