@@ -17,7 +17,7 @@ public class Habit {
      * Creates a new habit.
      * 
      * @precondition text != null && text != string.isEmpty();
-     * @postcondition this.getText() == text, this.isComplete() == false, this.getFrequency() == frequency;
+     * @postcondition this.getText() == text && this.isComplete() == false && this.getFrequency() == frequency;
      * 
      * @param text The text to display for the habit.
      * @param frequency How frequently the habit should be completed.
@@ -47,7 +47,7 @@ public class Habit {
      * @precondition None
      * @postcondition None
      * 
-     * @return the completion status of the habit.
+     * @return The completion status of the habit.
      */
     public boolean isComplete() {
         return this.complete;
@@ -55,8 +55,8 @@ public class Habit {
 
     /** Gets the completion frequency of the habit.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
      * @return the completion frequency of the habit.
      */
@@ -67,7 +67,7 @@ public class Habit {
     /** 
      * Sets the completion frequency of the habit to the desired frequency.
      * 
-     * @precondition none
+     * @precondition None
      * @postcondition this.getFrequency() == frequency;
      * 
      * @param frequency How frequently the habit should be completed.
@@ -80,7 +80,7 @@ public class Habit {
      * Sets the text for the habit with the text provided.
      * 
      * @precondition text != string.isEmpty() && text != null;
-     * @postcondition this.getText() = string;
+     * @postcondition this.getText() == string;
      * 
      * @param text The display text for the habit.
      */
@@ -92,7 +92,7 @@ public class Habit {
     /** 
      * Toggles the completion status of the habit.
      * 
-     * @precondition none
+     * @precondition None
      * @postcondition this.isComplete() == !this.isComplete()@pre;
      */
     public void toggleCompletionStatus() {

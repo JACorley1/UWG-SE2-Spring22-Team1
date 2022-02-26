@@ -3,12 +3,14 @@ package habit_mode.model.sudoku;
 import java.util.Stack;
 
 /**
- * Sudoku puzzle class
+ * Stores information about the state of a puzzle, including the placement of numbers, the default
+ * solution, and which numbers are provided at the start of the puzzle.
  * 
  * @author Team 1
  * @version Spring 2022
  */
 public class SudokuPuzzle {
+    public static final int PUZZLE_SIZE = 9;
 
     private int[][] numbers;
     private boolean[][] numberLocks;
@@ -19,13 +21,15 @@ public class SudokuPuzzle {
     /**
      * Default Constructor
      * 
-     * @precondition none
-     * @postcondition this.numbers == new int[9][9] && this.numberLocks == new boolean[9][9] && this.defaultAnswer == new int[9][9] && this.selectedNumber == -1 && this.moveHistory == new Stack<SudokuMove>()
+     * @precondition None
+     * @postcondition this.getNumbers() == new int[9][9] && this.gtNumberLocks() == new boolean[9][9] && 
+     *                this.getDefaultAnswer() == new int[9][9] && this.getSelectedNumber() == -1 && 
+     *                this.moveHistory == new Stack<SudokuMove>()
      */
     public SudokuPuzzle() {
-        this.numbers = new int[9][9];
-        this.numberLocks = new boolean[9][9];
-        this.defaultAnswer = new int[9][9];
+        this.numbers = new int[PUZZLE_SIZE][PUZZLE_SIZE];
+        this.numberLocks = new boolean[PUZZLE_SIZE][PUZZLE_SIZE];
+        this.defaultAnswer = new int[PUZZLE_SIZE][PUZZLE_SIZE];
         this.selectedNumber = -1;
         this.moveHistory = new Stack<SudokuMove>();
     }
@@ -33,10 +37,10 @@ public class SudokuPuzzle {
     /**
      * Gets the numbers.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the numbers matrix.
+     * @return The numbers matrix.
      */
     public int[][] getNumbers() {
         return this.numbers;
@@ -45,10 +49,10 @@ public class SudokuPuzzle {
     /**
      * Gets the move history.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the move history.
+     * @return The move history.
      */
     public Stack<SudokuMove> getMoveHistory() {
         return this.moveHistory;
@@ -57,10 +61,10 @@ public class SudokuPuzzle {
     /**
      * Gets the selected number.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the selected number.
+     * @return The selected number.
      */
     public int getSelectedNumber() {
         return this.selectedNumber;
@@ -69,12 +73,12 @@ public class SudokuPuzzle {
     /**
      * Gets the number at specified location.
      * 
-     * @precondition 0 <= column <= 8 && 0 <= row <= 8
-     * @postcondition none
+     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @postcondition None
      * 
-     * @param column the column.
-     * @param row    the row.
-     * @return number at specified position.
+     * @param column The column.
+     * @param row    The row.
+     * @return The number at specified position.
      */
     public int getNumber(int column, int row) {
         this.checkColumnAndRow(column, row);
@@ -93,22 +97,22 @@ public class SudokuPuzzle {
     /**
      * Gets the number locks.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the number lock matrix.
+     * @return The number lock matrix.
      */
-    public boolean[][] getNumberLock() {
+    public boolean[][] getNumberLocks() {
         return this.numberLocks;
     }
 
     /**
      * Gets the default answer.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return default answer.
+     * @return The default answer.
      */
     public int[][] getDefaultAnswer() {
         return this.defaultAnswer;
@@ -117,12 +121,13 @@ public class SudokuPuzzle {
     /**
      * Sets the number at the specified point.
      * 
-     * @precondition 0 <= value <= 9 && 0 <= column <= 8 && 0 <= row <= 8
-     * @postcondition this.numbers[row][column] == value
+     * @precondition value >= 0 && value < PUZZLE_SIZE && column >= 0 && column < PUZZLE_SIZE && 
+     *               row >= 0 && row < PUZZLE_SIZE
+     * @postcondition this.getNumber(row, column) == value
      * 
-     * @param value the value being set to the specified position.
-     * @param column the column to be set.
-     * @param row the row to be set.
+     * @param value The value being set to the specified position.
+     * @param column The column to be set.
+     * @param row The row to be set.
      */
     public void setNumber(int value, int column, int row) {
         this.checkNumber(value);
@@ -133,12 +138,12 @@ public class SudokuPuzzle {
     /**
      * Sets the lock at the specified point.
      * 
-     * @precondition column >= 0 && row >= 0
-     * @postcondition this.numberLocks[row][column] == lock
+     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @postcondition this.isNumberLocked(column, row) == lock
      * 
-     * @param lock the boolean for the numberlock to be set.
-     * @param column the column to be set.
-     * @param row the row to be set.
+     * @param lock The boolean for the numberlock to be set.
+     * @param column The column to be set.
+     * @param row The row to be set.
      */
     public void setNumberLock(boolean lock, int column, int row) {
         this.checkColumnAndRow(column, row);
@@ -149,7 +154,7 @@ public class SudokuPuzzle {
      * Sets the selected number.
      * 
      * @precondition number >= 0 && number <= 9
-     * @postcondition this.selectedNumber == number
+     * @postcondition this.getSelectedNumber() == number
      * 
      * @param number
      */
@@ -170,10 +175,10 @@ public class SudokuPuzzle {
     /**
      * Checks to see if game is comple.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return true or false depending on state of the game.
+     * @return [true] iff the game has been completed, otherwise [false]
      */
     public boolean isComplete() {
         return this.numbers.equals(this.defaultAnswer);
@@ -182,11 +187,11 @@ public class SudokuPuzzle {
     /**
      * Checks to see if number is locked.
      * 
-     * @precondition 0 <= column <= 8 && 0 <= row <= 8
-     * @postcondition none
+     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @postcondition None
      * 
-     * @param column the column to be set.
-     * @param row the row to be set.
+     * @param column The column to be set.
+     * @param row The row to be set.
      * @return true or false depending on locked state.
      */
     public boolean isNumberLocked(int column, int row) {
@@ -197,12 +202,12 @@ public class SudokuPuzzle {
     /**
      * Gets the answer for the specified position.
      * 
-     * @precondition 0 <= column <= 8 && 0 <= row <= 8
-     * @postcondition none
+     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @postcondition None
      * 
-     * @param column the column to be set.
-     * @param row the row to be set.
-     * @return the answer for the coord.
+     * @param column The column to be set.
+     * @param row The row to be set.
+     * @return The answer for the coord.
      */
     public int getAnswerForPosition(int column, int row) {
         this.checkColumnAndRow(column, row);

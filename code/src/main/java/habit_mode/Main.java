@@ -11,8 +11,8 @@ import javafx.scene.Scene;
 /**
  * Entry point for the program
  *
- * @author    Shawn Carter
- * @version Fall 2021
+ * @author Team 1
+ * @version Spring 2022
  */
 public class Main extends Application {
     public static final String WINDOW_TITLE = "Habit Mode";
@@ -21,8 +21,8 @@ public class Main extends Application {
     /**
      * JavaFX entry point.
      *
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      *
      * @throws IOException
      */
@@ -38,10 +38,10 @@ public class Main extends Application {
     /**
      * Primary Java entry point.
      *
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      *
-     * @param args command line arguments
+     * @param args The command line arguments.
      */
     public static void main(String[] args) {
         Main.launch(args);
