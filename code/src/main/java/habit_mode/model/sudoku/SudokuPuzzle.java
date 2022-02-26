@@ -3,7 +3,8 @@ package habit_mode.model.sudoku;
 import java.util.Stack;
 
 /**
- * Stores information about the state of a puzzle, including the placement of numbers, the default
+ * Stores information about the state of a puzzle, including the placement of
+ * numbers, the default
  * solution, and which numbers are provided at the start of the puzzle.
  * 
  * @author Team 1
@@ -11,6 +12,8 @@ import java.util.Stack;
  */
 public class SudokuPuzzle {
     public static final int PUZZLE_SIZE = 9;
+    public static final int MIN_INDEX = 0;
+    public static final int MAX_INDEX = 8;
 
     private int[][] numbers;
     private boolean[][] numberLocks;
@@ -22,8 +25,12 @@ public class SudokuPuzzle {
      * Default Constructor
      * 
      * @precondition None
-     * @postcondition this.getNumbers() == new int[9][9] && this.gtNumberLocks() == new boolean[9][9] && 
-     *                this.getDefaultAnswer() == new int[9][9] && this.getSelectedNumber() == -1 && 
+     * @postcondition this.getNumbers() == new int[PUZZLE_SIZE][PUZZLE_SIZE] &&
+     *                this.gtNumberLocks() ==
+     *                new boolean[PUZZLE_SIZE][PUZZLE_SIZE] &&
+     *                this.getDefaultAnswer() == new int[PUZZLE_SIZE][PUZZLE_SIZE]
+     *                &&
+     *                this.getSelectedNumber() == -1 &&
      *                this.moveHistory == new Stack<SudokuMove>()
      */
     public SudokuPuzzle() {
@@ -73,7 +80,8 @@ public class SudokuPuzzle {
     /**
      * Gets the number at specified location.
      * 
-     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @precondition column >= MIN_INDEX && column < MAX_INDEX && row >= MIN_INDEX
+     *               && row < MAX_INDEX
      * @postcondition None
      * 
      * @param column The column.
@@ -86,10 +94,16 @@ public class SudokuPuzzle {
     }
 
     private void checkColumnAndRow(int column, int row) {
-        if (column < 0) {
+        if (column < MIN_INDEX) {
             throw new IndexOutOfBoundsException("column can not be less than 0");
         }
-        if (row < 0) {
+        if (column > MAX_INDEX) {
+            throw new IndexOutOfBoundsException("column can not be more than 8");
+        }
+        if (row > MAX_INDEX) {
+            throw new IndexOutOfBoundsException("row can not be more than 8");
+        }
+        if (row < MIN_INDEX) {
             throw new IndexOutOfBoundsException("row can not be less than 0");
         }
     }
@@ -121,13 +135,16 @@ public class SudokuPuzzle {
     /**
      * Sets the number at the specified point.
      * 
-     * @precondition value >= 0 && value < PUZZLE_SIZE && column >= 0 && column < PUZZLE_SIZE && 
-     *               row >= 0 && row < PUZZLE_SIZE
+     * @precondition value >= MIN_INDEX && value < PUZZLE_SIZE && column >=
+     *               MIN_INDEX &&
+     *               column <
+     *               PUZZLE_SIZE &&
+     *               row >= MIN_INDEX && row < PUZZLE_SIZE
      * @postcondition this.getNumber(row, column) == value
      * 
-     * @param value The value being set to the specified position.
+     * @param value  The value being set to the specified position.
      * @param column The column to be set.
-     * @param row The row to be set.
+     * @param row    The row to be set.
      */
     public void setNumber(int value, int column, int row) {
         this.checkNumber(value);
@@ -138,12 +155,13 @@ public class SudokuPuzzle {
     /**
      * Sets the lock at the specified point.
      * 
-     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @precondition column >= MIN_INDEX && column < MAX_INDEX && row >= MIN_INDEX
+     *               && row < MAX_INDEX
      * @postcondition this.isNumberLocked(column, row) == lock
      * 
-     * @param lock The boolean for the numberlock to be set.
+     * @param lock   The boolean for the numberlock to be set.
      * @param column The column to be set.
-     * @param row The row to be set.
+     * @param row    The row to be set.
      */
     public void setNumberLock(boolean lock, int column, int row) {
         this.checkColumnAndRow(column, row);
@@ -153,7 +171,7 @@ public class SudokuPuzzle {
     /**
      * Sets the selected number.
      * 
-     * @precondition number >= 0 && number <= 9
+     * @precondition number >= MIN_INDEX && number <= PUZZLE_SIZE
      * @postcondition this.getSelectedNumber() == number
      * 
      * @param number
@@ -164,10 +182,10 @@ public class SudokuPuzzle {
     }
 
     private void checkNumber(int number) {
-        if (number < 0) {
+        if (number < MIN_INDEX) {
             throw new IllegalArgumentException("number cannot be less than 0");
         }
-        if (number > 9) {
+        if (number > PUZZLE_SIZE) {
             throw new IllegalArgumentException("number cannot be greater than 9");
         }
     }
@@ -187,11 +205,12 @@ public class SudokuPuzzle {
     /**
      * Checks to see if number is locked.
      * 
-     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @precondition column >= MIN_INDEX && column < PUZZLE_SIZE && row >= MIN_INDEX
+     *               && row < PUZZLE_SIZE
      * @postcondition None
      * 
      * @param column The column to be set.
-     * @param row The row to be set.
+     * @param row    The row to be set.
      * @return true or false depending on locked state.
      */
     public boolean isNumberLocked(int column, int row) {
@@ -202,11 +221,12 @@ public class SudokuPuzzle {
     /**
      * Gets the answer for the specified position.
      * 
-     * @precondition column >= 0 && column < PUZZLE_SIZE && row >= 0 && row < PUZZLE_SIZE
+     * @precondition column >= MIN_INDEX && column < PUZZLE_SIZE && row >= MIN_INDEX
+     *               && row < PUZZLE_SIZE
      * @postcondition None
      * 
      * @param column The column to be set.
-     * @param row The row to be set.
+     * @param row    The row to be set.
      * @return The answer for the coord.
      */
     public int getAnswerForPosition(int column, int row) {
