@@ -120,4 +120,19 @@ public class Habit {
     public String toString() {
         return this.textProperty.get();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Habit)) {
+            return false;
+        }
+
+        Habit otherHabit = (Habit) other;
+        return this.getText().equals(otherHabit.getText()) && this.completionFrequency == otherHabit.completionFrequency;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

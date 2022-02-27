@@ -240,18 +240,6 @@ public class HabitViewModel {
         return this.coinsLabelProperty;
     }
 
-    /**
-     * Sets the coins label to match the amount of coins
-     * 
-     * @precondition None.
-     * @postcondition None.
-     * 
-     * @return String to set the text.
-     */
-    public String setCoinText() {
-        return "Coins: " + this.serverCommunicator.getCoins();
-    }
-
     public void sendCompletedHabit(Habit habit) {
         if (this.serverCommunicator.completeHabit(habit)) {
             this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());

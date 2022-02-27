@@ -19,6 +19,9 @@ import habit_mode.model.sudoku.SudokuPuzzle;
  * @version Spring 2022
  */
 public class LocalServerCommunicator extends ServerCommunicator {
+    private static final int COMPLETION_REWARD = 20;
+    private static final int FULL_COMPLETION_BONUS = 50;
+
     private static final String NULL_USERNAME_ERROR = "username must not be null";
     private static final String BLANK_USERNAME_ERROR = "username must not be blank";
     private static final String NULL_PASSWORD_ERROR = "password must not be null";
@@ -29,6 +32,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static int coins = 0;
     private static HabitManager habits = new HabitManager();
     private static SudokuPuzzle storedPuzzle = null;
+    private static boolean receivedBonus = false;
 
     /**
      * Resets static fields stored values to their default state.
@@ -42,6 +46,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
         coins = 0;
         storedPuzzle = null;
         habits.clear();
+        receivedBonus = false;
     }
 
     @Override
@@ -86,7 +91,10 @@ public class LocalServerCommunicator extends ServerCommunicator {
             return false;
         }
 
-        habits.add(habit);
+        Habit clonedHabit = new Habit(habit.getText(), habit.getFrequency());
+        clonedHabit.completionProperty().set(habit.isComplete());
+        habits.add(clonedHabit);
+
         return true;
     }
 
@@ -112,26 +120,27 @@ public class LocalServerCommunicator extends ServerCommunicator {
             return false;
         }
 
-        // Ensures that we edit the habit stored in the "server" when the "server" and
-        // the client
-        // have different objects
-        int index = habits.indexOf(habit);
-        Habit storedHabit = habits.get(index);
+        Habit storedHabit = this.getServerSideHabit(habit);
 
         if (storedHabit.isComplete()) {
             return false;
         }
-        coins += 20;
-        var completed = 0;
-        for (Habit currHabit : habits) {
-            if (currHabit.isComplete()) {
-                completed++;
+        storedHabit.completionProperty().set(true);
+        coins += COMPLETION_REWARD;
+
+        if (!receivedBonus) {
+            var completed = 0;
+            for (Habit currHabit : habits) {
+                if (currHabit.isComplete()) {
+                    completed++;
+                }
+            }
+            if (completed == habits.size()) {
+                coins += FULL_COMPLETION_BONUS;
+                receivedBonus = true;
             }
         }
-        if (completed == habits.size()) {
-            coins += 50;
-        }
-        storedHabit.completionProperty().set(true);
+        
         return true;
     }
 
@@ -149,5 +158,17 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
         coins = amount;
         return true;
+    }
+
+    /**
+     * Gets the server-side version of a given Habit.
+     * 
+     * @param habit The client-side version of a habit
+     * @return The server-side version of a habit if it exists, otherwise null.
+     */
+    public Habit getServerSideHabit(Habit habit) {
+        int index = habits.indexOf(habit);
+
+        return index == -1 ? null : habits.get(index);
     }
 }
