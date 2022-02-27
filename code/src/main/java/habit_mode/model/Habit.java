@@ -133,6 +133,6 @@ public class Habit {
 
     @Override
     public int hashCode() {
-        return 0;
+        return super.hashCode();
     }
 }

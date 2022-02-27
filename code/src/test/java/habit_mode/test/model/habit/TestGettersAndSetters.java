@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
+import javafx.beans.property.StringProperty;
 
-class TestSetters {
+class TestGettersAndSetters {
     @Test
     void testSetFrequency() {
         Habit habit = new Habit("Hello!", Frequency.DAILY);
@@ -15,5 +16,15 @@ class TestSetters {
         habit.setFrequency(Frequency.WEEKLY);
 
         assertEquals(Frequency.WEEKLY, habit.getFrequency(), "Checking that the frequency is set");
+    }
+    
+    @Test
+    void testTextProperty() {
+        Habit habit = new Habit("Hello!", Frequency.DAILY);
+
+        StringProperty property = habit.textProperty();
+        property.set("Habit");
+
+        assertEquals("Habit", habit.getText(), "Checking that the text is set");
     }
 }

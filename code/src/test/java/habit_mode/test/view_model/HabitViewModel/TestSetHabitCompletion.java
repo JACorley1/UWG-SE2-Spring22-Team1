@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
+import habit_mode.model.local_implementation.LocalServerCommunicator;
 import habit_mode.view_model.HabitViewModel;
 
 class TestSetHabitCompletion {
     @Test
     void testSetHabitCompletionWithAValueSelected() {
+        LocalServerCommunicator.reset();
         HabitViewModel viewModel = new HabitViewModel();
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
@@ -28,6 +30,7 @@ class TestSetHabitCompletion {
 
     @Test
     void testSetHabitCompletionWithNoValueSelected() {
+        LocalServerCommunicator.reset();
         HabitViewModel viewModel = new HabitViewModel();
         viewModel.habitNameProperty().set("Test");
         viewModel.addHabit();
@@ -42,6 +45,7 @@ class TestSetHabitCompletion {
 
     @Test
     void testSetHabitCompletionWithEmptyCollection() {
+        LocalServerCommunicator.reset();
         HabitViewModel viewModel = new HabitViewModel();
         Habit selectedHabit = new Habit("TestHabit", Frequency.DAILY);
         viewModel.selectedHabitProperty().set(selectedHabit);

@@ -244,7 +244,6 @@ public class HabitViewModel {
         if (this.serverCommunicator.completeHabit(habit)) {
             this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
         }
-
     }
 
 }
