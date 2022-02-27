@@ -22,4 +22,10 @@ public class TestGetters {
         HabitViewModel viewModel = new HabitViewModel();
         viewModel.monthlySelectedProperty();
     }
+
+    @Test
+    void testCoinsLabelProperty() {
+        HabitViewModel viewModel = new HabitViewModel();
+        viewModel.coinsLabelProperty();
+    }
 }

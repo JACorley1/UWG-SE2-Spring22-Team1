@@ -26,7 +26,7 @@ import habit_mode.view_model.HabitViewModel;
  */
 public class HabitScreenCodeBehind {
     private HabitViewModel viewModel;
-    
+
     @FXML
     private ResourceBundle resources;
 
@@ -43,7 +43,7 @@ public class HabitScreenCodeBehind {
     private Button settingsButton;
 
     @FXML
-    private Label moneyLabel;
+    private Label coinsLabel;
 
     @FXML
     private Button backButton;
@@ -80,7 +80,7 @@ public class HabitScreenCodeBehind {
 
     @FXML
     private Label habitNameErrorLabel;
-    
+
     @FXML
     private TextField habitNameTextField;
 
@@ -107,7 +107,7 @@ public class HabitScreenCodeBehind {
             System.out.println(err.getMessage());
         }
     }
-    
+
     @FXML
     void settingsButtonClicked(ActionEvent event) {
 
@@ -121,27 +121,52 @@ public class HabitScreenCodeBehind {
     @FXML
     void initialize() {
         this.viewModel = new HabitViewModel();
-        
-        assert this.sudokuButton != null : "fx:id=\"sudokuButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.moneyLabel != null : "fx:id=\"moneyLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.habitScreenLabel != null : "fx:id=\"habitScreenLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.habitListView != null : "fx:id=\"habitListView\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.addHabitButton != null : "fx:id=\"addHabitButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.addHabitBackgroundAnchorPane != null : "fx:id=\"addHabitBackgroundAnchorPane\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.dailyRadioButton != null : "fx:id=\"dailyRadioButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.frequencyToggleGroup != null : "fx:id=\"frequencyToggleGroup\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.weeklyRadioButton != null : "fx:id=\"weeklyRadioButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.monthlyRadioButton != null : "fx:id=\"monthlyRadioButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.confirmHabitButton != null : "fx:id=\"confirmHabitButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.cancelButton != null : "fx:id=\"cancelButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.habitNameErrorLabel != null : "fx:id=\"habitNameErrorLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
-        assert this.habitNameTextField != null : "fx:id=\"habitNameTextField\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+
+        this.assertFields();
 
         this.setHabitListeners();
         this.setViewModelBindings();
+    }
+
+    private void assertFields() {
+        assert this.sudokuButton != null
+                : "fx:id=\"sudokuButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.habitListButton != null
+                : "fx:id=\"habitListButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.settingsButton != null
+                : "fx:id=\"settingsButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.coinsLabel != null
+                : "fx:id=\"coinsLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.backButton != null
+                : "fx:id=\"backButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.habitScreenLabel != null
+                : "fx:id=\"habitScreenLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.habitListView != null
+                : "fx:id=\"habitListView\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.addHabitButton != null
+                : "fx:id=\"addHabitButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.addHabitBackgroundAnchorPane != null
+                : "fx:id=\"addHabitBackgroundAnchorPane\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        this.splitAssertFields();
+    }
+
+    private void splitAssertFields() {
+        assert this.dailyRadioButton != null
+                : "fx:id=\"dailyRadioButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.frequencyToggleGroup != null
+                : "fx:id=\"frequencyToggleGroup\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.weeklyRadioButton != null
+                : "fx:id=\"weeklyRadioButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.monthlyRadioButton != null
+                : "fx:id=\"monthlyRadioButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.confirmHabitButton != null
+                : "fx:id=\"confirmHabitButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.cancelButton != null
+                : "fx:id=\"cancelButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.habitNameErrorLabel != null
+                : "fx:id=\"habitNameErrorLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.habitNameTextField != null
+                : "fx:id=\"habitNameTextField\" was not injected: check your FXML file 'HabitScreen.fxml'.";
     }
 
     private void setViewModelBindings() {
@@ -152,20 +177,21 @@ public class HabitScreenCodeBehind {
         this.viewModel.errorVisibleProperty().bindBidirectional(this.habitNameErrorLabel.visibleProperty());
         this.viewModel.habitNameProperty().bindBidirectional(this.habitNameTextField.textProperty());
         this.viewModel.habitListProperty().bindBidirectional(this.habitListView.itemsProperty());
-        
-        //please work :(
+        this.viewModel.coinsLabelProperty().bindBidirectional(this.coinsLabel.textProperty());
+
         this.viewModel.habitListProperty().addListener((observable, oldValue, newValue) -> {
             var list = this.habitListView.itemsProperty().get();
             Habit newestItem = list.get(list.size() - 1);
 
             newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
                 System.out.println(newestItem.getText() + " changed on state from " + wasOn + " to " + isNowOn);
+                this.viewModel.sendCompletedHabit(newestItem);
             });
         });
     }
 
     private void setHabitListeners() {
-        for (Habit habit : this.viewModel.habitListProperty())  {
+        for (Habit habit : this.viewModel.habitListProperty()) {
             habit.completionProperty().addListener((obs, wasOn, isNowOn) -> {
                 System.out.println(habit.getText() + " changed on state from " + wasOn + " to " + isNowOn);
             });

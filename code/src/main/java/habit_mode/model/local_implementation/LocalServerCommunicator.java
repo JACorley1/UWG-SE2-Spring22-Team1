@@ -7,12 +7,15 @@ import habit_mode.model.HabitManager;
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.sudoku.SudokuPuzzle;
 
-/** 
- *  Stores server information locally, allowing for easy testing without the need of a live server.
- *  All instances access the same static information, as though communicating with the same server.
- *  To clear the information for unit testing, please use LocalServerCommunicator::reset().
+/**
+ * Stores server information locally, allowing for easy testing without the need
+ * of a live server.
+ * All instances access the same static information, as though communicating
+ * with the same server.
+ * To clear the information for unit testing, please use
+ * LocalServerCommunicator::reset().
  * 
- * @author  Team 1
+ * @author Team 1
  * @version Spring 2022
  */
 public class LocalServerCommunicator extends ServerCommunicator {
@@ -40,7 +43,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
         storedPuzzle = null;
         habits.clear();
     }
-    
+
     @Override
     public boolean validateLogin(String username, String password) {
         if (username == null) {
@@ -109,15 +112,25 @@ public class LocalServerCommunicator extends ServerCommunicator {
             return false;
         }
 
-        //Ensures that we edit the habit stored in the "server" when the "server" and the client 
-        //have different objects
+        // Ensures that we edit the habit stored in the "server" when the "server" and
+        // the client
+        // have different objects
         int index = habits.indexOf(habit);
         Habit storedHabit = habits.get(index);
 
         if (storedHabit.isComplete()) {
             return false;
         }
-
+        coins += 20;
+        var completed = 0;
+        for (Habit currHabit : habits) {
+            if (currHabit.isComplete()) {
+                completed++;
+            }
+        }
+        if (completed == habits.size()) {
+            coins += 50;
+        }
         storedHabit.completionProperty().set(true);
         return true;
     }

@@ -14,10 +14,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 
-/** 
+/**
  * The habitViewModel class.
  * 
- * @author    Team 1
+ * @author Team 1
  * @version Spring 2022
  */
 public class HabitViewModel {
@@ -28,15 +28,19 @@ public class HabitViewModel {
     private BooleanProperty popupVisibleProperty;
     private BooleanProperty errorVisibleProperty;
     private StringProperty habitNameProperty;
+    private StringProperty coinsLabelProperty;
     private ObjectProperty<Habit> selectedHabitProperty;
     private ListProperty<Habit> habitListProperty;
 
-    /** 
+    /**
      * Creates a new habit view model.
      * 
      * @precondition: None.
-     * @postcondition: this.frequencyProperty() == new SimpleObjectProperty<Frequency>(), this.habitNameProperty() == new SimpleStringProperty(""), 
-     * 				         this.habitListProperty() == FXCollections.observableArrayList(new HabitManager());
+     * @postcondition: this.frequencyProperty() == new
+     *                 SimpleObjectProperty<Frequency>(), this.habitNameProperty()
+     *                 == new SimpleStringProperty(""),
+     *                 this.habitListProperty() ==
+     *                 FXCollections.observableArrayList(new HabitManager());
      */
     public HabitViewModel() {
         this.serverCommunicator = new LocalServerCommunicator();
@@ -46,15 +50,17 @@ public class HabitViewModel {
         this.popupVisibleProperty = new SimpleBooleanProperty();
         this.errorVisibleProperty = new SimpleBooleanProperty();
         this.selectedHabitProperty = new SimpleObjectProperty<Habit>();
-        this.habitNameProperty =  new SimpleStringProperty("");
+        this.habitNameProperty = new SimpleStringProperty("");
+        this.coinsLabelProperty = new SimpleStringProperty("");
         this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
     }
 
-    /** 
+    /**
      * Adds a habit to the system.
      * 
      * @precondition this.habitNameProperty.getValue() != null || "";
-     * @postcondition this.habitListProperty().getValue().size() == this.habitListProperty().getValue().size() @pre + 1;
+     * @postcondition this.habitListProperty().getValue().size() ==
+     *                this.habitListProperty().getValue().size() @pre + 1;
      */
     public void addHabit() {
         if (this.habitNameProperty.getValue() == null) {
@@ -85,7 +91,8 @@ public class HabitViewModel {
     }
 
     /**
-     * Closes the add habit popup window, hides the error message, and resets all of its values 
+     * Closes the add habit popup window, hides the error message, and resets all of
+     * its values
      * to default.
      * 
      * @precondition None
@@ -103,11 +110,14 @@ public class HabitViewModel {
         this.habitNameProperty.set("");
     }
 
-    /** 
+    /**
      * Sets the targeted habits completion status.
      * 
-     * @precondition !this.habitListProperty().getValue().isEmpty() && this.selectedHabitProperty().getValue() != null;
-     * @postcondition this.selectedHabitProperty.getValue().toggleCompletionStatus() == !this.selectedHabitProperty().getValue().toggleCompletionStatus() @pre;
+     * @precondition !this.habitListProperty().getValue().isEmpty() &&
+     *               this.selectedHabitProperty().getValue() != null;
+     * @postcondition this.selectedHabitProperty.getValue().toggleCompletionStatus()
+     *                ==
+     *                !this.selectedHabitProperty().getValue().toggleCompletionStatus() @pre;
      * 
      * @param status The completion status of the currently selected habit.
      */
@@ -122,7 +132,7 @@ public class HabitViewModel {
         this.selectedHabitProperty.getValue().completionProperty().set(status);
     }
 
-    /** 
+    /**
      * The selected habit property.
      * 
      * @precondition None.
@@ -194,19 +204,19 @@ public class HabitViewModel {
         return this.monthlySelectedProperty;
     }
 
-    /** 
+    /**
      * The habit list property.
      * 
      * @precondition None.
      * @postcondition None.
-     *  
+     * 
      * @return The habit list property.
      */
     public ListProperty<Habit> habitListProperty() {
         return this.habitListProperty;
     }
 
-    /** 
+    /**
      * The habit name property.
      * 
      * @precondition None.
@@ -217,4 +227,36 @@ public class HabitViewModel {
     public StringProperty habitNameProperty() {
         return this.habitNameProperty;
     }
+
+    /**
+     * The habit name property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The habit name property.
+     */
+    public StringProperty coinsLabelProperty() {
+        return this.coinsLabelProperty;
+    }
+
+    /**
+     * Sets the coins label to match the amount of coins
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return String to set the text.
+     */
+    public String setCoinText() {
+        return "Coins: " + this.serverCommunicator.getCoins();
+    }
+
+    public void sendCompletedHabit(Habit habit) {
+        if (this.serverCommunicator.completeHabit(habit)) {
+            this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
+        }
+
+    }
+
 }
