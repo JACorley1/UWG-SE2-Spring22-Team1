@@ -154,7 +154,7 @@ public class HabitScreenCodeBehind {
         this.viewModel.habitListProperty().bindBidirectional(this.habitListView.itemsProperty());
         
         //please work :(
-        this.habitListView.itemsProperty().addListener((observable, oldValue, newValue) -> {
+        this.viewModel.habitListProperty().addListener((observable, oldValue, newValue) -> {
             var list = this.habitListView.itemsProperty().get();
             Habit newestItem = list.get(list.size() - 1);
 
