@@ -30,19 +30,7 @@ class TestIndexOf {
 
         assertTrue(result == -1, "Check if return is correct.");
     }
-
-    @Test
-    void testLastIndexOfWhenTheHabitIsNull() {
-        HabitManager manager = new HabitManager();
-
-        assertThrows(
-            IllegalArgumentException.class, 
-            ()->{
-                manager.lastIndexOf(null);
-            }
-        );
-    }
-
+    
     @Test
     void testIndexOfWhenTheHabitIsNull() {
         HabitManager manager = new HabitManager();

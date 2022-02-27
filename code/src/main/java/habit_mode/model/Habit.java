@@ -1,5 +1,10 @@
 package habit_mode.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /** 
  * The habit class.
  * 
@@ -9,8 +14,9 @@ package habit_mode.model;
 public class Habit {
     public static final String NULL_TEXT_ERROR = "text for the habit cannot be null";
     public static final String EMPTY_TEXT_ERROR = "text for the habit cannot be empty";
-    private String text;
-    private boolean complete;
+
+    private StringProperty textProperty;
+    private BooleanProperty completionProperty;
     private Frequency completionFrequency;
 
     /** 
@@ -24,21 +30,9 @@ public class Habit {
      */
     public Habit(String text, Frequency frequency) {
         this.checkString(text);
-        this.text = text;
-        this.complete = false;
+        this.textProperty = new SimpleStringProperty(text);
+        this.completionProperty = new SimpleBooleanProperty(false);
         this.completionFrequency = frequency;
-    }
-
-    /** 
-     * Gets the text of the habit.
-     *
-     * @precondition None
-     * @postcondition None
-     * 
-     * @return The text of the habit.
-     */
-    public String getText() {
-        return this.text;
     }
 
     /** 
@@ -50,15 +44,52 @@ public class Habit {
      * @return the completion status of the habit.
      */
     public boolean isComplete() {
-        return this.complete;
+        return this.completionProperty.get();
     }
 
-    /** Gets the completion frequency of the habit.
+    /**
+     * Gets the property for the habit text.
      * 
-     * @precondition none
-     * @postcondition none
+     * @precondition None
+     * @postcondition None
      * 
-     * @return the completion frequency of the habit.
+     * @return The text property.
+     */
+    public StringProperty textProperty() {
+        return this.textProperty;
+    }
+
+    /**
+     * Gets the property for the habit's completion status.
+     * 
+     * @precondition None
+     * @postcondition None
+     * 
+     * @return The completion property.
+     */
+    public BooleanProperty completionProperty() {
+        return this.completionProperty;
+    }
+
+    /** 
+     * Gets the text of the habit.
+     *
+     * @precondition None
+     * @postcondition None
+     * 
+     * @return The text of the habit.
+     */
+    public String getText() {
+        return this.textProperty.get();
+    }
+
+    /** 
+     * Gets the completion frequency of the habit.
+     * 
+     * @precondition None
+     * @postcondition None
+     * 
+     * @return The completion frequency of the habit.
      */
     public Frequency getFrequency() {
         return this.completionFrequency;
@@ -76,29 +107,6 @@ public class Habit {
         this.completionFrequency = frequency;
     }
 
-    /** 
-     * Sets the text for the habit with the text provided.
-     * 
-     * @precondition text != string.isEmpty() && text != null;
-     * @postcondition this.getText() = string;
-     * 
-     * @param text The display text for the habit.
-     */
-    public void setText(String text) {
-        this.checkString(text);
-        this.text = text;
-    }
-
-    /** 
-     * Toggles the completion status of the habit.
-     * 
-     * @precondition none
-     * @postcondition this.isComplete() == !this.isComplete()@pre;
-     */
-    public void toggleCompletionStatus() {
-        this.complete = !this.complete;
-    }
-
     private void checkString(String string) {
         if (string == null) {
             throw new IllegalArgumentException(NULL_TEXT_ERROR);
@@ -106,5 +114,10 @@ public class Habit {
         if (string.isEmpty()) {
             throw new IllegalArgumentException(EMPTY_TEXT_ERROR);
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.textProperty.get();
     }
 }
