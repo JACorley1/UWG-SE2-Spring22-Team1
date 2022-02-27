@@ -19,10 +19,52 @@ public class TestCompleteHabit {
         Habit habit = new Habit("habit", Frequency.DAILY);
 
         communicator.addHabit(habit);
+        Habit serverHabit = communicator.getServerSideHabit(habit);
 
         assertAll(
             () -> {assertTrue(communicator.completeHabit(habit), "Check if return is correct");},
-            () -> {assertTrue(habit.isComplete(), "Check if habit was completed");}
+            () -> {assertTrue(serverHabit.isComplete(), "Check if habit was completed");}
+        );
+    }
+
+    @Test
+    void testCompleteManyHabits() {
+        LocalServerCommunicator.reset();
+        LocalServerCommunicator communicator = new LocalServerCommunicator();
+        Habit habit1 = new Habit("habit", Frequency.DAILY);
+        Habit habit2 = new Habit("habit2", Frequency.DAILY);
+
+        communicator.addHabit(habit1);
+        communicator.addHabit(habit2);
+        Habit serverHabit1 = communicator.getServerSideHabit(habit1);
+        Habit serverHabit2 = communicator.getServerSideHabit(habit2);
+
+        assertAll(
+            () -> {assertTrue(communicator.completeHabit(habit1), "Check if return is correct");},
+            () -> {assertTrue(communicator.completeHabit(habit2), "Check if return is correct");},
+            () -> {assertTrue(serverHabit1.isComplete(), "Check if habit was completed");},
+            () -> {assertTrue(serverHabit2.isComplete(), "Check if habit was completed");}
+        );
+    }
+
+    @Test
+    void testCompleteHabitsAfterEarningBonus() {
+        LocalServerCommunicator.reset();
+        LocalServerCommunicator communicator = new LocalServerCommunicator();
+        Habit habit1 = new Habit("habit", Frequency.DAILY);
+        Habit habit2 = new Habit("habit2", Frequency.DAILY);
+
+        communicator.addHabit(habit1);
+        communicator.completeHabit(habit1);
+
+        communicator.addHabit(habit2);
+        Habit serverHabit1 = communicator.getServerSideHabit(habit1);
+        Habit serverHabit2 = communicator.getServerSideHabit(habit2);
+
+        assertAll(
+            () -> {assertTrue(communicator.completeHabit(habit2), "Check if return is correct");},
+            () -> {assertTrue(serverHabit1.isComplete(), "Check if habit was completed");},
+            () -> {assertTrue(serverHabit2.isComplete(), "Check if habit was completed");}
         );
     }
 
@@ -46,10 +88,11 @@ public class TestCompleteHabit {
 
         communicator.addHabit(habit);
         communicator.completeHabit(habit);
+        Habit serverHabit = communicator.getServerSideHabit(habit);
 
         assertAll(
             () -> {assertFalse(communicator.completeHabit(habit), "Check if return is correct");},
-            () -> {assertTrue(habit.isComplete(), "Check if habit was not completed");}
+            () -> {assertTrue(serverHabit.isComplete(), "Check if habit was not completed");}
         );
     }
 

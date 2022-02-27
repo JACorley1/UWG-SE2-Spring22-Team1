@@ -16,7 +16,7 @@
       <Button id="sudokuButton" fx:id="sudokuButton" layoutX="36.0" layoutY="620.0" mnemonicParsing="false" onAction="#sudokuButtonSelected" prefHeight="65.0" prefWidth="98.0" text="Sudoku" />
       <Button id="habitListButton" fx:id="habitListButton" layoutX="192.0" layoutY="619.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="98.0" text="Habit List" />
       <Button id="settingsButton" fx:id="settingsButton" layoutX="344.0" layoutY="620.0" mnemonicParsing="false" onAction="#settingsButtonClicked" prefHeight="65.0" prefWidth="98.0" text="Settings" />
-      <Label id="moneyLabel" fx:id="moneyLabel" layoutX="439.0" layoutY="20.0" text="Money">
+      <Label id="coinsLabel" fx:id="coinsLabel" layoutX="401.0" layoutY="27.0" prefHeight="20.0" prefWidth="90.0" text="Coins : 0">
          <font>
             <Font size="14.0" />
          </font>
