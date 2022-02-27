@@ -2,6 +2,8 @@ package habit_mode.view_model;
 
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
+import habit_mode.model.ServerCommunicator;
+import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -19,6 +21,7 @@ import javafx.collections.FXCollections;
  * @version Spring 2022
  */
 public class HabitViewModel {
+    private ServerCommunicator serverCommunicator;
     private BooleanProperty dailySelectedProperty;
     private BooleanProperty weeklySelectedProperty;
     private BooleanProperty monthlySelectedProperty;
@@ -36,6 +39,7 @@ public class HabitViewModel {
      * 				         this.habitListProperty() == FXCollections.observableArrayList(new HabitManager());
      */
     public HabitViewModel() {
+        this.serverCommunicator = new LocalServerCommunicator();
         this.dailySelectedProperty = new SimpleBooleanProperty();
         this.weeklySelectedProperty = new SimpleBooleanProperty();
         this.monthlySelectedProperty = new SimpleBooleanProperty();
@@ -53,8 +57,6 @@ public class HabitViewModel {
      * @postcondition this.habitListProperty().getValue().size() == this.habitListProperty().getValue().size() @pre + 1;
      */
     public void addHabit() {
-        System.out.println("Add habit");
-
         if (this.habitNameProperty.getValue() == null) {
             this.errorVisibleProperty.set(true);
             throw new IllegalArgumentException(Habit.NULL_TEXT_ERROR);
@@ -65,9 +67,11 @@ public class HabitViewModel {
         }
 
         Habit habit = new Habit(this.habitNameProperty.getValue(), this.determineFrequency());
-        this.habitListProperty.add(habit);
+        if (this.serverCommunicator.addHabit(habit)) {
+            this.habitListProperty.add(habit);
+            this.closePopup();
+        }
 
-        this.closePopup();
     }
 
     private Frequency determineFrequency() {
