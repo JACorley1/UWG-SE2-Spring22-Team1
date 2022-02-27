@@ -118,7 +118,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
             return false;
         }
 
-        storedHabit.toggleCompletionStatus();
+        storedHabit.completionProperty().set(true);
         return true;
     }
 

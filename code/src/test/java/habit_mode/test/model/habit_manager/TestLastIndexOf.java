@@ -9,36 +9,36 @@ import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.HabitManager;
 
-class TestIndexOf {
+class TestLastIndexOf {
     @Test
-    void testIndexOfWithTheHabitInTheManager() {
+    void testLastIndexOfWithTheHabitInTheManager() {
         Habit habit = new Habit("Hello!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
         manager.add(habit);
 
-        int result = manager.indexOf(habit);
+        int result = manager.lastIndexOf(habit);
 
         assertTrue(result == 0, "Check if return is correct.");
     }
 
     @Test
-    void testIndexOfWithoutTheHabitInTheManager() {
+    void testLastIndexOfWithoutTheHabitInTheManager() {
         Habit habit = new Habit("Hello!", Frequency.DAILY);
         HabitManager manager = new HabitManager();
 
-        int result = manager.indexOf(habit);
+        int result = manager.lastIndexOf(habit);
 
         assertTrue(result == -1, "Check if return is correct.");
     }
-    
+
     @Test
-    void testIndexOfWhenTheHabitIsNull() {
+    void testLastIndexOfWhenTheHabitIsNull() {
         HabitManager manager = new HabitManager();
 
         assertThrows(
             IllegalArgumentException.class, 
             ()->{
-                manager.indexOf(null);
+                manager.lastIndexOf(null);
             }
         );
     }
