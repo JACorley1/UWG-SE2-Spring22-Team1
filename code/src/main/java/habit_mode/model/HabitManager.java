@@ -144,7 +144,7 @@ public class HabitManager implements List<Habit> {
     @Override
     public int lastIndexOf(Object object) {
         this.checkObject(object);
-        return this.lastIndexOf(object);
+        return this.habits.lastIndexOf(object);
     }
 
     @Override
