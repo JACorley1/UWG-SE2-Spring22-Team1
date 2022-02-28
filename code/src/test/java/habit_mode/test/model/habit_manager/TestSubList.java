@@ -65,4 +65,23 @@ class TestSubList {
             }
         );
     }
+
+    @Test
+    void testWhenLowerBoundIndexIsGreaterThanTheUpperBoundIndex() {
+        Habit habit1 = new Habit("Hello!", Frequency.DAILY);
+        Habit habit2 = new Habit("Bye!", Frequency.DAILY);
+        Habit habit3 = new Habit("Hi!", Frequency.WEEKLY);
+        HabitManager manager = new HabitManager();
+
+        manager.add(habit3);
+        manager.add(habit2);
+        manager.add(habit1);
+
+        assertThrows(
+            IllegalArgumentException.class, 
+            ()->{
+                manager.subList(1, 0);
+            }
+        );
+    }
 }

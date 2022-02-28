@@ -101,7 +101,7 @@ public class HabitManager implements List<Habit> {
     @Override
     public boolean retainAll(Collection<?> collection) {
         this.checkObject(collection);
-        return this.retainAll(collection);
+        return this.habits.retainAll(collection);
     }
 
     @Override
