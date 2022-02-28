@@ -184,7 +184,6 @@ public class HabitScreenCodeBehind {
             Habit newestItem = list.get(list.size() - 1);
 
             newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
-                System.out.println(newestItem.getText() + " changed on state from " + wasOn + " to " + isNowOn);
                 this.viewModel.sendCompletedHabit(newestItem);
             });
         });
@@ -193,7 +192,7 @@ public class HabitScreenCodeBehind {
     private void setHabitListeners() {
         for (Habit habit : this.viewModel.habitListProperty()) {
             habit.completionProperty().addListener((obs, wasOn, isNowOn) -> {
-                System.out.println(habit.getText() + " changed on state from " + wasOn + " to " + isNowOn);
+                this.viewModel.sendCompletedHabit(habit);
             });
 
             this.habitListView.getItems().add(habit);

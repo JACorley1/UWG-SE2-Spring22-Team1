@@ -42,7 +42,6 @@ public class LoginScreenViewModel {
      */
     public boolean validateLogin() {
         boolean result = this.serverCommunicator.validateLogin(this.usernameProperty.getValue(), this.passwordProperty.getValue());
-        System.out.println(result);
         return result;
     }
 
