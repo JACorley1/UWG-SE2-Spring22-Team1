@@ -240,10 +240,23 @@ public class HabitViewModel {
         return this.coinsLabelProperty;
     }
 
+    /**
+     * Send the completed habit to the server.
+     * 
+     * @precondition habit != null;
+     * @postcondition this.coinsLabelProperty.getValue == "Coins: " +
+     *                this.serverCommunicator.getCoins();
+     * 
+     * @param habit the habit being sent.
+     */
     public void sendCompletedHabit(Habit habit) {
+        if (habit == null) {
+            throw new IllegalArgumentException("habit cannot be null");
+        }
         if (this.serverCommunicator.completeHabit(habit)) {
             this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
         }
     }
+
 
 }
