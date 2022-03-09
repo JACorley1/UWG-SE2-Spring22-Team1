@@ -1,6 +1,6 @@
 Context: The user has loaded into the application and has added 1 habit successfully
 Primary Flow:
-1.	The user selects a habit
+1.	The user selects a habit in the "ToDo" or "Completed" section
 2.	The “Edit(?)” button becomes enabled
 3.	The user selects the “Edit(?)” button
 4.	The user is prompted a similar pop up page with the currently selected habit filling in the sections
@@ -8,7 +8,7 @@ Primary Flow:
 6.	The user selects the “confirm” button
 7.	The user is taken back to the home page with the habit updated.
 Alternative Flow(s):
-	No habits selected:
+	No valid habits selected:
 		1a. The user attempts to select the “Edit(?)” button 
 		2a. The “Edit(?)” button stays disabled and nothing happens.
 	Invalid Changes are made:

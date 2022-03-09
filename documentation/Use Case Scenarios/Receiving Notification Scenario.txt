@@ -1,0 +1,7 @@
+Context: The user has successfully registered an account and has one habit ToDo
+Primary Flow:
+1.	The user completes a milestone while using the app
+2.	The user receives an email saying they completed the milestone and received the bonus coins
+Alternative Flow:
+	A habit needs to be done:
+		1a. The user receives an email reminding them to check their habits and to complete them. 

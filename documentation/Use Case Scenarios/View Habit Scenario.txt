@@ -1,9 +1,10 @@
-Context: has loaded the app and has added habits before
+Context: has logged into the app and has added habits before
 Primary Flow:
 1.	The user selects the “home” page button
 2.	The user is taken to the home page
-3.	The home page displays the habits the user has added
+3.	The home page displays the users "ToDo" habits and the users "Completed" habits
 Alternative Flow:
 	No Habits to display:
 		3a. A message is displayed for the user encouraging them to add a habit.
-	
+	All Habits in the "Completed" category:
+		3b. A message is displayed for the user congratulating them on finishing all of their tasks at the moment. 

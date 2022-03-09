@@ -1,12 +1,18 @@
 Context: User has loaded the application and has added at least one habit.
 Primary Flow:
-1.	The user selects a habit
+1.	The user selects a habit in either the "ToDo" or "Completed" section
 2.	The “Edit(?)” button becomes enabled for the user
 3.	The user selects “Edit(?)” button 
 4.	The user is prompted a similar pop up page with the currently selected habit filling in the sections
 5.	The user selects the “Remove” button
-6.	The user is returned to the home page
+6.	The user is prompted to ensure they want to remove the habit
+7.	The user selects "yes"
+8.	The user is prompted that the habit was successfully deleted
+9.	The user is returned to the home page
 Alternative Flow(s):
 	No habit selected:
 		1a. The user attempts to select the “Edit(?)” button 
 		2a. The “Edit(?)” button remains disabled and nothing happens
+	User decides not to remove habit:
+		7b. The user selects "no"
+		8b. The user is returned to the home page
