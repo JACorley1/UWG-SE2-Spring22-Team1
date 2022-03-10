@@ -2,21 +2,21 @@ Context: the user is a first time user
 Primary Flow:
 1.	The user loads the application
 2.	The user is taken to the login page
-3.	The user selects "register"
-4.	The user is taken to a registration page
+3.	The user selects "First Time?"
+4.	The login page will be changed to a registration page
 5.	The user enters in valid credentials
-6.	The user selects "register account"
+6.	The user selects "register"
 7.	The user is prompted that their account was successfully registered
 8.	The user is returned to the login page
 Alternative Flows:
 	User enters in an already created account:
 		5a.	The user enters in credentials to an already created account
-		6a.	The user selects "register account"
+		6a.	The user selects "register"
 		7a.	The user is prompted that their credentials are already in use and to try something else
 		8a.	The user remains at the registration page
 	User cancels Registration:
 		5b.	The user selects "cancel"
-		6b.	The user is returned to the login page
+		6b.	registration page will be changed to the login page
 	User enters in invalid credentials:
 		5c.	The user enters in invalid credentials
 		6c.	The user selects "register account"
