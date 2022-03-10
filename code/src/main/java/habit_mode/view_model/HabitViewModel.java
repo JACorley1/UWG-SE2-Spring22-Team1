@@ -80,6 +80,27 @@ public class HabitViewModel {
 
     }
 
+    /**
+     * Removes a habit from the system
+     * 
+     * @precondition this.habitNameProperty.getValue() != null;
+     * @postcondition this.habitListProperty().getValue().size() ==
+     *                this.habitListProperty().getValue().size() @pre - 1;
+     */
+    public void removeHabit() {
+        if (this.selectedHabitProperty.getValue() == null) {
+            this.errorVisibleProperty.set(true);
+            throw new IllegalArgumentException(Habit.NULL_TEXT_ERROR);
+        }
+
+        Habit habit = this.selectedHabitProperty.getValue();
+        if (this.serverCommunicator.removeHabit(habit)) {
+            this.habitListProperty.remove(habit);
+            this.closePopup();
+        }
+
+    }
+
     private Frequency determineFrequency() {
         if (this.dailySelectedProperty.getValue()) {
             return Frequency.DAILY;
@@ -257,6 +278,5 @@ public class HabitViewModel {
             this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
         }
     }
-
 
 }
