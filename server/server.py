@@ -1,6 +1,8 @@
 import json
 from typing import Any, MutableMapping
+
 from authentication_manager import AuthenticationManager
+from user_data import UserData
 from service_manager import ServiceManager
 import zmq
 
@@ -112,7 +114,10 @@ class _RequestHandler:
         Validates a specified username-password combination and sends an authentication token
         back to the client if successful.
 
-        Precondition:  None
+        Precondition:  username is not None and
+                       isinstance(username, str) and
+                       password is not None and
+                       isinstance(password, str)
         Postcondition: None
 
         Params - username: The specified username.
@@ -144,6 +149,71 @@ class _RequestHandler:
             "success_code": 0,
             "authentication_token": token,
         }
+
+    def _retrieve_data(self, token: str, fields: list[str]) -> MutableMapping[str, Any]:
+        """
+        Attempts to retrieve a set of data for a user using their authentication token.
+
+        Precondition:  token is not None and
+                       isinstance(token, str) and
+                       fields is not None and
+                       isinstance(fields, str)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 fields: The requested data fields
+        Return - The response to the client.
+        """
+        if token is None:
+            raise Exception("token must not be None")
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if fields is None:
+            raise Exception("fields must not be None")
+        if not isinstance(fields, list):
+            raise Exception("fields must be a list of str")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        
+        user_data: UserData = self._service_manager.get_data_for_user(username)
+        if user_data is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        
+
+        if len(fields) == 0:
+            return {
+                "success_code": 41,
+                "error_message": f"No fields provided"
+            }
+
+        message: MutableMapping[str, any] = {
+            "success_code": 0
+        }
+        
+        for field in fields:
+            if field == "username":
+                message["username"] = user_data.username
+            elif field == "email":
+                message["email"] = user_data.email
+            elif field == "coins":
+                message["coins"] = user_data.coins
+            elif field == "sudoku_puzzle":
+                message["sudoku_puzzle"] = user_data.sudoku_puzzle
+            else:
+                return {
+                    "success_code": 40,
+                    "error_message": f"Unknown field name ({field})"
+                }
+
+        return message
 
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
@@ -188,6 +258,16 @@ class _RequestHandler:
                 }
             else:
                 response = self._login(request["username"], request["password"])
+
+        elif request["request_type"] == "retrieve_data":
+            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "fields"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._retrieve_data(request["authentication_token"], request["fields"])
 
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
