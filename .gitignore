@@ -27,3 +27,6 @@ hs_err_pid*
 
 #Maven
 target/
+
+#Python
+__pycache__/
