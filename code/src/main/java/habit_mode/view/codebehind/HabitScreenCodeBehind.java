@@ -85,6 +85,14 @@ public class HabitScreenCodeBehind {
     private TextField habitNameTextField;
 
     @FXML
+    private Button removeHabitsButton;
+
+    @FXML
+    void removeButtonClicked(ActionEvent event) {
+
+    }
+
+    @FXML
     void addButtonClicked(ActionEvent event) {
         this.addHabitBackgroundAnchorPane.setVisible(true);
     }
