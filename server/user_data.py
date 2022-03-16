@@ -45,6 +45,53 @@ class UserData:
         """
         self._next_habit_id += 1
 
+    def add_habit(self, habit_name: str, habit_frequency: int):
+        """
+        Adds a habit with a specified name and frequency to the user's list of habits.
+
+        Precondition:  isinstance(habit_name, str) and
+                       not str.isspace(habit_name) and
+                       isinstance(habit_frequency, int) and
+                       habit_frequency >= 0 and
+                       habit_frequency <= 2
+        Postcondition: len(self.habits) == len(self.habits) + 1
+        """
+        new_habit = Habit(habit_name, habit_frequency, self.next_habit_id)
+        self.increment_habit_id()
+
+        self._habits.append(new_habit)
+
+    def remove_habit(self, habit_id: int) -> bool:
+        """
+        Attempts to remove a habit with the specified id and will return whether or not the
+        operation was successful.
+
+        Precondition:  None
+        Postcondition: habit with id == habit_id not in self.habits
+
+        Params - habit_id: The id for the habit.
+        Return - Whether the habit was removed.
+        """
+        for habit in self._habits:
+            if habit.id == habit_id:
+                self._habits.remove(habit)
+                return True
+        return False
+
+    def get_habit(self, habit_id: int) -> Habit:
+        """
+        Gets the first instance of a habit from the habit list with the specified id.
+
+        Precondition:  None
+        Postcondition: None
+
+        Params - habit_id: The id for the habit.
+        Return - The first habit with the specified id if exists, otherwise None.
+        """
+        for habit in self._habits:
+            if habit.id == habit_id:
+                return habit
+        return False
 
     @property
     def username(self) -> str:

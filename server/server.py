@@ -158,7 +158,7 @@ class _RequestHandler:
         Precondition:  token is not None and
                        isinstance(token, str) and
                        fields is not None and
-                       isinstance(fields, str)
+                       isinstance(fields, list)
         Postcondition: None
 
         Params - token: The specified authentication token.
@@ -209,7 +209,7 @@ class _RequestHandler:
             elif field == "sudoku_puzzle":
                 message["sudoku_puzzle"] = user_data.sudoku_puzzle
             elif field == "habits":
-                message["habits"] = list(map(lambda habit: habit.create_json_dict, user_data.habits))
+                message["habits"] = list(map(lambda habit: habit.create_json_dict(), user_data.habits))
             else:
                 return {
                     "success_code": 40,
@@ -218,6 +218,93 @@ class _RequestHandler:
 
         return message
 
+    def _add_habit(self, token: str, habit_name: str, habit_frequency: int) -> MutableMapping[str, Any]:
+        """
+        Attempts to add a new habit to a user's list of habits.
+
+        Precondition:  isinstance(token, str) and
+                       isinstance(habit_name, str) and
+                       isinstance(habit_frequency, str) and
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 habit_name: The name of the new habit.
+                 habit_frequency: How frequently the habit needs to be completed.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if not isinstance(habit_name, str):
+            raise Exception("habit_name must be a str")
+        if not isinstance(habit_frequency, int):
+            raise Exception("habit_frequency must be an int")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        success_code = self._service_manager.add_habit(username, habit_name, habit_frequency)
+        if success_code == 14:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        elif success_code == 50:
+            return {
+                "success_code": 50,
+                "error_message": f"Invalid habit name ({habit_name})"
+            }
+        elif success_code == 51:
+            return {
+                "success_code": 51,
+                "error_message": f"Invalid habit frequency ({habit_frequency})"
+            }
+        return {
+            "success_code": 0
+        }
+
+    def _remove_habit(self, token: str, habit_id: int) -> MutableMapping[str, Any]:
+        """
+        Removes a habit with the specified ID from a user's habit list.
+
+        Precondition:  isinstance(token, str) and
+                       isinstance(habit_id, int)
+        Postcondition: The specified doesn't have a habit with the matching id.
+
+        Params - token: The user's authentication token.
+                 habit_id: The ID for the habit to remove.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if not isinstance(habit_id, int):
+            raise Exception("habit_id must be an int")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        success_code = self._service_manager.remove_habit(username, habit_id)
+        if success_code == 14:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        elif success_code == 52:
+            return {
+                "success_code": 52,
+                "error_message": f"No habit with id ({habit_id}))"
+            }
+        return {
+            "success_code": 0
+        }
+    
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
         Accepts a request from the client and performs an action depending on the request body.
@@ -272,6 +359,26 @@ class _RequestHandler:
             else:
                 response = self._retrieve_data(request["authentication_token"], request["fields"])
 
+        elif request["request_type"] == "add_habit":
+            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "habit_name", "habit_frequency"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._add_habit(request["authentication_token"], request["habit_name"], request["habit_frequency"])
+
+        elif request["request_type"] == "remove_habit":
+            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "habit_id"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._remove_habit(request["authentication_token"], request["habit_id"])
+
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
             response = {"success_code": 11, "error_message": error_message}
@@ -319,7 +426,17 @@ class Server:
             print(f"Received request: {request}")
             if request == "exit":
                 return
-            response = request_handler.handle_request(request)
+            try:
+                response = request_handler.handle_request(request)
+            except:
+                print("-" * 15)
+                print("Exception was thrown. Please check the request.")
+                print(request)
+                print("-" * 15)
+                response = {
+                    "success_code": 15,
+                    "error_message": "Unknown error (Exception thrown)"
+                }
             json_response = json.dumps(response)
 
             #  Send reply back to client

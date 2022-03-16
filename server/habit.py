@@ -52,9 +52,9 @@ class Habit:
         Params - None
         Return - [True] iff the habit was not already complete, otherwise [False]
         """
-        if self.frequency == CompletionFrequency.DAILY:
+        if self.frequency == CompletionFrequency.DAILY.value:
             self._reset_date = datetime.today() + timedelta(days=1)
-        elif self.frequency == CompletionFrequency.WEEKLY:
+        elif self.frequency == CompletionFrequency.WEEKLY.value:
             today = datetime.today()
             self._reset_date = today + timedelta(days=7 - today.isoweekday())
         else:
@@ -80,7 +80,7 @@ class Habit:
         Params - None
         Return - [True] if the Habit is complete, otherwise [False].
         """
-        return datetime.now() > self._reset_time
+        return datetime.now() < self._reset_time
 
     @property
     def name(self) -> str:
@@ -155,12 +155,12 @@ class Habit:
         """
         if not isinstance(frequency, int):
             raise Exception("frequency must be an int")
-        if frequency < CompletionFrequency.DAILY or frequency > CompletionFrequency.MONTHLY:
+        if frequency < CompletionFrequency.DAILY.value or frequency > CompletionFrequency.MONTHLY.value:
             raise Exception("frequency must be betwwn 0 and 2, inclusive")
 
         self._frequency = frequency
 
 class CompletionFrequency(Enum):
-    DAILY = 0
-    WEEKLY = 1
-    MONTHLY = 2
+    DAILY: int = 0
+    WEEKLY: int = 1
+    MONTHLY: int = 2
