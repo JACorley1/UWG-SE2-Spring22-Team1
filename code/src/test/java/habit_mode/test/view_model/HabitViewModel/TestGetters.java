@@ -28,4 +28,16 @@ public class TestGetters {
         HabitViewModel viewModel = new HabitViewModel();
         viewModel.coinsLabelProperty();
     }
+
+    @Test
+    void testRemoveWeeklySelectedProperty() {
+        HabitViewModel viewModel = new HabitViewModel();
+        viewModel.removeWeeklySelectedProperty();
+    }
+
+    @Test
+    void testRemoveDailySelectedProperty() {
+        HabitViewModel viewModel = new HabitViewModel();
+        viewModel.removeDailySelectedProperty();
+    }
 }

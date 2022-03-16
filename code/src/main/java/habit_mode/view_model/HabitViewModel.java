@@ -31,6 +31,9 @@ public class HabitViewModel {
     private StringProperty coinsLabelProperty;
     private ObjectProperty<Habit> selectedHabitProperty;
     private ListProperty<Habit> habitListProperty;
+    private BooleanProperty removeDailySelectedProperty;
+    private BooleanProperty removeWeeklySelectedProperty;
+    private StringProperty removeHabitNameProperty;
 
     /**
      * Creates a new habit view model.
@@ -47,10 +50,13 @@ public class HabitViewModel {
         this.dailySelectedProperty = new SimpleBooleanProperty();
         this.weeklySelectedProperty = new SimpleBooleanProperty();
         this.monthlySelectedProperty = new SimpleBooleanProperty();
+        this.removeDailySelectedProperty = new SimpleBooleanProperty();
+        this.removeWeeklySelectedProperty = new SimpleBooleanProperty();
         this.popupVisibleProperty = new SimpleBooleanProperty();
         this.errorVisibleProperty = new SimpleBooleanProperty();
         this.selectedHabitProperty = new SimpleObjectProperty<Habit>();
         this.habitNameProperty = new SimpleStringProperty("");
+        this.removeHabitNameProperty = new SimpleStringProperty("");
         this.coinsLabelProperty = new SimpleStringProperty("");
         this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
     }
@@ -88,24 +94,29 @@ public class HabitViewModel {
      *                this.habitListProperty().getValue().size() @pre - 1;
      */
     public void removeHabit() {
-        if (this.selectedHabitProperty.getValue() == null) {
+        if (this.removeHabitNameProperty.getValue() == null) {
             this.errorVisibleProperty.set(true);
             throw new IllegalArgumentException(Habit.NULL_TEXT_ERROR);
         }
+        Habit removedHabit = new Habit(this.removeHabitNameProperty.getValue(), Frequency.DAILY);
+        for (Habit habit : this.habitListProperty) {
 
-        Habit habit = this.selectedHabitProperty.getValue();
-        if (this.serverCommunicator.removeHabit(habit)) {
-            this.habitListProperty.remove(habit);
+            if (habit.getText() == this.removeHabitNameProperty.getValue() && habit.getFrequency() == this.determineFrequency()) {
+                removedHabit = habit;
+            }
+        }
+        if (this.serverCommunicator.removeHabit(removedHabit)) {
+            this.habitListProperty.remove(removedHabit);
             this.closePopup();
         }
 
     }
 
     private Frequency determineFrequency() {
-        if (this.dailySelectedProperty.getValue()) {
+        if (this.dailySelectedProperty.getValue() || this.removeDailySelectedProperty.getValue()) {
             return Frequency.DAILY;
         }
-        if (this.weeklySelectedProperty.getValue()) {
+        if (this.weeklySelectedProperty.getValue() || this.removeWeeklySelectedProperty.getValue()) {
             return Frequency.WEEKLY;
         }
         return Frequency.MONTHLY;
@@ -163,6 +174,30 @@ public class HabitViewModel {
      */
     public ObjectProperty<Habit> selectedHabitProperty() {
         return this.selectedHabitProperty;
+    }
+
+    /**
+     * The remove daily selected property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove daily selected property.
+     */
+    public BooleanProperty removeDailySelectedProperty() {
+        return this.removeDailySelectedProperty;
+    }
+
+     /**
+     * The remove weekly selected property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove weekly selected property.
+     */
+    public BooleanProperty removeWeeklySelectedProperty() {
+        return this.removeWeeklySelectedProperty;
     }
 
     /**
@@ -247,6 +282,18 @@ public class HabitViewModel {
      */
     public StringProperty habitNameProperty() {
         return this.habitNameProperty;
+    }
+
+    /**
+     * The remove habit name property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove habit name property.
+     */
+    public StringProperty removeHabitNameProperty() {
+        return this.removeHabitNameProperty;
     }
 
     /**

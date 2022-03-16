@@ -39,7 +39,7 @@
       </Button>
       <AnchorPane id="addHabitBackgroundAnchorPane" fx:id="addHabitBackgroundAnchorPane" prefHeight="709.0" prefWidth="496.0" style="-fx-background-color: #00000099;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane layoutX="98.0" layoutY="255.0" prefHeight="219.0" prefWidth="301.0" style="-fx-background-color: white;">
+            <AnchorPane fx:id="addHabitsAnchorPane" layoutX="98.0" layoutY="255.0" prefHeight="219.0" prefWidth="301.0" style="-fx-background-color: white;">
                <children>
                   <Label layoutX="95.0" layoutY="14.0" text="New Habit" textAlignment="CENTER" underline="true">
                      <font>
@@ -64,9 +64,35 @@
                   <TextField fx:id="habitNameTextField" layoutX="22.0" layoutY="80.0" prefHeight="25.0" prefWidth="259.0" promptText="Enter task name..." />
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="removeHabitAnchorPane" layoutX="83.0" layoutY="265.0" prefHeight="219.0" prefWidth="326.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="8.0" layoutY="14.0" prefHeight="35.0" prefWidth="270.0" text="Remove/Update Habit" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="22.0" layoutY="55.0" text="Name:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="removeDailyRadioButton" layoutX="22.0" layoutY="144.0" mnemonicParsing="false" selected="true" text="Daily">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="updateFrequencyToggleGroup" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="removeWeeklyRadioButton" layoutX="121.0" layoutY="144.0" mnemonicParsing="false" text="Weekly" toggleGroup="$updateFrequencyToggleGroup" />
+                  <RadioButton fx:id="removeMonthlyRadioButton" layoutX="215.0" layoutY="144.0" mnemonicParsing="false" text="Monthly" toggleGroup="$updateFrequencyToggleGroup" />
+                  <Button fx:id="updateConfirmButton" layoutX="20.0" layoutY="180.0" mnemonicParsing="false" onAction="#confirmUpdateHabitButtonClicked" text="Confirm" />
+                  <Button fx:id="removeButton" cancelButton="true" layoutX="229.0" layoutY="180.0" mnemonicParsing="false" onAction="#removeButtonClicked" text="Remove" />
+                  <Button fx:id="removeCancelButton" cancelButton="true" layoutX="127.0" layoutY="180.0" mnemonicParsing="false" onAction="#cancelButtonClicked" prefHeight="20.0" prefWidth="66.0" text="Cancel" />
+                  <Label fx:id="updateErrorLabel" focusTraversable="false" layoutX="22.0" layoutY="110.0" text="Please enter a unique task name" textFill="#ee4747" visible="false" />
+                  <TextField fx:id="updateHabitNameTextField" layoutX="22.0" layoutY="80.0" prefHeight="25.0" prefWidth="259.0" promptText="Enter task name..." />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
-      <Button fx:id="removeHabitsButton" layoutX="435.0" layoutY="144.0" mnemonicParsing="false" onAction="#removeButtonClicked" prefHeight="53.0" prefWidth="52.0" text="X">
+      <Button fx:id="removeHabitsButton" layoutX="435.0" layoutY="144.0" mnemonicParsing="false" onAction="#removeHabitsButtonClicked" prefHeight="53.0" prefWidth="52.0" text="X">
          <font>
             <Font size="14.0" />
          </font>

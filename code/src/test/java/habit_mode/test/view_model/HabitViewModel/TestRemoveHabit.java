@@ -22,7 +22,7 @@ class TestRemoveHabit {
     @Test
     void testRemoveHabitWithNullStringProperty() {
         HabitViewModel viewModel = new HabitViewModel();
-        viewModel.selectedHabitProperty().set(null);
+        viewModel.removeHabitNameProperty().set(null);
 
         assertAll(
                 () -> {

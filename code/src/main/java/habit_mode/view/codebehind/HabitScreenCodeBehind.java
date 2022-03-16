@@ -88,13 +88,65 @@ public class HabitScreenCodeBehind {
     private Button removeHabitsButton;
 
     @FXML
+    private AnchorPane removeHabitAnchorPane;
+
+    @FXML
+    private RadioButton removeDailyRadioButton;
+
+    @FXML
+    private ToggleGroup updateFrequencyToggleGroup;
+
+    @FXML
+    private RadioButton removeWeeklyRadioButton;
+
+    @FXML
+    private RadioButton removeMonthlyRadioButton;
+
+    @FXML
+    private Button updateConfirmButton;
+
+    @FXML
+    private Button removeButton;
+
+    @FXML
+    private Label updateErrorLabel;
+
+    @FXML
+    private TextField updateHabitNameTextField;
+
+    @FXML
+    private AnchorPane addHabitsAnchorPane;
+
+    @FXML
+    private Button removeCancelButton;
+
+    @FXML
     void removeButtonClicked(ActionEvent event) {
+        try {
+            this.viewModel.removeHabit();
+        } catch (Exception err) {
+            System.out.println(err.getMessage());
+        }
+
+    }
+
+    @FXML
+    void removeHabitsButtonClicked(ActionEvent event) {
+        this.addHabitBackgroundAnchorPane.setVisible(true);
+        this.removeHabitAnchorPane.setVisible(true);
+        this.addHabitsAnchorPane.setVisible(false);
+    }
+
+    @FXML
+    void confirmUpdateHabitButtonClicked(ActionEvent event) {
 
     }
 
     @FXML
     void addButtonClicked(ActionEvent event) {
         this.addHabitBackgroundAnchorPane.setVisible(true);
+        this.addHabitsAnchorPane.setVisible(true);
+        this.removeHabitAnchorPane.setVisible(false);
     }
 
     @FXML
@@ -181,19 +233,24 @@ public class HabitScreenCodeBehind {
         this.viewModel.dailySelectedProperty().bindBidirectional(this.dailyRadioButton.selectedProperty());
         this.viewModel.weeklySelectedProperty().bindBidirectional(this.weeklyRadioButton.selectedProperty());
         this.viewModel.monthlySelectedProperty().bindBidirectional(this.monthlyRadioButton.selectedProperty());
+        this.viewModel.removeDailySelectedProperty().bindBidirectional(this.removeDailyRadioButton.selectedProperty());
+        this.viewModel.removeWeeklySelectedProperty().bindBidirectional(this.removeWeeklyRadioButton.selectedProperty());
         this.viewModel.popupVisibleProperty().bindBidirectional(this.addHabitBackgroundAnchorPane.visibleProperty());
         this.viewModel.errorVisibleProperty().bindBidirectional(this.habitNameErrorLabel.visibleProperty());
         this.viewModel.habitNameProperty().bindBidirectional(this.habitNameTextField.textProperty());
+        this.viewModel.removeHabitNameProperty().bindBidirectional(this.updateHabitNameTextField.textProperty());
         this.viewModel.habitListProperty().bindBidirectional(this.habitListView.itemsProperty());
         this.viewModel.coinsLabelProperty().bindBidirectional(this.coinsLabel.textProperty());
 
         this.viewModel.habitListProperty().addListener((observable, oldValue, newValue) -> {
             var list = this.habitListView.itemsProperty().get();
-            Habit newestItem = list.get(list.size() - 1);
+            if (!list.isEmpty()) {
+                Habit newestItem = list.get(list.size() - 1);
 
-            newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
-                this.viewModel.sendCompletedHabit(newestItem);
-            });
+                newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
+                    this.viewModel.sendCompletedHabit(newestItem);
+                });
+            }
         });
     }
 
