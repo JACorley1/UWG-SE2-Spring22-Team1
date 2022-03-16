@@ -208,6 +208,8 @@ class _RequestHandler:
                 message["coins"] = user_data.coins
             elif field == "sudoku_puzzle":
                 message["sudoku_puzzle"] = user_data.sudoku_puzzle
+            elif field == "habits":
+                message["habits"] = list(map(lambda habit: habit.create_json_dict, user_data.habits))
             else:
                 return {
                     "success_code": 40,
