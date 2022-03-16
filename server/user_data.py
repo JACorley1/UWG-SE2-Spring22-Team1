@@ -1,3 +1,4 @@
+from habit import Habit
 from sudoku_puzzle import SudokuPuzzle
 
 class UserData:
@@ -12,6 +13,8 @@ class UserData:
     _email: str
     _coins: int
     _sudoku_puzzle: SudokuPuzzle
+    _next_habit_id: int
+    _habits: list[Habit]
 
     def __init__(self, username: str, password: str, email: str):
         """
@@ -27,6 +30,21 @@ class UserData:
         self.email = email
         self.coins = 0
         self.sudoku_puzzle = None
+        self._next_habit_id = 0
+        self._habits = []
+
+    def increment_habit_id(self):
+        """
+        Increments the next valid habit id by one.
+
+        Precondition:  None
+        Postcondition: self.next_habit_id == self.next_habit_id@prev
+
+        Params - None
+        Return - None
+        """
+        self._next_habit_id += 1
+
 
     @property
     def username(self) -> str:
@@ -148,3 +166,29 @@ class UserData:
         if sudoku_puzzle is not None and not isinstance(sudoku_puzzle, str):
             raise Exception("sudoku_puzzle must be a SudokuPuzzle")
         self._sudoku_puzzle = sudoku_puzzle
+
+    @property
+    def next_habit_id(self) -> int:
+        """
+        Gets the next valid id for habits for this user.
+
+        Precondition:  None
+        Postcondition: None
+
+        Params - None
+        Return - The next valid habit id.
+        """
+        return self._next_habit_id
+
+    @property
+    def habits(self) -> list[Habit]:
+        """
+        Gets the user's list of habits.
+
+        Precondition:  None
+        Postcondition: None
+
+        Params - None
+        Return - A list of the user's habits.
+        """
+        return self._habits

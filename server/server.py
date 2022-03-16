@@ -27,6 +27,7 @@ class _RequestHandler:
         Postcondition: RequestHandler has appropriate ServiceManager to server requests
 
         Params - service_manager: The specified ServiceManager
+                 authentication_manager: The specified AuthenticationManager
         """
         if service_manager is None:
             raise Exception("service_manager must not be None")
