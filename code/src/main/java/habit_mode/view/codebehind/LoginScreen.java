@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -23,7 +24,12 @@ import habit_mode.view_model.LoginScreenViewModel;
  */
 public class LoginScreen {
 
+    private boolean isUserNew;
+
     private LoginScreenViewModel viewModel;
+
+    @FXML
+    private Label emailLabel;
 
     @FXML
     private ResourceBundle resources;
@@ -35,10 +41,16 @@ public class LoginScreen {
     private Button loginButton;
 
     @FXML
+    private Button newUserButton;
+
+    @FXML
     private TextField passwordTextField;
 
     @FXML
     private TextField userNameTextField;
+
+    @FXML
+    private TextField emailTextField;
 
     @FXML
     void loginButtonPress(ActionEvent event) throws IOException {
@@ -62,7 +74,15 @@ public class LoginScreen {
     }
 
     @FXML
+    void newUserButtonPress(ActionEvent event) throws IOException {
+        this.isUserNew = !this.isUserNew;
+        this.toggleEmailVisibility();
+        this.toggleButtonText();
+    }
+
+    @FXML
     void initialize() {
+        this.isUserNew = false;
         this.viewModel = new LoginScreenViewModel();
 
         this.viewModel.usernameProperty().bindBidirectional(this.userNameTextField.textProperty());
@@ -74,4 +94,20 @@ public class LoginScreen {
 
     }
 
+    private void toggleEmailVisibility() {
+        this.emailLabel.setVisible(!this.emailLabel.isVisible());
+        this.emailTextField.setVisible(!this.emailTextField.isVisible());
+    }
+
+    private void toggleButtonText() {
+        if (!this.isUserNew) {
+            this.loginButton.setStyle("-fx-font-size: 31px; ");
+            this.loginButton.setText("Login");
+            this.newUserButton.setText("New User?");
+        } else {
+            this.loginButton.setStyle("-fx-font-size: 22px; ");
+            this.loginButton.setText("Register");
+            this.newUserButton.setText("Cancel");
+        }
+    }
 }
