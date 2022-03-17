@@ -112,7 +112,15 @@ public class HabitViewModel {
 
     }
 
-    private Frequency determineFrequency() {
+     /**
+     * Gets the currently selected frequency.
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return Frequency.
+     */
+    public Frequency determineFrequency() {
         if (this.dailySelectedProperty.getValue() || this.removeDailySelectedProperty.getValue()) {
             return Frequency.DAILY;
         }
