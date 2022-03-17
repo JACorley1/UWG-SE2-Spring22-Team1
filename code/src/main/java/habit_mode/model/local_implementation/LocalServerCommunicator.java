@@ -1,5 +1,6 @@
 package habit_mode.model.local_implementation;
 
+import java.util.HashMap;
 import java.util.List;
 
 import habit_mode.model.Habit;
@@ -33,6 +34,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static HabitManager habits = new HabitManager();
     private static SudokuPuzzle storedPuzzle = null;
     private static boolean receivedBonus = false;
+    private static HashMap<String, String> logins = new HashMap<String, String>();
 
     /**
      * Resets static fields stored values to their default state.
@@ -46,6 +48,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
         coins = 0;
         storedPuzzle = null;
         habits.clear();
+        logins.clear();
         receivedBonus = false;
     }
 
@@ -171,4 +174,8 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
         return index == -1 ? null : habits.get(index);
     }
+
+    /**
+     * 
+     */
 }
