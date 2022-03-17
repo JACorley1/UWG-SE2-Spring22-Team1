@@ -224,7 +224,7 @@ class _RequestHandler:
 
         Precondition:  isinstance(token, str) and
                        isinstance(habit_name, str) and
-                       isinstance(habit_frequency, str) and
+                       isinstance(habit_frequency, int) 
         Postcondition: None
 
         Params - token: The specified authentication token.
@@ -305,6 +305,63 @@ class _RequestHandler:
             "success_code": 0
         }
     
+    def _modify_habit(self, token: str, habit_id: int, habit_name: str, habit_frequency: int) -> MutableMapping[str, Any]:
+        """
+        Modifies an existing habit's name and frequency.
+
+        Precondition:  isinstance(token, str) and
+                       isinstance(habit_id, int) and
+                       isinstance(habit_name, str) and
+                       isinstance(habit_frequency, int)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 habit_id: The id of the habit to modify.
+                 habit_name: The name of the new habit.
+                 habit_frequency: How frequently the habit needs to be completed.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if not isinstance(habit_id, int):
+            raise Exception("habit_id must be an int")
+        if not isinstance(habit_name, str):
+            raise Exception("habit_name must be a str")
+        if not isinstance(habit_frequency, int):
+            raise Exception("habit_frequency must be an int")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        success_code = self._service_manager.modify_habit(username, habit_id, habit_name, habit_frequency)
+        if success_code == 14:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        elif success_code == 50:
+            return {
+                "success_code": 50,
+                "error_message": f"Invalid habit name ({habit_name})"
+            }
+        elif success_code == 51:
+            return {
+                "success_code": 51,
+                "error_message": f"Invalid habit frequency ({habit_frequency})"
+            }
+        elif success_code == 52:
+            return {
+                "success_code": 52,
+                "error_message": f"No habit with id ({habit_id}))"
+            }
+        return {
+            "success_code": 0
+        }
+        
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
         Accepts a request from the client and performs an action depending on the request body.
@@ -378,6 +435,16 @@ class _RequestHandler:
                 }
             else:
                 response = self._remove_habit(request["authentication_token"], request["habit_id"])
+
+        elif request["request_type"] == "modify_habit":
+            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "habit_id", "habit_name", "habit_frequency"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._modify_habit(request["authentication_token"], request["habit_id"], request["habit_name"], request["habit_frequency"])
 
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"

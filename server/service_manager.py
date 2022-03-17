@@ -101,6 +101,36 @@ class ServiceManager:
             return 52
         return 0
 
+    def modify_habit(self, username: str, habit_id: int, habit_name: str, habit_frequency: int) -> int:
+        """
+        Modifies the name and frequency of a habit belonging to the specified user. Returns 
+        the success code to be sent to the client.
+
+        Precondition:  None
+        Postcondition: The specified user has the new habit in their habit list, if the information is valid.
+
+        Params - username: The specified username.
+                 habit_name: The specified habit name.
+                 habit_frequency: The specified habit frequency.
+        Return - The success code to be sent back to the user.
+        """
+        user_data = self._user_information[username]
+        if user_data is None:
+            return 14
+        if not _validate_habit_name(habit_name):
+            return 50
+        if not _validate_habit_frequency(habit_frequency):
+            return 51
+        
+        habit = user_data.get_habit(habit_id)
+        if habit is None:
+            return 52
+        
+        habit.name = habit_name
+        habit.frequency = habit_frequency
+        return 0
+
+
 def _validate_username(username: str) -> bool:
     """
     Determines whether a username is valid or not.
