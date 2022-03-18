@@ -53,12 +53,17 @@ class Habit:
         Params - None
         Return - [True] iff the habit was not already complete, otherwise [False]
         """
+        if self.is_complete:
+            return False
+
         if self.frequency == CompletionFrequency.DAILY.value:
             self._reset_date = server.datetime_extension.tomorrow()
         elif self.frequency == CompletionFrequency.WEEKLY.value:
             self._reset_date = server.datetime_extension.next_sunday()
         else:
             self._reset_date = server.datetime_extension.first_of_next_month()
+
+        return True
 
     def create_json_dict(self) -> MutableMapping:
         return {

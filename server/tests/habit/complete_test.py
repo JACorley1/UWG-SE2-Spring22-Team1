@@ -19,7 +19,7 @@ class TestComplete(unittest.TestCase):
         id = 0
         
         habit = Habit(name, frequency, id)
-        habit.complete()
+        self.assertTrue(habit.complete(), "Check if habit was changed to complete from incomplete")
         self.assertTrue(habit.is_complete, "Check if a daily habit is correctly completed")
 
     def test_complete_weekly_habit(self):
@@ -31,7 +31,8 @@ class TestComplete(unittest.TestCase):
         id = 0
         
         habit = Habit(name, frequency, id)
-        habit.complete()
+        
+        self.assertTrue(habit.complete(), "Check if habit was changed to complete from incomplete")
         self.assertTrue(habit.is_complete, "Check if a daily habit is correctly completed")
 
     def test_complete_monthly_habit(self):
@@ -43,5 +44,18 @@ class TestComplete(unittest.TestCase):
         id = 0
         
         habit = Habit(name, frequency, id)
-        habit.complete()
+        self.assertTrue(habit.complete(), "Check if habit was changed to complete from incomplete")
         self.assertTrue(habit.is_complete, "Check if a daily habit is correctly completed")
+
+    def test_habit_already_complete(self):
+        """
+        Checks if the return value is correct when completing an already completed habit.
+        """
+        name = "Habit"
+        frequency = 0
+        id = 0
+        
+        habit = Habit(name, frequency, id)
+        habit.complete()
+
+        self.assertFalse(habit.complete(), "Check if habit was changed to complete from incomplete")

@@ -7,9 +7,9 @@ from server.server import _RequestHandler
 from server.service_manager import ServiceManager
 
 
-class TestRetrieveData(unittest.TestCase):
+class TestRemoveData(unittest.TestCase):
     """
-    Tests for the _retrieve_data method.
+    Tests for the _remove_habit method.
 
     @author Team 1
     @version Spring 2022
@@ -23,30 +23,31 @@ class TestRetrieveData(unittest.TestCase):
         username = "username"
         password = "password"
         email = "email@email.com"
-        fields = ["username", "email", "coins", "sudoku_puzzle", "habits"]
+        habit_name = "Habit"
+        habit_freq = 0
 
         request_handler._register_user(username, password, email)
         authentication_token = request_handler._login(username, password)["authentication_token"]
-        response = request_handler._retrieve_data(authentication_token, fields)
+        request_handler._add_habit(authentication_token, habit_name, habit_freq)
+        response = request_handler._remove_habit(authentication_token, 0)
 
-        self.assertEqual(response["username"], username, "Check if username is correct.")
-        self.assertEqual(response["email"], email, "Check if email is correct.")
-        self.assertEqual(response["coins"], 0, "Check if coins is correct.")
-        self.assertEqual(response["sudoku_puzzle"], None, "Check if sudoku_puzzle is correct.")
-        self.assertEqual(response["habits"], [], "Check if habits is correct.")
+        self.assertEqual(response["success_code"], 0, "Check if success_code is correct")
 
     def test_invalid_authentication_token(self):
         """
-        Tests if _RequestHandler returns the correct success code when the username doesn't exist.
+        Tests if _RequestHandler returns the correct success code when the authentication token is invalid.
         """
         request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         username = "username"
         password = "password"
         email = "email@email.com"
-        fields = ["username", "email", "coins", "sudoku_puzzle", "habits"]
+        habit_name = "Habit"
+        habit_freq = 0
 
         request_handler._register_user(username, password, email)
-        response = request_handler._retrieve_data("authentication_token", fields)
+        authentication_token = request_handler._login(username, password)["authentication_token"]
+        request_handler._add_habit(authentication_token, habit_name, habit_freq)
+        response = request_handler._remove_habit("authentication_token", 0)
         success_code = response["success_code"]
         error_message = response["error_message"]
 
@@ -61,52 +62,48 @@ class TestRetrieveData(unittest.TestCase):
         username = "username"
         password = "password"
         email = "email@email.com"
-        fields = ["username", "email", "coins", "sudoku_puzzle", "habits"]
+        habit_name = "Habit"
+        habit_freq = 0
 
         request_handler._register_user(username, password, email)
         authentication_token = request_handler._login(username, password)["authentication_token"]
+        request_handler._add_habit(authentication_token, habit_name, habit_freq)
         request_handler._service_manager._user_information.clear()
-        response = request_handler._retrieve_data(authentication_token, fields)
+        response = request_handler._remove_habit(authentication_token, 0)
         success_code = response["success_code"]
         error_message = response["error_message"]
 
         self.assertEqual(success_code, 14, "Check if success_code is correct")
         self.assertEqual(error_message, "Invalid authentication token", "Check if error_message is correct")
 
-    def test_no_fields_requested(self):
-        """
-        Tests if _RequestHandler returns the correct success code when no fields are requested.
-        """
+    def test_no_habit_with_id(self):
         request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         username = "username"
         password = "password"
         email = "email@email.com"
-        fields = []
+        habit_name = "Habit"
+        habit_freq = 0
 
         request_handler._register_user(username, password, email)
         authentication_token = request_handler._login(username, password)["authentication_token"]
-        response = request_handler._retrieve_data(authentication_token, fields)
-        success_code = response["success_code"]
-        error_message = response["error_message"]
+        request_handler._add_habit(authentication_token, habit_name, habit_freq)
+        response = request_handler._remove_habit(authentication_token, -1)
 
-        self.assertEqual(success_code, 41, "Check if success_code is correct")
-        self.assertEqual(error_message, "No fields provided", "Check if error_message is correct")
+        self.assertEqual(response["success_code"], 52, "Check if success_code is correct")
+        self.assertEqual(response["error_message"], "No habit with id (-1))", "Check if arror_message is correct")
 
-    def test_unknown_field(self):
+    def test_non_str_token(self):
         """
-        Tests if _RequestHandler returns the correct success code when no fields are requested.
+        Test if an exception is thrown when the authentication token is not a str.
         """
         request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        username = "username"
-        password = "password"
-        email = "email@email.com"
-        fields = ["bad_field"]
 
-        request_handler._register_user(username, password, email)
-        authentication_token = request_handler._login(username, password)["authentication_token"]
-        response = request_handler._retrieve_data(authentication_token, fields)
-        success_code = response["success_code"]
-        error_message = response["error_message"]
+        self.assertRaises(Exception, request_handler._remove_habit, (0, 0), "Check if an exception is raised")
 
-        self.assertEqual(success_code, 40, "Check if success_code is correct")
-        self.assertEqual(error_message, "Unknown field name (bad_field)", "Check if error_message is correct")
+    def test_non_int_id(self):
+        """
+        Test if an exception is thrown when the authentication token is not a str.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+
+        self.assertRaises(Exception, request_handler._remove_habit, (0, "0"), "Check if an exception is raised")

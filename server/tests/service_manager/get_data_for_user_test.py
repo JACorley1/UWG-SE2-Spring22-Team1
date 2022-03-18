@@ -35,5 +35,3 @@ class TestGetDataForUser(unittest.TestCase):
         result = service_manager.get_data_for_user("username")
 
         self.assertTrue(result is None, "Checks if None was returned")
-    
-    

@@ -71,9 +71,10 @@ class ServiceManager:
                  habit_frequency: The specified habit frequency.
         Return - The success code to be sent back to the user.
         """
-        user_data = self._user_information[username]
-        if user_data is None:
+        if username not in self._user_information:
             return 14
+            
+        user_data = self._user_information[username]
         if not _validate_habit_name(habit_name):
             return 50
         if not _validate_habit_frequency(habit_frequency):
@@ -94,9 +95,10 @@ class ServiceManager:
                  habit_id: The id of the habit to remove.
         Return - The success code to be sent back to the user.
         """
-        user_data = self._user_information[username]
-        if user_data is None:
+        if username not in self._user_information:
             return 14
+            
+        user_data = self._user_information[username]
         if not user_data.remove_habit(habit_id):
             return 52
         return 0
@@ -114,9 +116,10 @@ class ServiceManager:
                  habit_frequency: The specified habit frequency.
         Return - The success code to be sent back to the user.
         """
-        user_data = self._user_information[username]
-        if user_data is None:
+        if username not in self._user_information:
             return 14
+            
+        user_data = self._user_information[username]
         if not _validate_habit_name(habit_name):
             return 50
         if not _validate_habit_frequency(habit_frequency):

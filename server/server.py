@@ -193,7 +193,7 @@ class _RequestHandler:
                 "error_message": f"No fields provided"
             }
 
-        message: MutableMapping[str, any] = {
+        message: MutableMapping[str, Any] = {
             "success_code": 0
         }
         
@@ -354,7 +354,7 @@ class _RequestHandler:
         elif success_code == 52:
             return {
                 "success_code": 52,
-                "error_message": f"No habit with id ({habit_id}))"
+                "error_message": f"No habit with id ({habit_id})"
             }
         return {
             "success_code": 0
@@ -384,8 +384,9 @@ class _RequestHandler:
                 "error_message": "Malformed Request, missing Request Type"
             }
 
+        missing_fields: list[str]
         if request["request_type"] == "register_user" :
-            missing_fields: list[str] = self._get_missing_fields(request, ["username", "password", "email"])
+            missing_fields = self._get_missing_fields(request, ["username", "password", "email"])
             if len(missing_fields) > 0:
                 response = {
                     "success_code": 12,
@@ -395,7 +396,7 @@ class _RequestHandler:
                 response = self._register_user(request["username"], request["password"], request["email"])
 
         elif request["request_type"] == "login":
-            missing_fields: list[str] = self._get_missing_fields(request, ["username", "password"])
+            missing_fields = self._get_missing_fields(request, ["username", "password"])
             if len(missing_fields) > 0:
                 response = {
                     "success_code": 12,
@@ -405,7 +406,7 @@ class _RequestHandler:
                 response = self._login(request["username"], request["password"])
 
         elif request["request_type"] == "retrieve_data":
-            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "fields"])
+            missing_fields = self._get_missing_fields(request, ["authentication_token", "fields"])
             if len(missing_fields) > 0:
                 response = {
                     "success_code": 12,
@@ -415,7 +416,7 @@ class _RequestHandler:
                 response = self._retrieve_data(request["authentication_token"], request["fields"])
 
         elif request["request_type"] == "add_habit":
-            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "habit_name", "habit_frequency"])
+            missing_fields = self._get_missing_fields(request, ["authentication_token", "habit_name", "habit_frequency"])
             if len(missing_fields) > 0:
                 response = {
                     "success_code": 12,
@@ -425,7 +426,7 @@ class _RequestHandler:
                 response = self._add_habit(request["authentication_token"], request["habit_name"], request["habit_frequency"])
 
         elif request["request_type"] == "remove_habit":
-            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "habit_id"])
+            missing_fields = self._get_missing_fields(request, ["authentication_token", "habit_id"])
             if len(missing_fields) > 0:
                 response = {
                     "success_code": 12,
@@ -435,7 +436,7 @@ class _RequestHandler:
                 response = self._remove_habit(request["authentication_token"], request["habit_id"])
 
         elif request["request_type"] == "modify_habit":
-            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "habit_id", "habit_name", "habit_frequency"])
+            missing_fields = self._get_missing_fields(request, ["authentication_token", "habit_id", "habit_name", "habit_frequency"])
             if len(missing_fields) > 0:
                 response = {
                     "success_code": 12,
