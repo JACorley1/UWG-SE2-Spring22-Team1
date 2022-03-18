@@ -117,7 +117,6 @@ class _RequestHandler:
 
         Params - username: The specified username.
                  password: The specified password.
-                 email: The specified email address.
         Return - The response to the client.
         """
         if username is None:
