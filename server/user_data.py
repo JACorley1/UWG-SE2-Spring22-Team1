@@ -227,7 +227,7 @@ class UserData:
         return self._next_habit_id
 
     @property
-    def habits(self) -> list[Habit]:
+    def habits(self) -> MutableMapping[int, Habit]:
         """
         Gets the user's list of habits.
 

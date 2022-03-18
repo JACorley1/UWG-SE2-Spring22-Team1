@@ -14,7 +14,7 @@ class Habit:
     """
     _name: str
     _id: int
-    _reset_date: int
+    _reset_date: datetime
     _frequency: int
 
     def __init__(self, name: str, frequency: int, id: int):
@@ -74,7 +74,7 @@ class Habit:
         }
 
     @property
-    def is_complete(self, cur_time: datetime = None) -> bool:
+    def is_complete(self) -> bool:
         """
         Gets whether the habit is complete or not.
 
@@ -84,10 +84,7 @@ class Habit:
         Params - None
         Return - [True] if the Habit is complete, otherwise [False].
         """
-        if cur_time is None:
-            cur_time = datetime.now()
-        
-        return cur_time < self._reset_date
+        return datetime.now() < self._reset_date
 
     @property
     def name(self) -> str:
