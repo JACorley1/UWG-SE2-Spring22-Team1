@@ -32,3 +32,5 @@ target/
 __pycache__/
 .mypy_cache/
 .pytest_cache/
+.coverage
+htmlcov/
