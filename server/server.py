@@ -1,7 +1,7 @@
 import json
 from typing import Any, MutableMapping
-from authentication_manager import AuthenticationManager
-from service_manager import ServiceManager
+from server.authentication_manager import AuthenticationManager
+from server.service_manager import ServiceManager
 import zmq
 
 class _RequestHandler:
