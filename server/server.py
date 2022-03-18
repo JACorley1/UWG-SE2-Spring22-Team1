@@ -1,9 +1,8 @@
 import json
 from typing import Any, MutableMapping
-
-from authentication_manager import AuthenticationManager
-from user_data import UserData
-from service_manager import ServiceManager
+from server.user_data import UserData
+from server.authentication_manager import AuthenticationManager
+from server.service_manager import ServiceManager
 import zmq
 
 class _RequestHandler:
@@ -123,7 +122,6 @@ class _RequestHandler:
 
         Params - username: The specified username.
                  password: The specified password.
-                 email: The specified email address.
         Return - The response to the client.
         """
         if username is None:

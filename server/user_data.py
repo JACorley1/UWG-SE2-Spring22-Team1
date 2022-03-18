@@ -1,5 +1,5 @@
-from habit import Habit
-from sudoku_puzzle import SudokuPuzzle
+from server.habit import Habit
+from server.sudoku_puzzle import SudokuPuzzle
 
 class UserData:
     """
