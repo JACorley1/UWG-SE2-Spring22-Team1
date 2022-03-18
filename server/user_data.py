@@ -1,3 +1,4 @@
+from typing import MutableMapping
 from server.habit import Habit
 from server.sudoku_puzzle import SudokuPuzzle
 
@@ -14,7 +15,7 @@ class UserData:
     _coins: int
     _sudoku_puzzle: SudokuPuzzle
     _next_habit_id: int
-    _habits: list[Habit]
+    _habits: MutableMapping[int, Habit]
 
     def __init__(self, username: str, password: str, email: str):
         """
@@ -31,7 +32,7 @@ class UserData:
         self.coins = 0
         self.sudoku_puzzle = None
         self._next_habit_id = 0
-        self._habits = []
+        self._habits = {}
 
     def increment_habit_id(self):
         """
@@ -59,7 +60,7 @@ class UserData:
         new_habit = Habit(habit_name, habit_frequency, self.next_habit_id)
         self.increment_habit_id()
 
-        self._habits.append(new_habit)
+        self._habits[new_habit.id] = new_habit
 
     def remove_habit(self, habit_id: int) -> bool:
         """
@@ -72,10 +73,9 @@ class UserData:
         Params - habit_id: The id for the habit.
         Return - Whether the habit was removed.
         """
-        for habit in self._habits:
-            if habit.id == habit_id:
-                self._habits.remove(habit)
-                return True
+        if habit_id in self._habits:
+            self._habits.pop(habit_id)
+            return True
         return False
 
     def get_habit(self, habit_id: int) -> Habit:
@@ -88,10 +88,9 @@ class UserData:
         Params - habit_id: The id for the habit.
         Return - The first habit with the specified id if exists, otherwise None.
         """
-        for habit in self._habits:
-            if habit.id == habit_id:
-                return habit
-        return False
+        if habit_id in self._habits:
+            return self._habits[habit_id]
+        return None
 
     @property
     def username(self) -> str:
