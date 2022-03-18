@@ -1,4 +1,4 @@
-from sudoku_puzzle import SudokuPuzzle
+from server.sudoku_puzzle import SudokuPuzzle
 
 class UserData:
     """
