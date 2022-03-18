@@ -1,7 +1,8 @@
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from typing import MutableMapping
+import server.datetime_extension
 
 class Habit:
     """
@@ -40,7 +41,7 @@ class Habit:
         self.name = name
         self.frequency = frequency
         self._id = id
-        self._reset_time = datetime.fromtimestamp(EPOCH_TIME)
+        self._reset_date = datetime.fromtimestamp(EPOCH_TIME)
 
     def complete(self) -> bool:
         """
@@ -52,14 +53,12 @@ class Habit:
         Params - None
         Return - [True] iff the habit was not already complete, otherwise [False]
         """
-        if self.frequency == CompletionFrequency.DAILY:
-            self._reset_date = datetime.today() + timedelta(days=1)
-        elif self.frequency == CompletionFrequency.WEEKLY:
-            today = datetime.today()
-            self._reset_date = today + timedelta(days=7 - today.isoweekday())
+        if self.frequency == CompletionFrequency.DAILY.value:
+            self._reset_date = server.datetime_extension.tomorrow()
+        elif self.frequency == CompletionFrequency.WEEKLY.value:
+            self._reset_date = server.datetime_extension.next_sunday()
         else:
-            today = datetime.today()
-            self._reset_date = (today.replace(day=1) + timedelta(days=32)).replace(day=1)
+            self._reset_date = server.datetime_extension.first_of_next_month()
 
     def create_json_dict(self) -> MutableMapping:
         return {
@@ -70,7 +69,7 @@ class Habit:
         }
 
     @property
-    def is_complete(self) -> bool:
+    def is_complete(self, cur_time: datetime = None) -> bool:
         """
         Gets whether the habit is complete or not.
 
@@ -80,7 +79,10 @@ class Habit:
         Params - None
         Return - [True] if the Habit is complete, otherwise [False].
         """
-        return datetime.now() > self._reset_time
+        if cur_time is None:
+            cur_time = datetime.now()
+        
+        return cur_time < self._reset_date
 
     @property
     def name(self) -> str:
@@ -155,7 +157,7 @@ class Habit:
         """
         if not isinstance(frequency, int):
             raise Exception("frequency must be an int")
-        if frequency < CompletionFrequency.DAILY or frequency > CompletionFrequency.MONTHLY:
+        if frequency < CompletionFrequency.DAILY.value or frequency > CompletionFrequency.MONTHLY.value:
             raise Exception("frequency must be betwwn 0 and 2, inclusive")
 
         self._frequency = frequency
