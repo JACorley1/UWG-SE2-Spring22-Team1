@@ -139,8 +139,12 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void confirmUpdateHabitButtonClicked(ActionEvent event) {
-        this.habitListView.getSelectionModel().getSelectedItem().textProperty().set(this.viewModel.removeHabitNameProperty().getValue());
+        Habit updatedHabit = new Habit(this.viewModel.removeHabitNameProperty().getValue(), this.viewModel.determineFrequency());
         this.habitListView.getSelectionModel().getSelectedItem().setFrequency(this.viewModel.determineFrequency());
+        int index = this.habitListView.getSelectionModel().getSelectedIndex();
+        this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
+        this.habitListView.getItems().add(index, updatedHabit);
+        this.viewModel.getServerCommunicator().addHabit(updatedHabit);
         this.habitListView.refresh();
         this.addHabitBackgroundAnchorPane.setVisible(false);
         this.removeHabitAnchorPane.setVisible(false);

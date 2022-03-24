@@ -86,6 +86,19 @@ public class HabitViewModel {
 
     }
 
+    
+
+     /**
+     * Gets the server communicator.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return the server communicator
+     */
+    public ServerCommunicator getServerCommunicator() {
+        return this.serverCommunicator;
+    }
     /**
      * Removes a habit from the system
      * 
@@ -107,6 +120,26 @@ public class HabitViewModel {
         }
         if (this.serverCommunicator.removeHabit(removedHabit)) {
             this.habitListProperty.remove(removedHabit);
+            this.closePopup();
+        }
+
+    }
+
+     /**
+     * Removes a habit from the system
+     * 
+     * @precondition habitToRemove != null;
+     * @postcondition this.habitListProperty().getValue().size() ==
+     *                this.habitListProperty().getValue().size() @pre - 1;
+     * 
+     * @param habitToRemove the habit to remove.
+     */
+    public void removeHabit(Habit habitToRemove) {
+        if (habitToRemove == null) {
+            throw new IllegalArgumentException("habit can't be null");
+        }
+        if (this.serverCommunicator.removeHabit(habitToRemove)) {
+            this.habitListProperty.remove(habitToRemove);
             this.closePopup();
         }
 
