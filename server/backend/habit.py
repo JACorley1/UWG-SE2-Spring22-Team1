@@ -2,7 +2,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import MutableMapping
-import server.datetime_extension
+import backend.datetime_extension
 
 class Habit:
     """
@@ -57,11 +57,11 @@ class Habit:
             return False
 
         if self.frequency == CompletionFrequency.DAILY.value:
-            self._reset_date = server.datetime_extension.tomorrow()
+            self._reset_date = backend.datetime_extension.tomorrow()
         elif self.frequency == CompletionFrequency.WEEKLY.value:
-            self._reset_date = server.datetime_extension.next_sunday()
+            self._reset_date = backend.datetime_extension.next_sunday()
         else:
-            self._reset_date = server.datetime_extension.first_of_next_month()
+            self._reset_date = backend.datetime_extension.first_of_next_month()
 
         return True
 

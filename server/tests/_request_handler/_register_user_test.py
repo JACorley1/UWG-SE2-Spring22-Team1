@@ -1,8 +1,8 @@
 import unittest
-from server.authentication_manager import AuthenticationManager
-from server.server import _RequestHandler
-from server.service_manager import ServiceManager
-from server.user_data import UserData
+from backend.authentication_manager import AuthenticationManager
+from backend.server import _RequestHandler
+from backend.service_manager import ServiceManager
+from backend.user_data import UserData
 
 class TestRegisterUser(unittest.TestCase):
     """

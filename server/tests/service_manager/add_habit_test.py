@@ -1,7 +1,7 @@
 import unittest
 from unittest import result
-from server.service_manager import ServiceManager
-from server.user_data import UserData
+from backend.service_manager import ServiceManager
+from backend.user_data import UserData
 
 class TestAddHabit(unittest.TestCase):    
     """

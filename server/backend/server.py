@@ -1,8 +1,8 @@
 import json
 from typing import Any, MutableMapping
-from server.user_data import UserData
-from server.authentication_manager import AuthenticationManager
-from server.service_manager import ServiceManager
+from backend.user_data import UserData
+from backend.authentication_manager import AuthenticationManager
+from backend.service_manager import ServiceManager
 import zmq
 
 class _RequestHandler:
@@ -207,7 +207,7 @@ class _RequestHandler:
             elif field == "sudoku_puzzle":
                 message["sudoku_puzzle"] = user_data.sudoku_puzzle
             elif field == "habits":
-                message["habits"] = list(map(lambda habit: habit.create_json_dict(), user_data.habits))
+                message["habits"] = list(map(lambda habit: habit.create_json_dict(), user_data.habits.values()))
             else:
                 return {
                     "success_code": 40,

@@ -1,6 +1,6 @@
 from typing import MutableMapping
-from server.habit import Habit
-from server.sudoku_puzzle import SudokuPuzzle
+from backend.habit import Habit
+from backend.sudoku_puzzle import SudokuPuzzle
 
 class UserData:
     """

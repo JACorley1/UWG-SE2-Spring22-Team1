@@ -1,6 +1,6 @@
 import unittest
 
-from server.habit import Habit
+from backend.habit import Habit
 
 class TestComplete(unittest.TestCase):    
     """

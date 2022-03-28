@@ -1,6 +1,6 @@
 import unittest
 
-from server.user_data import UserData
+from backend.user_data import UserData
 
 class TestRemoveHabit(unittest.TestCase):    
     """
