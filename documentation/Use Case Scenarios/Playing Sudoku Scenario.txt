@@ -1,25 +1,25 @@
 Context: User has loaded into the home page and hasn’t played a sudoku game in the app before
 Primary Flow:
-1.	The user selects the Grid Button (looks like a waffle)
-2.	The user is taken to the sudoku page  
-3.	The user selects “New Game” Button 
-4.	The user is taken to another page with a new sudoku game generated
-5.	The user solves the puzzle
-6.	The user is prompted that they have solved the puzzle 
-7.	The user selects “return”
-8.	The user is returned to the home page
+1. The user selects the Grid Button (looks like a waffle)
+2. The user is taken to the sudoku page  
+3. The user selects “New Game” Button 
+4. The user is taken to another page with a new sudoku game generated
+5. The user solves the puzzle
+6. The user is prompted that they have solved the puzzle 
+7. The user selects “return”
+8. The user is returned to the home page
 Alternative Flow(s):
-	 User is already in progress of another sudoku game:
-		4a. The user is prompted asking if they are sure they want to start a new game
-		5a. The user selects “Yes” the user is taken to the newly loaded game
-		6a. return to step 5 in Primary Flow
-	User does not finish their game:
-		5b. The user solves part of the puzzle
-		6b. The user selects the back-arrow button or Waffle button
-		7b. The system saves the user’s progress
-		8b. The user is taken to the sudoku game page
-	User wants to continue their game:
-		3c. The user selects “Continue” button
-		4c. The system loads the user’s progress
-		5c. The user is taken to their in-progress game 
-		6c. return to step 5 in Primary Flow
+User is already in progress of another sudoku game:
+4a. The user is prompted asking if they are sure they want to start a new game
+5a. The user selects “Yes” the user is taken to the newly loaded game
+6a. return to step 5 in Primary Flow
+User does not finish their game:
+5b. The user solves part of the puzzle
+6b. The user selects the back-arrow button or Waffle button
+7b. The system saves the user’s progress
+8b. The user is taken to the sudoku game page
+User wants to continue their game:
+3c. The user selects “Continue” button
+4c. The system loads the user’s progress
+5c. The user is taken to their in-progress game 
+6c. return to step 5 in Primary Flow

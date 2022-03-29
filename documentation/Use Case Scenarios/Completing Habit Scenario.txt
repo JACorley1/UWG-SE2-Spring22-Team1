@@ -1,17 +1,17 @@
 Context: The user has loaded the application and has added a scenario
 Primary Flow:
-1.	The user selects a habit
-2.	The user selects the check box next to the habits they want to complete
-3.	The user selects a "complete" button to complete the habits
-4.	The user is prompted to ensure they want to complete the habits
-5.	The user selects "yes" confirming they want the habits marked as complete
-6.	The habits are marked as complete 
-7.	The habits are added to the "completed" list of habits and cannot be interacted with
-8.	The habits are removed from the "ToDo" list of habits
-9.	The user is returned to the habit page
-10.	The user receives coins for successfully completing each habit.
-11.	The coin amount increases by the coin value of the habits completed.
+1. The user selects a habit
+2. The user selects the check box next to the habits they want to complete
+3. The user selects a "complete" button to complete the habits
+4. The user is prompted to ensure they want to complete the habits
+5. The user selects "yes" confirming they want the habits marked as complete
+6. The habits are marked as complete 
+7. The habits are added to the "completed" list of habits and cannot be interacted with
+8. The habits are removed from the "ToDo" list of habits
+9. The user is returned to the habit page
+10. The user receives coins for successfully completing each habit.
+11. The coin amount increases by the coin value of the habits completed.
 Alternative Flow(s):
-	User Doesn't Want to complete the task:
-		5a. The user selects "no" confirming they do not want the habit marked as complete
-		6a. The user is returned to the habit page
+User Doesn't Want to complete the task:
+5a. The user selects "no" confirming they do not want the habit marked as complete
+6a. The user is returned to the habit page

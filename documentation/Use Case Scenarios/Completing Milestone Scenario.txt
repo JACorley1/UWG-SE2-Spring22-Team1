@@ -1,10 +1,10 @@
 Context: User has added some habits and is logged in
 Primary Flow:
-1.	The user completes the final habit needed to reach a milestone
-2.	The user receives a prompt congratulating them on reaching the milestone
-3.	The user receives bonus coins up to the value of the milestone
-4.	The user receives an email informing them of their milestone being reached and the amount awarded
-5.	The user selects "ok"
-6.	The user stays on the habit page
+1. The user completes the final habit needed to reach a milestone
+2. The user receives a prompt congratulating them on reaching the milestone
+3. The user receives bonus coins up to the value of the milestone
+4. The user receives an email informing them of their milestone being reached and the amount awarded
+5. The user selects "ok"
+6. The user stays on the habit page
 Alternative Flows:
-	none
+none
