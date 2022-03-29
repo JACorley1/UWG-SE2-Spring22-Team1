@@ -44,6 +44,9 @@ public class LoginScreen {
     private Button newUserButton;
 
     @FXML
+    private Button registerButton;
+
+    @FXML
     private TextField passwordTextField;
 
     @FXML
@@ -74,10 +77,15 @@ public class LoginScreen {
     }
 
     @FXML
-    void newUserButtonPress(ActionEvent event) throws IOException {
+    void newUserButtonPress(ActionEvent event) {
         this.isUserNew = !this.isUserNew;
         this.toggleEmailVisibility();
-        this.toggleButtonText();
+        this.toggleButtons();
+    }
+
+    @FXML
+    void registerButtonPressed(ActionEvent event) throws IOException {
+        this.loginButtonPress(event);
     }
 
     @FXML
@@ -99,14 +107,16 @@ public class LoginScreen {
         this.emailTextField.setVisible(!this.emailTextField.isVisible());
     }
 
-    private void toggleButtonText() {
+    private void toggleButtons() {
+        this.loginButton.setVisible(!this.isUserNew);
+        this.loginButton.setDisable(this.isUserNew);
+
+        this.registerButton.setVisible(this.isUserNew);
+        this.registerButton.setDisable(!this.isUserNew);
+
         if (!this.isUserNew) {
-            this.loginButton.setStyle("-fx-font-size: 31px; ");
-            this.loginButton.setText("Login");
             this.newUserButton.setText("New User?");
         } else {
-            this.loginButton.setStyle("-fx-font-size: 22px; ");
-            this.loginButton.setText("Register");
             this.newUserButton.setText("Cancel");
         }
     }
