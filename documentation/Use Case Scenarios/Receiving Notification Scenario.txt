@@ -1,4 +1,4 @@
-Context: The user has successfully registered an account and has one habit ToDo
+Context: The user has successfully registered an account and has one habit they need to complete
 Primary Flow:
 1. The user completes a milestone while using the app
 2. The user receives an email saying they completed the milestone and received the bonus coins

@@ -2,7 +2,7 @@ Context: The user has their account for the app
 Primary Flow: 
 1. The user is taken to the log in page
 2. The user enters in their correct log in credentials
-3. The user selects “Login”
+3. The user selects the login option
 4. The user is sent to the home page
 Alternative Flow(s):
 User enters the invalid credentials:

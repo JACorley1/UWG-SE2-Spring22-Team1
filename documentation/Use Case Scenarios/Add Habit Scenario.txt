@@ -1,17 +1,17 @@
 Context: User has loaded into the application and is at the home page
 Primary Flow:
-1. The user selects the “+” button
-2. A pop-up add page will appear before the user
-3. The user enters in the Name of the habit they want to handle in the Name section
-4. The user selects one of the available buttons for how often they want to update their habit
-5. The user selects the “Add” button
+1. The user selects the add option
+2. A pop-up prompt will appear for the user to create a habit
+3. The user enters in the name of their desired habit
+4. The user selects one of the available options for how often they want to update their habit
+5. The user confirms they want to add the habit with the entered specifications
 6. The user recieves a prompt stating the habit addition was successful
-7. The user is returned to the home page with the habit added successfully in the "ToDo" list of habits
+7. The user is returned to the home page with the habit added successfully to the list of habits they need to do
 Alternative Flow:
 User Selects Cancel:
-3/4/5a. The user selects the “Cancel” button
+3/4/5a. The user cancels or exits the prompt
 4/5/6a. The user is returned to the home page
 User doesn’t enter any information:
-3b. The user selects the “Add” button
-4b. A prompt appears telling the user that they must fill in all required zones
-5b. The user is returned to the home page.
+3b. The user confirms they want to add the habit
+4b. A prompt appears telling the user that they must fill in all required specifications
+5b. The user is returned to the home page
