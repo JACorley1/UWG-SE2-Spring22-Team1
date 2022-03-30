@@ -37,5 +37,10 @@
       </Button>
       <Label fx:id="emailLabel" layoutX="117.0" layoutY="329.0" prefHeight="17.0" prefWidth="70.0" text="Email" visible="false" />
       <TextField fx:id="emailTextField" layoutX="114.0" layoutY="346.0" prefHeight="25.0" prefWidth="247.0" promptText="Email" visible="false" />
+      <Button fx:id="registerButton" disable="true" layoutX="172.0" layoutY="397.0" mnemonicParsing="false" onAction="#registerButtonPressed" prefHeight="84.0" prefWidth="136.0" text="Register" visible="false">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
