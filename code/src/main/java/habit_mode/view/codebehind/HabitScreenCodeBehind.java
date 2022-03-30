@@ -121,6 +121,9 @@ public class HabitScreenCodeBehind {
     private Button removeCancelButton;
 
     @FXML
+    private ListView<Habit> completedHabitListView;
+
+    @FXML
     void removeButtonClicked(ActionEvent event) {
         try {
             this.viewModel.removeHabit();
@@ -257,6 +260,10 @@ public class HabitScreenCodeBehind {
 
                 newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
                     this.viewModel.sendCompletedHabit(newestItem);
+                    if (isNowOn) {
+                        this.completedHabitListView.getItems().add(newestItem);
+                        this.habitListView.getItems().remove(newestItem);
+                    }
                 });
             }
         });
