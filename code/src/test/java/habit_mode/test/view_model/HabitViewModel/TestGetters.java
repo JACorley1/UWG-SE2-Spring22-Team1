@@ -40,4 +40,10 @@ public class TestGetters {
         HabitViewModel viewModel = new HabitViewModel();
         viewModel.removeDailySelectedProperty();
     }
+
+    @Test
+    void testgetServerCommunicator() {
+        HabitViewModel viewModel = new HabitViewModel();
+        viewModel.getServerCommunicator();
+    }
 }
