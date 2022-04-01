@@ -6,7 +6,7 @@ package habit_mode.model;
  * @author Team 1
  * @version Spring 2022
  */
-public enum SuccessCodes {
+public enum SuccessCode {
     OKAY(0), 
     MISSING_REQUEST_TYPE(10), 
     UNSUPPORT_REQUEST_TYPE(11),
@@ -35,7 +35,7 @@ public enum SuccessCodes {
      * 
      * @param value The integer value associated with each code. 
      */
-    SuccessCodes(int value) {
+    SuccessCode(int value) {
         this.code = value;
     }
 

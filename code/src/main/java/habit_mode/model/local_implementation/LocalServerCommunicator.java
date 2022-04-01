@@ -6,7 +6,7 @@ import java.util.List;
 import habit_mode.model.Habit;
 import habit_mode.model.HabitManager;
 import habit_mode.model.ServerCommunicator;
-import habit_mode.model.SuccessCodes;
+import habit_mode.model.SuccessCode;
 import habit_mode.model.sudoku.SudokuPuzzle;
 
 /**
@@ -39,7 +39,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static SudokuPuzzle storedPuzzle = null;
     private static boolean receivedBonus = false;
     private static HashMap<String, String> registry = new HashMap<String, String>();
-    private static SuccessCodes successCode;
+    private static SuccessCode successCode;
 
     /**
      * Resets static fields stored values to their default state.
@@ -181,17 +181,17 @@ public class LocalServerCommunicator extends ServerCommunicator {
     }
 
     @Override
-    public SuccessCodes registerCredentials(String username, String password, String email) {
+    public SuccessCode registerCredentials(String username, String password, String email) {
         if (username == null || username.isBlank()) {
-            successCode = SuccessCodes.INVALID_USERNAME;
+            successCode = SuccessCode.INVALID_USERNAME;
         } else if (password == null || password.isBlank()) {
-            successCode = SuccessCodes.INVALID_PASSWORD;
+            successCode = SuccessCode.INVALID_PASSWORD;
         } else if (email == null || email.isBlank()) {
-            successCode = SuccessCodes.INVALID_EMAIL;
+            successCode = SuccessCode.INVALID_EMAIL;
         } else if (registry.containsValue(username)) {
-            successCode = SuccessCodes.USERNAME_ALREADY_EXISTS;
+            successCode = SuccessCode.USERNAME_ALREADY_EXISTS;
         } else {
-            successCode = SuccessCodes.OKAY;
+            successCode = SuccessCode.OKAY;
             registry.put(USERNAME, username);
             registry.put(PASSWORD, password);
             registry.put(EMAIL, email);

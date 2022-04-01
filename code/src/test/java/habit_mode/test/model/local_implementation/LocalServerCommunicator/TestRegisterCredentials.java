@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 
 import habit_mode.model.local_implementation.LocalServerCommunicator;
-import habit_mode.model.SuccessCodes;
+import habit_mode.model.SuccessCode;
 public class TestRegisterCredentials {
 
     @Test
@@ -17,7 +17,7 @@ public class TestRegisterCredentials {
         String username1 = "";
         String password = "123";
         String email = "emailadd";
-        SuccessCodes code = SuccessCodes.INVALID_USERNAME;
+        SuccessCode code = SuccessCode.INVALID_USERNAME;
 
         assertAll(
             () -> {assertEquals(code, communicator.registerCredentials(username1, password, email));},
@@ -31,7 +31,7 @@ public class TestRegisterCredentials {
         String username1 = "Admin";
         String password = "";
         String email = "emailadd";
-        SuccessCodes code = SuccessCodes.INVALID_PASSWORD;
+        SuccessCode code = SuccessCode.INVALID_PASSWORD;
 
         assertAll(
             () -> {assertEquals(code, communicator.registerCredentials(username1, password, email));},
@@ -45,7 +45,7 @@ public class TestRegisterCredentials {
         String username1 = "Admin";
         String password = "Adin";
         String email = "";
-        SuccessCodes code = SuccessCodes.INVALID_EMAIL;
+        SuccessCode code = SuccessCode.INVALID_EMAIL;
 
         assertAll(
             () -> {assertEquals(code, communicator.registerCredentials(username1, password, email));},
@@ -59,8 +59,8 @@ public class TestRegisterCredentials {
         String username1 = "Admin";
         String password = "Adin";
         String email = "Admin";
-        SuccessCodes code1 = SuccessCodes.USERNAME_ALREADY_EXISTS;
-        SuccessCodes code2 = SuccessCodes.OKAY;
+        SuccessCode code1 = SuccessCode.USERNAME_ALREADY_EXISTS;
+        SuccessCode code2 = SuccessCode.OKAY;
 
         assertAll(
             () -> {assertEquals(code2, communicator.registerCredentials(username1, password, email));},

@@ -27,7 +27,7 @@ public abstract class ServerCommunicator {
      *         20 if username is taken, 21 if username is invalid, 22 if password is invalid, 23 if email
      *         is invalid, or 15 if an unknown error occurs. 
      */
-    public abstract SuccessCodes registerCredentials(String username, String password, String email);
+    public abstract SuccessCode registerCredentials(String username, String password, String email);
 
     /** 
      * Checks with the server whether a specified username and password pair is valid.
