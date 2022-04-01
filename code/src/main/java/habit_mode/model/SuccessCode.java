@@ -1,7 +1,7 @@
 package habit_mode.model;
 
 /**
- * The enum SuccessCodes.
+ * The enum SuccessCode.
  * 
  * @author Team 1
  * @version Spring 2022
@@ -28,7 +28,7 @@ public enum SuccessCode {
     private final int code;
 
     /**
-     * The constructor for SuccessCodes.
+     * The constructor for SuccessCode.
      * 
      * @precondition none
      * @postcondition this.getCode == value
