@@ -14,11 +14,11 @@ class TestConstructor(unittest.TestCase):
         Checks if the constructor sets the default values correctly.
         """
         user_data = UserData("username", "password", "email@email.com")
-        self.assertEqual(user_data.username, "username", "Check if username is set correctly.")
-        self.assertEqual(user_data.password, "password", "Check if password is set correctly.")
-        self.assertEqual(user_data.email, "email@email.com", "Check if email is set correctly.")
-        self.assertEqual(user_data.coins, 0, "Check if coins are set correctly.")
-        self.assertEqual(user_data.sudoku_puzzle, None, "Check if sudoku_puzzle is set correctly.")
+        self.assertEqual(user_data.get_username(), "username", "Check if username is set correctly.")
+        self.assertEqual(user_data.get_password(), "password", "Check if password is set correctly.")
+        self.assertEqual(user_data.get_email(), "email@email.com", "Check if email is set correctly.")
+        self.assertEqual(user_data.get_coins(), 0, "Check if coins are set correctly.")
+        self.assertEqual(user_data.get_sudoku_puzzle(), None, "Check if sudoku_puzzle is set correctly.")
     
     def test_empty_username(self):
         """
