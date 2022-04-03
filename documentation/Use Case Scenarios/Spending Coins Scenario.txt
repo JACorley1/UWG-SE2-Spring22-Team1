@@ -10,21 +10,22 @@ Primary Flow:
 8. The user gains that item from the shop
 9. A prompt informs the user that their purchase was successful
 10. The user is returned to the sudoku game page
-Alternative Flow:
+
+Alternative Flow(s):
 The user cannot afford a shop product:
-7a. The user receives a prompt saying they cannot afford that item
-8a. The user remains on the shop page
+    7a.  The user receives a prompt saying they cannot afford that item
+    8a.  The user remains on the shop page
 The user purchases a hint for the puzzle:
-3b. The user is playing a sudoku game
-4b. The user selects the hint option
-5b. The user receives a pop-up menu informing them that it will cost coins for a hint
-6b. The user confirms they want a hint
-7b. The user's coins is then deducted by the cost of a hint
-8b. The user receives the hint
+    3b.  The user is playing a sudoku game
+    4b.  The user selects the hint option
+    5b.  The user receives a pop-up menu informing them that it will cost coins for a hint
+    6b.  The user confirms they want a hint
+    7b.  The user's coins is then deducted by the cost of a hint
+    8b.  The user receives the hint
 The user cannot afford a hint:
-3c. The user is playing a sudoku game
-4c. The user selects the hint option
-5c. The user receives a pop-up menu informing them that it will cost coins for a hint
-6c. The user confirms they want a hint
-7c. The user receives a prompt stating that they cannot afford the hint
-8c. The user is returned to their game
+    3c.  The user is playing a sudoku game
+    4c.  The user selects the hint option
+    5c.  The user receives a pop-up menu informing them that it will cost coins for a hint
+    6c.  The user confirms they want a hint
+    7c.  The user receives a prompt stating that they cannot afford the hint
+    8c.  The user is returned to their game

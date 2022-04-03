@@ -1,9 +1,10 @@
 Context: has logged into the app and has added at least one habit before
 Primary Flow:
-1. The user is taken to the home page
-2. The home page displays the habits the user needs to do and has completed.
-Alternative Flow:
+1.  The user is taken to the home page
+2.  The home page displays the habits the user needs to do and has completed.
+
+Alternative Flow(s):
 No Habits to display:
-2a. A message is displayed for the user encouraging them to add a habit.
+    2a.  A message is displayed for the user encouraging them to add a habit.
 All Habits are completed:
-2b. A message is displayed for the user congratulating them on finishing all of their tasks at the moment. 
+    2b.  A message is displayed for the user congratulating them on finishing all of their tasks at the moment. 
