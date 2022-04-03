@@ -8,7 +8,7 @@ def yesterday():
 
 def next_sunday():
     today = datetime.today()
-    return today + timedelta(days=7 - today.isoweekday())
+    return today + timedelta(days=7 - today.weekday())
 
 def first_of_next_month():
     today = datetime.today()
