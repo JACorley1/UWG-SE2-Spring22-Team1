@@ -1,5 +1,5 @@
 from typing import MutableMapping
-from user_data import UserData
+from server.user_data import UserData
 
 class ServiceManager:
     """
