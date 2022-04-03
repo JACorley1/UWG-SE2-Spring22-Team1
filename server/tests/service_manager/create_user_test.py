@@ -1,7 +1,7 @@
 import unittest
 from server.service_manager import ServiceManager
 
-class TestConstructor(unittest.TestCase):    
+class TestCreateUser(unittest.TestCase):    
     """
     Tests for the create_user function.
 
