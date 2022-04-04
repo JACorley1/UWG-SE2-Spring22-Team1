@@ -234,6 +234,52 @@ class TestHandleRequest(unittest.TestCase):
         self.assertEqual(habit.name, new_habit_name, "Check if the habit name is correct")
         self.assertEqual(habit.frequency, new_habit_freq, "Check if the habit frequency is correct")
 
+    def test_valid_complete_habits(self):
+        """
+        Checks if a valid complete_habits request is handled correctly.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        username = "username"
+        password = "password"
+        email = "email@email.com"
+        habit_name = "Habit"
+        habit_freq = 0
+
+        register_request = {
+            "request_type": "register_user",
+            "username": username,
+            "password": password,
+            "email": email,
+        }
+        login_request = {
+            "request_type": "login",
+            "username": username,
+            "password": password,
+        }
+        add_habit_request = {
+            "request_type": "add_habit",
+            "habit_name": habit_name,
+            "habit_frequency": habit_freq,
+        }
+        complete_habit_request = {
+            "request_type": "complete_habits",
+            "habit_ids": [0],
+        }
+
+        request_handler.handle_request(register_request)
+        add_habit_request["authentication_token"] = request_handler.handle_request(login_request)["authentication_token"]
+        complete_habit_request["authentication_token"] = add_habit_request["authentication_token"]
+        request_handler.handle_request(add_habit_request)
+        response = request_handler.handle_request(complete_habit_request)
+
+        success_code = response["success_code"]
+        already_completed = response["already_completed"]
+        habit = request_handler._service_manager._user_information[username].habits[0]
+
+        self.assertEqual(success_code, 0, "Check if success_code is correct.")
+        self.assertEqual(already_completed, [], "Check if no habits were already completed")
+        self.assertTrue(habit.is_complete)
+
     def test_missing_request_type(self):
         """
         Checks if a the correct response is created when not providing a request type.
@@ -536,5 +582,54 @@ class TestHandleRequest(unittest.TestCase):
         self.assertEqual(
             error_message, 
             f"Malformed Request, missing Request Fields (habit_id)", 
+            "Check if error_message is correct."
+        )
+
+    def test_complete_habits_missing_fields(self):
+        """
+        Checks if a the correct response is created when missing fields.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        username = "username"
+        password = "password"
+        email = "email@email.com"
+        habit_name = "Habit"
+        habit_freq = 0
+        new_habit_name = "Habit"
+        new_habit_freq = 0
+
+        register_request = {
+            "request_type": "register_user",
+            "username": username,
+            "password": password,
+            "email": email,
+        }
+        login_request = {
+            "request_type": "login",
+            "username": username,
+            "password": password,
+        }
+        add_habit_request = {
+            "request_type": "add_habit",
+            "habit_name": habit_name,
+            "habit_frequency": habit_freq,
+        }
+        complete_habits_request = {
+            "request_type": "complete_habits",
+        }
+
+        request_handler.handle_request(register_request)
+        add_habit_request["authentication_token"] = request_handler.handle_request(login_request)["authentication_token"]
+        complete_habits_request["authentication_token"] = add_habit_request["authentication_token"]
+        request_handler.handle_request(add_habit_request)
+        response = request_handler.handle_request(complete_habits_request)
+
+        success_code = response["success_code"]
+        error_message = response["error_message"]
+
+        self.assertEqual(success_code, 12, "Check if success_code is correct.")
+        self.assertEqual(
+            error_message, 
+            f"Malformed Request, missing Request Fields (habit_ids)", 
             "Check if error_message is correct."
         )
