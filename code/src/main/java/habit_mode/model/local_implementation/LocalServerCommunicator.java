@@ -1,10 +1,12 @@
 package habit_mode.model.local_implementation;
 
+import java.util.HashMap;
 import java.util.List;
 
 import habit_mode.model.Habit;
 import habit_mode.model.HabitManager;
 import habit_mode.model.ServerCommunicator;
+import habit_mode.model.SuccessCode;
 import habit_mode.model.sudoku.SudokuPuzzle;
 
 /**
@@ -28,11 +30,16 @@ public class LocalServerCommunicator extends ServerCommunicator {
     private static final String BLANK_PASSWORD_ERROR = "password must not be blank";
     private static final String NULL_HABIT_ERROR = "habit must not be null";
     private static final String NEGATIVE_COIN_AMOUNT = "coins must not be negative";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String EMAIL = "email";
 
     private static int coins = 0;
     private static HabitManager habits = new HabitManager();
     private static SudokuPuzzle storedPuzzle = null;
     private static boolean receivedBonus = false;
+    private static HashMap<String, String> registry = new HashMap<String, String>();
+    private static SuccessCode successCode;
 
     /**
      * Resets static fields stored values to their default state.
@@ -46,6 +53,7 @@ public class LocalServerCommunicator extends ServerCommunicator {
         coins = 0;
         storedPuzzle = null;
         habits.clear();
+        registry.clear();
         receivedBonus = false;
     }
 
@@ -170,5 +178,24 @@ public class LocalServerCommunicator extends ServerCommunicator {
         int index = habits.indexOf(habit);
 
         return index == -1 ? null : habits.get(index);
+    }
+
+    @Override
+    public SuccessCode registerCredentials(String username, String password, String email) {
+        if (username == null || username.isBlank()) {
+            successCode = SuccessCode.INVALID_USERNAME;
+        } else if (password == null || password.isBlank()) {
+            successCode = SuccessCode.INVALID_PASSWORD;
+        } else if (email == null || email.isBlank()) {
+            successCode = SuccessCode.INVALID_EMAIL;
+        } else if (registry.containsValue(username)) {
+            successCode = SuccessCode.USERNAME_ALREADY_EXISTS;
+        } else {
+            successCode = SuccessCode.OKAY;
+            registry.put(USERNAME, username);
+            registry.put(PASSWORD, password);
+            registry.put(EMAIL, email);
+        }
+        return successCode;
     }
 }
