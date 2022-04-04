@@ -21,7 +21,7 @@ class UserData:
     _password: str
     _email: str
     _coins: int
-    _sudoku_puzzle: SudokuPuzzle
+    _sudoku_puzzle: Optional[SudokuPuzzle]
     _next_habit_id: int
     _habits: MutableMapping[int, Habit]
     _bonus_reset_dates: MutableMapping[int, datetime]
@@ -141,7 +141,7 @@ class UserData:
         """
         return habit_id in self._habits
 
-    def get_habit(self, habit_id: int) -> Habit:
+    def get_habit(self, habit_id: int) -> Optional[Habit]:
         """
         Gets the first instance of a habit from the habit list with the specified id.
 
@@ -266,7 +266,7 @@ class UserData:
         self._coins = coins
 
     @property
-    def sudoku_puzzle(self) -> SudokuPuzzle:
+    def sudoku_puzzle(self) ->  Optional[SudokuPuzzle]:
         """
         Gets the user's current sudoku puzzle.
 
@@ -278,7 +278,7 @@ class UserData:
         return self._sudoku_puzzle
 
     @sudoku_puzzle.setter
-    def sudoku_puzzle(self, sudoku_puzzle: SudokuPuzzle):
+    def sudoku_puzzle(self, sudoku_puzzle:  Optional[SudokuPuzzle]):
         """
         Sets the user's current sudoku puzzle.
 

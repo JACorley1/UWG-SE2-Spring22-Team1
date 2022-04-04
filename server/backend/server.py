@@ -1,5 +1,5 @@
 import json
-from typing import Any, MutableMapping
+from typing import Any, Iterable, MutableMapping, Optional
 from backend.user_data import UserData
 from backend.authentication_manager import AuthenticationManager
 from backend.service_manager import ServiceManager
@@ -179,7 +179,7 @@ class _RequestHandler:
                 "error_message": f"Invalid authentication token"
             }
         
-        user_data: UserData = self._service_manager.get_data_for_user(username)
+        user_data: Optional[UserData] = self._service_manager.get_data_for_user(username)
         if user_data is None:
             return {
                 "success_code": 14,
@@ -384,9 +384,11 @@ class _RequestHandler:
                 "error_message": f"Invalid authentication token"
             }
 
-        user_data: UserData = self._service_manager.get_data_for_user(username)
+        user_data: Any = self._service_manager.get_data_for_user(username)
 
-        unknown_habits = list(filter(lambda habit_id: habit_id not in user_data.habits, habit_ids))
+        unknown_habits: list[str] = list(
+            map(str, filter(lambda habit_id: habit_id not in user_data.habits, habit_ids))
+        )
         if len(unknown_habits) > 0:
             return {
                 "success_code": 52,

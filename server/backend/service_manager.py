@@ -1,4 +1,4 @@
-from typing import MutableMapping
+from typing import MutableMapping, Optional
 from backend.user_data import UserData
 
 class ServiceManager:
@@ -46,7 +46,7 @@ class ServiceManager:
         self._user_information[username] = new_user
         return 0
 
-    def get_data_for_user(self, username: str) -> UserData:
+    def get_data_for_user(self, username: str) -> Optional[UserData]:
         """
         Gets the user information for a specified username, if it has been registered.
 
