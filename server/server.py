@@ -1,7 +1,8 @@
 import json
 from typing import Any, MutableMapping
-from authentication_manager import AuthenticationManager
-from service_manager import ServiceManager
+from server.user_data import UserData
+from server.authentication_manager import AuthenticationManager
+from server.service_manager import ServiceManager
 import zmq
 
 class _RequestHandler:
@@ -12,35 +13,28 @@ class _RequestHandler:
     @version Spring 2022
     """
     _service_manager: ServiceManager
-    _authentication_manager: AuthenticationManager
 
-    def __init__(self, service_manager: ServiceManager, authentication_manager: AuthenticationManager):
+    def __init__(self, service_manager: ServiceManager):
         """
         Creates a new RequestHandler using the specified ServiceManager.
 
         Precondition:  service_manager is not None and
-                       isinstance(service_manager, ServiceManager) and
-                       authentication_manager is not None and
-                       isinstance(authentication_manager, AuthenticationManager)
+                       isinstance(service_manager, ServiceManager)
         Postcondition: RequestHandler has appropriate ServiceManager to server requests
 
         Params - service_manager: The specified ServiceManager
+                 authentication_manager: The specified AuthenticationManager
         """
         if service_manager is None:
             raise Exception("service_manager must not be None")
         if not isinstance(service_manager, ServiceManager):
             raise Exception("service_manager must be an instance of ServiceManager.")
-        if authentication_manager is None:
-            raise Exception("authentication_manager must not be None")
-        if not isinstance(authentication_manager, AuthenticationManager):
-            raise Exception("authentication_manager must be an instance of AuthenticationManager.")
 
         self._service_manager = service_manager
-        self._authentication_manager = authentication_manager
 
     def _get_missing_fields(self, request: MutableMapping[str, Any], fields: list[str]) -> list[str]:
         """
-        Creates a list of any missing fields from a request.
+        Creates a list of anf missing fields from a request.
 
         Precondition:  request is not None and
                        isinstance(request, MutableMapping) and
@@ -66,7 +60,7 @@ class _RequestHandler:
                 missing_fields.append(field)
         return missing_fields
 
-    def _register_user(self, username: str, password: str, email: str) -> MutableMapping[str, Any]:
+    def _register_user(self, username: str, email: str, password: str) -> MutableMapping[str, Any]:
         """
         Attempts to add a new user to the server using the specified username, password, and email.
         Generates and returns a response to be sent back to the client.
@@ -83,27 +77,27 @@ class _RequestHandler:
         response: MutableMapping[str, Any]
         if success_code == 20:
             response = {
-                "success_code": 20,
+                "successCode": 20,
                 "error_message": f"Username ({username}) already exists"
             }
         elif success_code == 21:
             response = {
-                "success_code": 21,
+                "successCode": 21,
                 "error_message": f"Username ({username}) is invalid"
             }
         elif success_code == 22:
             response = {
-                "success_code": 22,
+                "successCode": 22,
                 "error_message": "Password is invalid"
             }
         elif success_code == 23:
             response = {
-                "success_code": 23,
+                "successCode": 23,
                 "error_message": f"Email ({email}) is invalid"
             }
         else:
             response = {
-                "success_code": 0
+                "successCode": 0
             }
         return response
 
@@ -112,12 +106,14 @@ class _RequestHandler:
         Validates a specified username-password combination and sends an authentication token
         back to the client if successful.
 
-        Precondition:  None
+        Precondition:  username is not None and
+                       isinstance(username, str) and
+                       password is not None and
+                       isinstance(password, str)
         Postcondition: None
 
         Params - username: The specified username.
                  password: The specified password.
-                 email: The specified email address.
         Return - The response to the client.
         """
         if username is None:
@@ -145,6 +141,73 @@ class _RequestHandler:
             "authentication_token": token,
         }
 
+    def _retrieve_data(self, token: str, fields: list[str]) -> MutableMapping[str, Any]:
+        """
+        Attempts to retrieve a set of data for a user using their authentication token.
+
+        Precondition:  token is not None and
+                       isinstance(token, str) and
+                       fields is not None and
+                       isinstance(fields, str)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 fields: The requested data fields
+        Return - The response to the client.
+        """
+        if token is None:
+            raise Exception("token must not be None")
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if fields is None:
+            raise Exception("fields must not be None")
+        if not isinstance(fields, list):
+            raise Exception("fields must be a list of str")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        
+        user_data: UserData = self._service_manager.get_data_for_user(username)
+        if user_data is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        
+
+        if len(fields) == 0:
+            return {
+                "success_code": 41,
+                "error_message": f"No fields provided"
+            }
+
+        message: MutableMapping[str, any] = {
+            "success_code": 0
+        }
+        
+        for field in fields:
+            if field == "username":
+                message["username"] = user_data.username
+            elif field == "email":
+                message["email"] = user_data.email
+            elif field == "coins":
+                message["coins"] = user_data.coins
+            elif field == "sudoku_puzzle":
+                message["sudoku_puzzle"] = user_data.sudoku_puzzle
+            elif field == "habits":
+                message["habits"] = list(map(lambda habit: habit.create_json_dict, user_data.habits))
+            else:
+                return {
+                    "success_code": 40,
+                    "error_message": f"Unknown field name ({field})"
+                }
+
+        return message
+
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
         Accepts a request from the client and performs an action depending on the request body.
@@ -165,7 +228,7 @@ class _RequestHandler:
         response: MutableMapping[str, Any]
         if "request_type" not in request :
             return {
-                "success_code": 10,
+                "successCode": 10,
                 "error_message": "Malformed Request, missing Request Type"
             }
 
@@ -173,7 +236,7 @@ class _RequestHandler:
             missing_fields: list[str] = self._get_missing_fields(request, ["username", "password", "email"])
             if len(missing_fields) > 0:
                 response = {
-                    "success_code": 12,
+                    "successCode": 12,
                     "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
                 }
             else:
@@ -189,9 +252,19 @@ class _RequestHandler:
             else:
                 response = self._login(request["username"], request["password"])
 
+        elif request["request_type"] == "retrieve_data":
+            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "fields"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._retrieve_data(request["authentication_token"], request["fields"])
+
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
-            response = {"success_code": 11, "error_message": error_message}
+            response = {"successCode": 11, "error_message": error_message}
         return response
 
 class Server:
@@ -202,30 +275,24 @@ class Server:
     @author Team 1
     @version Spring 2022
     """
-    def run(self, service_manager: ServiceManager, authentication_manager: AuthenticationManager):
+    def run(self, service_manager: ServiceManager):
         """
         Launches the server with a specified ServiceManager.
         The server will run indefinitely.
 
         Precondition:  service_manager is not None and
-                       isinstance(service_manager, ServiceManager) and
-                       authentication_manager is not None and
-                       isinstance(authentication_manager, AuthenticationManager)
+                       isinstance(service_manager, ServiceManager)
         Postcondition: The server becomes active.
         """
         if service_manager is None:
             raise Exception("service_manager must not be None")
         if not isinstance(service_manager, ServiceManager):
             raise Exception("service_manager must be an instance of ServiceManager.")
-        if authentication_manager is None:
-            raise Exception("authentication_manager must not be None")
-        if not isinstance(authentication_manager, AuthenticationManager):
-            raise Exception("authentication_manager must be an instance of AuthenticationManager.")
 
-        request_handler = _RequestHandler(service_manager, authentication_manager)
+        request_handler = _RequestHandler(service_manager)
         context = zmq.Context()
         socket = context.socket(zmq.REP)
-        socket.bind("tcp://127.0.0.1:5555")
+        socket.bind("tcp://0.0.0.0:8000")
 
         while True:
             #  Wait for next request from client

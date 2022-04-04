@@ -1,5 +1,5 @@
 from typing import MutableMapping
-from user_data import UserData
+from server.user_data import UserData
 
 class ServiceManager:
     """
@@ -46,17 +46,6 @@ class ServiceManager:
         self._user_information[username] = new_user
         return 0
 
-    def get_data_for_user(self, username: str) -> UserData:
-        """
-        Gets the user information for a specified username, if it has been registered.
-
-        Precondition:  None
-        Postcondition: None
-
-        Params - username: The specified username.
-        Return - The UserData associated with the name if it has been registered, otherwise None.
-        """
-        return self._user_information[username] if username in self._user_information else None
 
 def _validate_username(username: str) -> bool:
     """

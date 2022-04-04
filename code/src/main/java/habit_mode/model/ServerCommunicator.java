@@ -12,6 +12,23 @@ import habit_mode.model.sudoku.SudokuPuzzle;
  */
 public abstract class ServerCommunicator {
 
+    /**
+     * Adds a set of valid user credentials to the registry.
+     * 
+     * @precondition username != null && !username.isBlank() && password != null && !password.isBlank() &&
+     *               email != null && !email.isBlank()
+     * @postcondition tbd 
+     * 
+     * @param username The username to be registered in the registry. 
+     * @param password The password to be associated with the given username.
+     * @param email The email address associated with the given credentials.
+     * 
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-12 if request breaks,
+     *         20 if username is taken, 21 if username is invalid, 22 if password is invalid, 23 if email
+     *         is invalid, or 15 if an unknown error occurs. 
+     */
+    public abstract SuccessCode registerCredentials(String username, String password, String email);
+
     /** 
      * Checks with the server whether a specified username and password pair is valid.
      * 
