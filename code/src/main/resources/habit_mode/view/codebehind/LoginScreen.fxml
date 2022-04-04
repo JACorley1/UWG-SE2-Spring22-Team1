@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="habit_mode.view.codebehind.LoginScreen">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="habit_mode.view.codebehind.LoginScreen">
    <children>
       <ImageView fx:id="birdImage" fitHeight="197.0" fitWidth="264.0" layoutX="134.0" layoutY="498.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -21,13 +21,25 @@
             <Font name="Magneto Bold" size="79.0" />
          </font>
       </Text>
-      <TextField fx:id="userNameTextField" layoutX="116.0" layoutY="275.0" prefHeight="25.0" prefWidth="247.0" promptText="UserName" />
-      <PasswordField fx:id="passwordTextField" layoutX="116.0" layoutY="355.0" prefHeight="25.0" prefWidth="247.0" promptText="Password" />
-      <Label layoutX="117.0" layoutY="250.0" prefHeight="17.0" prefWidth="70.0" text="Username" />
-      <Label layoutX="117.0" layoutY="332.0" prefHeight="17.0" prefWidth="70.0" text="Password" />
+      <TextField fx:id="userNameTextField" layoutX="114.0" layoutY="245.0" prefHeight="25.0" prefWidth="247.0" promptText="UserName" />
+      <PasswordField fx:id="passwordTextField" layoutX="114.0" layoutY="297.0" prefHeight="25.0" prefWidth="247.0" promptText="Password" />
+      <Label layoutX="117.0" layoutY="228.0" prefHeight="17.0" prefWidth="70.0" text="Username" />
+      <Label layoutX="117.0" layoutY="280.0" prefHeight="17.0" prefWidth="70.0" text="Password" />
       <Button fx:id="loginButton" layoutX="172.0" layoutY="397.0" mnemonicParsing="false" onAction="#loginButtonPress" prefHeight="84.0" prefWidth="136.0" text="Login">
          <font>
             <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="newUserButton" layoutX="169.0" layoutY="498.0" mnemonicParsing="false" onAction="#newUserButtonPress" prefHeight="84.0" prefWidth="136.0" text="New User?">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Button>
+      <Label fx:id="emailLabel" layoutX="117.0" layoutY="329.0" prefHeight="17.0" prefWidth="70.0" text="Email" visible="false" />
+      <TextField fx:id="emailTextField" layoutX="114.0" layoutY="346.0" prefHeight="25.0" prefWidth="247.0" promptText="Email" visible="false" />
+      <Button fx:id="registerButton" disable="true" layoutX="172.0" layoutY="397.0" mnemonicParsing="false" onAction="#registerButtonPressed" prefHeight="84.0" prefWidth="136.0" text="Register" visible="false">
+         <font>
+            <Font size="22.0" />
          </font>
       </Button>
    </children>

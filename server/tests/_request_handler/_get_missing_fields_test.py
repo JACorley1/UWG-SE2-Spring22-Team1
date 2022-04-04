@@ -3,7 +3,7 @@ from backend.authentication_manager import AuthenticationManager
 from backend.server import _RequestHandler
 from backend.service_manager import ServiceManager
 
-class TestGetMissingFields(unittest.TestCase):    
+class TestConstructor(unittest.TestCase):    
     """
     Tests for the _get_missing_fields method.
 
@@ -15,7 +15,7 @@ class TestGetMissingFields(unittest.TestCase):
         """
         Checks if the field was detected correctly.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {"field": 0}
         fields = ["field"]
 
@@ -26,7 +26,7 @@ class TestGetMissingFields(unittest.TestCase):
         """
         Checks if checking for no fields causes issues.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {"field": 0}
         fields = []
 
@@ -37,7 +37,7 @@ class TestGetMissingFields(unittest.TestCase):
         """
         Checks if the missing field is detected correctly.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {}
         fields = ["field"]
 
@@ -49,7 +49,7 @@ class TestGetMissingFields(unittest.TestCase):
         """
         Checks if the missing fields are detected correctly.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {}
         fields = ["field1", "field2", "field3"]
 

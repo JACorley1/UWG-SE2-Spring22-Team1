@@ -3,7 +3,7 @@ from backend.authentication_manager import AuthenticationManager
 from backend.server import _RequestHandler
 from backend.service_manager import ServiceManager
 
-class TestHandleRequest(unittest.TestCase):    
+class TestConstructor(unittest.TestCase):    
     """
     Tests for the handle_request method.
 
@@ -15,7 +15,7 @@ class TestHandleRequest(unittest.TestCase):
         """
         Checks if a valid register_user request is handled correctly.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {
             "request_type": "register_user",
             "username": "username",
@@ -238,7 +238,7 @@ class TestHandleRequest(unittest.TestCase):
         """
         Checks if a the correct response is created when not providing a request type.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {
             "username": "username",
             "password": "password",
@@ -246,7 +246,7 @@ class TestHandleRequest(unittest.TestCase):
         }
 
         result = request_handler.handle_request(request)
-        self.assertEqual(result["success_code"], 10, "Check if success_code is correct.")
+        self.assertEqual(result["successCode"], 10, "Check if success_code is correct.")
         self.assertEqual(
             result["error_message"], 
             "Malformed Request, missing Request Type", 
@@ -257,7 +257,7 @@ class TestHandleRequest(unittest.TestCase):
         """
         Checks if an exception is raised when passing None in for the request.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = None
 
         self.assertRaises(
@@ -271,7 +271,7 @@ class TestHandleRequest(unittest.TestCase):
         """
         Checks if an exception is raised when passing None in for the request.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = 0
 
         self.assertRaises(
@@ -285,7 +285,7 @@ class TestHandleRequest(unittest.TestCase):
         """
         Checks if a the correct response is created when giving an invalid request type.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {
             "request_type": "",
             "username": "username",
@@ -294,7 +294,7 @@ class TestHandleRequest(unittest.TestCase):
         }
 
         result = request_handler.handle_request(request)
-        self.assertEqual(result["success_code"], 11, "Check if success_code is correct.")
+        self.assertEqual(result["successCode"], 11, "Check if success_code is correct.")
         self.assertEqual(
             result["error_message"], 
             "Unsupported Request Type ()", 
@@ -305,7 +305,7 @@ class TestHandleRequest(unittest.TestCase):
         """
         Checks if a the correct response is created when not providing a request type.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {
             "username": "username",
             "password": "password",
@@ -313,18 +313,19 @@ class TestHandleRequest(unittest.TestCase):
         }
 
         result = request_handler.handle_request(request)
-        self.assertEqual(result["success_code"], 10, "Check if success_code is correct.")
+        self.assertEqual(result["successCode"], 10, "Check if success_code is correct.")
         self.assertEqual(
             result["error_message"], 
             "Malformed Request, missing Request Type", 
             "Check if error_message is correct."
         )
 
-    def test_register_user_missing_fields(self):
+
+    def test_missing_fields(self):
         """
         Checks if a the correct response is created when missing fields.
         """
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        request_handler = _RequestHandler(ServiceManager())
         request = {
             "request_type": "register_user",
             "username": "username",
@@ -332,7 +333,7 @@ class TestHandleRequest(unittest.TestCase):
         }
 
         result = request_handler.handle_request(request)
-        self.assertEqual(result["success_code"], 12, "Check if success_code is correct.")
+        self.assertEqual(result["successCode"], 12, "Check if success_code is correct.")
         self.assertEqual(
             result["error_message"], 
             f"Malformed Request, missing Request Fields (email)", 
