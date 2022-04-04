@@ -133,6 +133,24 @@ class ServiceManager:
         habit.frequency = habit_frequency
         return 0
 
+    def complete_habit(self, username: str, habit_id: int) -> int:
+        """
+        Marks the specified habit as completed for the specified user. Returns the success code 
+        to be sent to the client.
+
+        Precondition:  None
+        Postcondition: The specified user has the habit marked as completed.
+
+        Params - username: The specified username.
+                 habit_id: The ids of the habit to mark as completed.
+        Return - The success code to be sent back to the user.
+        """
+        if username not in self._user_information:
+            return 14
+        
+        user_data = self._user_information[username]
+        user_data.complete_habit(habit_id)
+        return 0
 
 def _validate_username(username: str) -> bool:
     """

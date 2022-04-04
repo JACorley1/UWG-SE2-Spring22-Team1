@@ -1,6 +1,14 @@
-from typing import MutableMapping
-from backend.habit import Habit
+from typing import Callable, MutableMapping, Optional
+from datetime import datetime
+from backend.habit import Habit, CompletionFrequency
 from backend.sudoku_puzzle import SudokuPuzzle
+import backend.datetime_extension
+
+_BONUS_RESET_FUNCTIONS: MutableMapping[int, Callable] = {
+    CompletionFrequency.DAILY.value: backend.datetime_extension.tomorrow,
+    CompletionFrequency.WEEKLY.value: backend.datetime_extension.next_sunday,
+    CompletionFrequency.MONTHLY.value: backend.datetime_extension.first_of_next_month,
+}
 
 class UserData:
     """
@@ -16,6 +24,7 @@ class UserData:
     _sudoku_puzzle: SudokuPuzzle
     _next_habit_id: int
     _habits: MutableMapping[int, Habit]
+    _bonus_reset_dates: MutableMapping[int, datetime]
 
     def __init__(self, username: str, password: str, email: str):
         """
@@ -26,6 +35,8 @@ class UserData:
                        isinstance(email, str)
         Postcondition:
         """
+        EPOCH_TIME = 30256871
+
         self.username = username
         self.password = password
         self.email = email
@@ -33,6 +44,11 @@ class UserData:
         self.sudoku_puzzle = None
         self._next_habit_id = 0
         self._habits = {}
+        self._bonus_reset_dates = {
+            CompletionFrequency.DAILY.value: datetime.fromtimestamp(EPOCH_TIME),
+            CompletionFrequency.WEEKLY.value: datetime.fromtimestamp(EPOCH_TIME),
+            CompletionFrequency.MONTHLY.value: datetime.fromtimestamp(EPOCH_TIME),
+        }
 
     def increment_habit_id(self):
         """
@@ -78,6 +94,53 @@ class UserData:
             return True
         return False
 
+    def complete_habit(self, habit_id: int) -> bool:
+        """
+        Attempts to complete a habit with the specified id and will return whether or not the
+        operation was successful. If the habit is complete, coins will be awarded based on whether
+        all habits for the habit's frequency are complete.
+
+        Precondition:  None
+        Postcondition: self.get_habit[habit_id].is_complete and
+                       self.coins == self.coins@prev + 70 if bonus is earned else
+                       self.coins == self.coins@prev + 20 if no bonus is earned else
+                       self.coins == self.coins@prev if habit was already complete
+
+        Params - habit_id: The id for the habit.
+        Return - Whether the habit was completed.
+        """
+        if habit_id not in self._habits or self._habits[habit_id].is_complete:
+            return False
+        
+        habit: Habit = self._habits[habit_id]
+        habit.complete()
+        self.coins += 20
+
+        incomplete_habits: list[Habit] = list(
+            filter(
+                lambda item: not item.is_complete and item.frequency == habit.frequency, 
+                self._habits.values()
+            )
+        )
+
+        if len(incomplete_habits) == 0 and datetime.now() > self._bonus_reset_dates[habit.frequency]:
+            self._bonus_reset_dates[habit.frequency] = _BONUS_RESET_FUNCTIONS[habit.frequency]()
+            self.coins += 50
+
+        return True
+
+    def contains_habit_id(self, habit_id: int) -> bool:
+        """
+        Determines whether the user contains a habit with the specified id.
+
+        Precondition:  None
+        Postcondition: None
+
+        Params - habit_id: The id for the habit.
+        Return - [True] iff the user contains a habit with the specified id, otherwise [False].
+        """
+        return habit_id in self._habits
+
     def get_habit(self, habit_id: int) -> Habit:
         """
         Gets the first instance of a habit from the habit list with the specified id.
@@ -91,6 +154,20 @@ class UserData:
         if habit_id in self._habits:
             return self._habits[habit_id]
         return None
+
+    def get_incomplete_habit_ids(self):
+        """
+        Gets a list of all incomplete habit ids.
+
+        Precondition:  None
+        Postcondition: None
+
+        Params - None
+        Return - A list of all incomplete habit ids.
+        """
+        incomplete_habits = filter(lambda habit: not habit.is_complete, self._habits.values())
+        habit_ids = list(map(lambda habit: habit.id, incomplete_habits))
+        return habit_ids
 
     @property
     def username(self) -> str:

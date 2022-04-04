@@ -359,7 +359,56 @@ class _RequestHandler:
         return {
             "success_code": 0
         }
+
+    def _complete_habits(self, token: str, habit_ids: list[int]) -> MutableMapping[str, Any]:
+        """
+        Marks a habit as completed.
+
+        Precondition:  isinstance(token, str) and
+                       isinstance(habit_id, list)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 habit_ids: The ids of the habit to mark as completed.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if not isinstance(habit_ids, list):
+            raise Exception("habit_ids must be a list")
         
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        user_data: UserData = self._service_manager.get_data_for_user(username)
+
+        unknown_habits = list(filter(lambda habit_id: habit_id not in user_data.habits, habit_ids))
+        if len(unknown_habits) > 0:
+            return {
+                "success_code": 52,
+                "error_message": f"No habit with id ({', '.join(unknown_habits)})"
+            }
+
+        incomplete_habits: list[int] = list(
+            filter(lambda habit_id: habit_id in user_data.get_incomplete_habit_ids(), habit_ids)
+        )
+        already_completed_habits: list[int] = list(
+            filter(lambda habit_id: not habit_id in incomplete_habits, habit_ids)
+        )
+
+        for habit_id in incomplete_habits:
+            self._service_manager.complete_habit(username, habit_id)
+
+        return {
+            "success_code": 0,
+            "already_completed": already_completed_habits,
+            "coins": user_data.coins
+        }
+
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
         Accepts a request from the client and performs an action depending on the request body.
@@ -444,6 +493,16 @@ class _RequestHandler:
                 }
             else:
                 response = self._modify_habit(request["authentication_token"], request["habit_id"], request["habit_name"], request["habit_frequency"])
+
+        elif request["request_type"] == "complete_habits":
+            missing_fields = self._get_missing_fields(request, ["authentication_token", "habit_ids"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._complete_habits(request["authentication_token"], request["habit_ids"])
 
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
