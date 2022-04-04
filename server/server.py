@@ -1,5 +1,7 @@
 import json
 from typing import Any, MutableMapping
+from server.user_data import UserData
+from server.authentication_manager import AuthenticationManager
 from server.service_manager import ServiceManager
 import zmq
 
@@ -21,6 +23,7 @@ class _RequestHandler:
         Postcondition: RequestHandler has appropriate ServiceManager to server requests
 
         Params - service_manager: The specified ServiceManager
+                 authentication_manager: The specified AuthenticationManager
         """
         if service_manager is None:
             raise Exception("service_manager must not be None")
@@ -98,6 +101,113 @@ class _RequestHandler:
             }
         return response
 
+    def _login(self, username: str, password: str) -> MutableMapping[str, Any]:
+        """
+        Validates a specified username-password combination and sends an authentication token
+        back to the client if successful.
+
+        Precondition:  username is not None and
+                       isinstance(username, str) and
+                       password is not None and
+                       isinstance(password, str)
+        Postcondition: None
+
+        Params - username: The specified username.
+                 password: The specified password.
+        Return - The response to the client.
+        """
+        if username is None:
+            raise Exception("username must not be None")
+        if not isinstance(username, str):
+            raise Exception("username must be a str")
+        if password is None:
+            raise Exception("password must not be None")
+        if not isinstance(password, str):
+            raise Exception("password must be a str")
+        
+        user_data = self._service_manager.get_data_for_user(username)
+        if user_data is None or user_data.password != password:
+            return {
+                "success_code": 30,
+                "error_message": "Invalid username or password"
+            }
+
+        token = self._authentication_manager.get_token_for_username(username)
+        if token is None:
+            token = self._authentication_manager.generate_and_store_key_for_username(username)
+        
+        return {
+            "success_code": 0,
+            "authentication_token": token,
+        }
+
+    def _retrieve_data(self, token: str, fields: list[str]) -> MutableMapping[str, Any]:
+        """
+        Attempts to retrieve a set of data for a user using their authentication token.
+
+        Precondition:  token is not None and
+                       isinstance(token, str) and
+                       fields is not None and
+                       isinstance(fields, str)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 fields: The requested data fields
+        Return - The response to the client.
+        """
+        if token is None:
+            raise Exception("token must not be None")
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if fields is None:
+            raise Exception("fields must not be None")
+        if not isinstance(fields, list):
+            raise Exception("fields must be a list of str")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        
+        user_data: UserData = self._service_manager.get_data_for_user(username)
+        if user_data is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+        
+
+        if len(fields) == 0:
+            return {
+                "success_code": 41,
+                "error_message": f"No fields provided"
+            }
+
+        message: MutableMapping[str, any] = {
+            "success_code": 0
+        }
+        
+        for field in fields:
+            if field == "username":
+                message["username"] = user_data.username
+            elif field == "email":
+                message["email"] = user_data.email
+            elif field == "coins":
+                message["coins"] = user_data.coins
+            elif field == "sudoku_puzzle":
+                message["sudoku_puzzle"] = user_data.sudoku_puzzle
+            elif field == "habits":
+                message["habits"] = list(map(lambda habit: habit.create_json_dict, user_data.habits))
+            else:
+                return {
+                    "success_code": 40,
+                    "error_message": f"Unknown field name ({field})"
+                }
+
+        return message
+
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
         Accepts a request from the client and performs an action depending on the request body.
@@ -131,6 +241,26 @@ class _RequestHandler:
                 }
             else:
                 response = self._register_user(request["username"], request["password"], request["email"])
+
+        elif request["request_type"] == "login":
+            missing_fields: list[str] = self._get_missing_fields(request, ["username", "password"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._login(request["username"], request["password"])
+
+        elif request["request_type"] == "retrieve_data":
+            missing_fields: list[str] = self._get_missing_fields(request, ["authentication_token", "fields"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._retrieve_data(request["authentication_token"], request["fields"])
 
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
