@@ -1,5 +1,6 @@
-from server.habit import Habit
-from server.sudoku_puzzle import SudokuPuzzle
+from typing import MutableMapping
+from backend.habit import Habit
+from backend.sudoku_puzzle import SudokuPuzzle
 
 class UserData:
     """
@@ -14,7 +15,7 @@ class UserData:
     _coins: int
     _sudoku_puzzle: SudokuPuzzle
     _next_habit_id: int
-    _habits: list[Habit]
+    _habits: MutableMapping[int, Habit]
 
     def __init__(self, username: str, password: str, email: str):
         """
@@ -31,7 +32,7 @@ class UserData:
         self.coins = 0
         self.sudoku_puzzle = None
         self._next_habit_id = 0
-        self._habits = []
+        self._habits = {}
 
     def increment_habit_id(self):
         """
@@ -45,6 +46,51 @@ class UserData:
         """
         self._next_habit_id += 1
 
+    def add_habit(self, habit_name: str, habit_frequency: int):
+        """
+        Adds a habit with a specified name and frequency to the user's list of habits.
+
+        Precondition:  isinstance(habit_name, str) and
+                       not str.isspace(habit_name) and
+                       isinstance(habit_frequency, int) and
+                       habit_frequency >= 0 and
+                       habit_frequency <= 2
+        Postcondition: len(self.habits) == len(self.habits) + 1
+        """
+        new_habit = Habit(habit_name, habit_frequency, self.next_habit_id)
+        self.increment_habit_id()
+
+        self._habits[new_habit.id] = new_habit
+
+    def remove_habit(self, habit_id: int) -> bool:
+        """
+        Attempts to remove a habit with the specified id and will return whether or not the
+        operation was successful.
+
+        Precondition:  None
+        Postcondition: habit with id == habit_id not in self.habits
+
+        Params - habit_id: The id for the habit.
+        Return - Whether the habit was removed.
+        """
+        if habit_id in self._habits:
+            self._habits.pop(habit_id)
+            return True
+        return False
+
+    def get_habit(self, habit_id: int) -> Habit:
+        """
+        Gets the first instance of a habit from the habit list with the specified id.
+
+        Precondition:  None
+        Postcondition: None
+
+        Params - habit_id: The id for the habit.
+        Return - The first habit with the specified id if exists, otherwise None.
+        """
+        if habit_id in self._habits:
+            return self._habits[habit_id]
+        return None
 
     def get_username(self) -> str:
         """
@@ -171,7 +217,7 @@ class UserData:
         return self._next_habit_id
 
     @property
-    def habits(self) -> list[Habit]:
+    def habits(self) -> MutableMapping[int, Habit]:
         """
         Gets the user's list of habits.
 

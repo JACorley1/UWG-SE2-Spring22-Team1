@@ -2,7 +2,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import MutableMapping
-import server.datetime_extension
+import backend.datetime_extension
 
 class Habit:
     """
@@ -14,7 +14,7 @@ class Habit:
     """
     _name: str
     _id: int
-    _reset_date: int
+    _reset_date: datetime
     _frequency: int
 
     def __init__(self, name: str, frequency: int, id: int):
@@ -53,12 +53,17 @@ class Habit:
         Params - None
         Return - [True] iff the habit was not already complete, otherwise [False]
         """
+        if self.is_complete:
+            return False
+
         if self.frequency == CompletionFrequency.DAILY.value:
-            self._reset_date = server.datetime_extension.tomorrow()
+            self._reset_date = backend.datetime_extension.tomorrow()
         elif self.frequency == CompletionFrequency.WEEKLY.value:
-            self._reset_date = server.datetime_extension.next_sunday()
+            self._reset_date = backend.datetime_extension.next_sunday()
         else:
-            self._reset_date = server.datetime_extension.first_of_next_month()
+            self._reset_date = backend.datetime_extension.first_of_next_month()
+
+        return True
 
     def create_json_dict(self) -> MutableMapping:
         return {
@@ -69,7 +74,7 @@ class Habit:
         }
 
     @property
-    def is_complete(self, cur_time: datetime = None) -> bool:
+    def is_complete(self) -> bool:
         """
         Gets whether the habit is complete or not.
 
@@ -79,10 +84,7 @@ class Habit:
         Params - None
         Return - [True] if the Habit is complete, otherwise [False].
         """
-        if cur_time is None:
-            cur_time = datetime.now()
-        
-        return cur_time < self._reset_date
+        return datetime.now() < self._reset_date
 
     @property
     def name(self) -> str:
@@ -163,6 +165,6 @@ class Habit:
         self._frequency = frequency
 
 class CompletionFrequency(Enum):
-    DAILY = 0
-    WEEKLY = 1
-    MONTHLY = 2
+    DAILY: int = 0
+    WEEKLY: int = 1
+    MONTHLY: int = 2

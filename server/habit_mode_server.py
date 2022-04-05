@@ -1,5 +1,6 @@
-from server import Server
-from service_manager import ServiceManager
+from backend.server import Server
+from backend.authentication_manager import AuthenticationManager
+from backend.service_manager import ServiceManager
 
 def main():
     """
