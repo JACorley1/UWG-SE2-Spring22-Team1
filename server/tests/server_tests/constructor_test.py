@@ -1,5 +1,5 @@
 import unittest
-from server.server import Server
+from backend.server import Server
 
 class TestConstructor(unittest.TestCase):    
     """

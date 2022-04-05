@@ -1,7 +1,7 @@
 import unittest
 
-from server.habit import Habit
-from server import datetime_extension
+from backend.habit import Habit
+from backend import datetime_extension
 
 class TestIsComplete(unittest.TestCase):    
     """

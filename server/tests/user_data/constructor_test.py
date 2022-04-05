@@ -1,5 +1,5 @@
 import unittest
-from server.user_data import UserData
+from backend.user_data import UserData
 
 class TestConstructor(unittest.TestCase):    
     """
@@ -20,7 +20,7 @@ class TestConstructor(unittest.TestCase):
         self.assertEqual(user_data.coins, 0, "Check if coins are set correctly.")
         self.assertEqual(user_data.sudoku_puzzle, None, "Check if sudoku_puzzle is set correctly.")
         self.assertEqual(user_data.next_habit_id, 0, "Check if next_habit_id is set correctly.")
-        self.assertEqual(user_data.habits, [], "Check if habits is set correctly")
+        self.assertEqual(user_data.habits, {}, "Check if habits is set correctly")
     
     def test_empty_username(self):
         """

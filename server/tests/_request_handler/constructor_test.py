@@ -1,6 +1,7 @@
 import unittest
-from server.server import _RequestHandler
-from server.service_manager import ServiceManager
+from backend.authentication_manager import AuthenticationManager
+from backend.server import _RequestHandler
+from backend.service_manager import ServiceManager
 
 class TestConstructor(unittest.TestCase):    
     """
