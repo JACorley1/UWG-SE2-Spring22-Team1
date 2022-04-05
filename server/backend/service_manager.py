@@ -190,7 +190,7 @@ def _validate_email(email: str) -> bool:
 
 def _validate_habit_name(habit_name: str) -> bool:
     """
-    Determines whether a hahit name is valid or not.
+    Determines whether a habit name is valid or not.
 
     Precondition:  None
     Postcondition: None
@@ -202,7 +202,7 @@ def _validate_habit_name(habit_name: str) -> bool:
 
 def _validate_habit_frequency(habit_frequency: int) -> bool:
     """
-    Determines whether a hahit frequency is valid or not.
+    Determines whether a habit frequency is valid or not.
 
     Precondition:  None
     Postcondition: None

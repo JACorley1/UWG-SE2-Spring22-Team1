@@ -160,7 +160,7 @@ class Habit:
         if not isinstance(frequency, int):
             raise Exception("frequency must be an int")
         if frequency < CompletionFrequency.DAILY.value or frequency > CompletionFrequency.MONTHLY.value:
-            raise Exception("frequency must be betwwn 0 and 2, inclusive")
+            raise Exception("frequency must be beteen 0 and 2, inclusive")
 
         self._frequency = frequency
 

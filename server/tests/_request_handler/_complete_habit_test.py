@@ -1,12 +1,9 @@
-
-
 import unittest
 from urllib import response
 from backend.authentication_manager import AuthenticationManager
 
 from backend.server import _RequestHandler
 from backend.service_manager import ServiceManager
-
 
 class TestCompleteHabit(unittest.TestCase):
     """
@@ -134,7 +131,7 @@ class TestCompleteHabit(unittest.TestCase):
             "Check if the third habit is completed"
         )
     
-    def text_habit_doesnt_exist(self):
+    def test_habit_doesnt_exist(self):
         """
         Tests if _RequestHandler correctly returns that the habit doesn't exist.
         """
@@ -156,7 +153,7 @@ class TestCompleteHabit(unittest.TestCase):
         self.assertEqual(success_code, 52, "Check if success_code is correct")
         self.assertEqual(error_message, "No habit with id (1)", "Check if error_message is correct")
 
-    def text_many_habits_dont_exist(self):
+    def test_many_habits_dont_exist(self):
         """
         Tests if _RequestHandler correctly returns that the habit doesn't exist.
         """
@@ -211,4 +208,3 @@ class TestCompleteHabit(unittest.TestCase):
 
         self.assertEqual(success_code, 14, "Check if success_code is correct")
         self.assertEqual(error_message, "Invalid authentication token", "Check if error_message is correct")
-

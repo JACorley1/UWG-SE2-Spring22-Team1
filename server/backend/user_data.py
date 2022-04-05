@@ -149,7 +149,7 @@ class UserData:
         Postcondition: None
 
         Params - habit_id: The id for the habit.
-        Return - The first habit with the specified id if exists, otherwise None.
+        Return - The first habit with the specified id if it exists, otherwise None.
         """
         if habit_id in self._habits:
             return self._habits[habit_id]
