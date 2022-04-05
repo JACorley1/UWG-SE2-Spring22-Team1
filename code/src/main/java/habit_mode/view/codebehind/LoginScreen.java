@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
-
+import habit_mode.model.SuccessCode;
 import habit_mode.view_model.LoginScreenViewModel;
 
 /**
@@ -58,7 +58,7 @@ public class LoginScreen {
     @FXML
     void loginButtonPress(ActionEvent event) throws IOException {
         try {
-            if (this.viewModel.validateLogin()) {
+            if (this.viewModel.validateLogin() == SuccessCode.OKAY) {
                 Parent loader = FXMLLoader.load(getClass().getResource("HabitScreen.fxml"));
 
                 Scene scene = new Scene(loader);
