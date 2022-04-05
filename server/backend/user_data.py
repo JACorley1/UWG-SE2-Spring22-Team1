@@ -154,7 +154,7 @@ class UserData:
         if habit_id in self._habits:
             return self._habits[habit_id]
         return None
-
+      
     def get_incomplete_habit_ids(self):
         """
         Gets a list of all incomplete habit ids.
@@ -181,20 +181,18 @@ class UserData:
         """
         return self._username
 
-    @username.setter
-    def username(self, username: str):
+    def set_username(self, username: str):
         """
         Sets the user's username.
 
         Precondition:  isinstance(username, str)
-        Postcondition: self.username == username
+        Postcondition: self.get_username() == username
         """
         if not isinstance(username, str):
             raise Exception("username must be a string")
         self._username = username
 
-    @property
-    def password(self) -> str:
+    def get_password(self) -> str:
         """
         Gets the user's password.
 
@@ -205,20 +203,18 @@ class UserData:
         """
         return self._password
 
-    @password.setter
-    def password(self, password: str):
+    def set_password(self, password: str):
         """
         Sets the user's password.
 
         Precondition:  isinstance(password, str)
-        Postcondition: self.password == password
+        Postcondition: self.get_password() == password
         """
         if not isinstance(password, str):
             raise Exception("password must be a string")
         self._password = password
 
-    @property
-    def email(self) -> str:
+    def get_email(self) -> str:
         """
         Gets the user's email address.
 
@@ -229,20 +225,18 @@ class UserData:
         """
         return self._email
 
-    @email.setter
-    def email(self, email: str):
+    def set_email(self, email: str):
         """
         Sets the user's email address.
 
         Precondition:  isinstance(email, str)
-        Postcondition: self.email == email
+        Postcondition: self.get_email() == email
         """
         if not isinstance(email, str):
             raise Exception("email must be a string")
         self._email = email
 
-    @property
-    def coins(self) -> int:
+    def get_coins(self) -> int:
         """
         Gets the user's coin count.
 
@@ -253,13 +247,12 @@ class UserData:
         """
         return self._coins
 
-    @coins.setter
-    def coins(self, coins: int):
+    def set_coins(self, coins: int):
         """
         Sets the user's coins.
 
         Precondition:  isinstance(coins, int)
-        Postcondition: self.coins == coins
+        Postcondition: self.get_coins() == coins
         """
         if not isinstance(coins, int):
             raise Exception("coins must be an int")
@@ -284,7 +277,7 @@ class UserData:
 
         Precondition:  sudoku_puzzle is None or
                        isinstance(sudoku_puzzle, SudokuPuzzle)
-        Postcondition: self.sudoku_puzzle == sudoku_puzzle
+        Postcondition: self.get_sudoku_puzzle() == sudoku_puzzle
         """
         if sudoku_puzzle is not None and not isinstance(sudoku_puzzle, str):
             raise Exception("sudoku_puzzle must be a SudokuPuzzle")
