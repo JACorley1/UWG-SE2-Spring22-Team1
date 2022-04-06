@@ -1,6 +1,7 @@
 package habit_mode.view.codebehind;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ObservableValue;
@@ -124,6 +125,19 @@ public class HabitScreenCodeBehind {
     private ListView<Habit> completedHabitListView;
 
     @FXML
+    private AnchorPane completeHabitAnchorPane;
+
+    @FXML
+    private Button confirmCompleteHabitButton;
+
+    @FXML
+    private Button completeHabitCancelButton;
+
+    @FXML
+    private Button sendCompleteHabitsButton;
+
+
+    @FXML
     void removeButtonClicked(ActionEvent event) {
         try {
             this.viewModel.removeHabit();
@@ -138,6 +152,15 @@ public class HabitScreenCodeBehind {
         this.addHabitBackgroundAnchorPane.setVisible(true);
         this.removeHabitAnchorPane.setVisible(true);
         this.addHabitsAnchorPane.setVisible(false);
+        this.completeHabitAnchorPane.setVisible(false);
+    }
+
+    @FXML
+    void sendCompleteHabitsButtonClicked(ActionEvent event) {
+        this.addHabitBackgroundAnchorPane.setVisible(true);
+        this.removeHabitAnchorPane.setVisible(false);
+        this.addHabitsAnchorPane.setVisible(false);
+        this.completeHabitAnchorPane.setVisible(true);
     }
 
     @FXML
@@ -154,11 +177,34 @@ public class HabitScreenCodeBehind {
     }
 
     @FXML
+    void confirmCompleteHabitButtonClicked(ActionEvent event) {
+        ArrayList<Habit> habits = new ArrayList<Habit>();
+        for (Habit habit : this.habitListView.getItems()) {
+            if (habit.isComplete()) {
+                habits.add(habit);
+            }
+        }
+
+        for (Habit habit : habits) {
+            this.completedHabitListView.getItems().add(habit);
+            this.habitListView.getItems().remove(habit);
+
+        }
+        this.completeHabitAnchorPane.setVisible(false);
+        this.addHabitBackgroundAnchorPane.setVisible(false);
+    }
+
+
+
+    @FXML
     void addButtonClicked(ActionEvent event) {
         this.addHabitBackgroundAnchorPane.setVisible(true);
         this.addHabitsAnchorPane.setVisible(true);
         this.removeHabitAnchorPane.setVisible(false);
+        this.completeHabitAnchorPane.setVisible(false);
     }
+
+    
 
     @FXML
     void backButtonClicked(ActionEvent event) {
@@ -260,10 +306,6 @@ public class HabitScreenCodeBehind {
 
                 newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
                     this.viewModel.sendCompletedHabit(newestItem);
-                    if (isNowOn) {
-                        this.completedHabitListView.getItems().add(newestItem);
-                        this.habitListView.getItems().remove(newestItem);
-                    }
                 });
             }
         });

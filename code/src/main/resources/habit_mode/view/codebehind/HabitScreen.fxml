@@ -53,6 +53,11 @@
             <Font size="23.0" />
          </font>
       </Button>
+      <Button fx:id="sendCompleteHabitsButton" layoutX="176.0" layoutY="559.0" mnemonicParsing="false" onAction="#sendCompleteHabitsButtonClicked" prefHeight="17.0" prefWidth="145.0" text="Send Completed">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
       <AnchorPane id="addHabitBackgroundAnchorPane" fx:id="addHabitBackgroundAnchorPane" prefHeight="709.0" prefWidth="496.0" style="-fx-background-color: #00000099;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane fx:id="addHabitsAnchorPane" layoutX="98.0" layoutY="255.0" prefHeight="219.0" prefWidth="301.0" style="-fx-background-color: white;">
@@ -104,6 +109,17 @@
                   <Button fx:id="removeCancelButton" cancelButton="true" layoutX="127.0" layoutY="180.0" mnemonicParsing="false" onAction="#cancelButtonClicked" prefHeight="20.0" prefWidth="66.0" text="Cancel" />
                   <Label fx:id="updateErrorLabel" focusTraversable="false" layoutX="22.0" layoutY="110.0" text="Please enter a unique task name" textFill="#ee4747" visible="false" />
                   <TextField fx:id="updateHabitNameTextField" layoutX="22.0" layoutY="80.0" prefHeight="25.0" prefWidth="259.0" promptText="Enter task name..." />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="completeHabitAnchorPane" layoutX="65.0" layoutY="267.0" prefHeight="90.0" prefWidth="366.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="23.0" layoutY="10.0" prefHeight="25.0" prefWidth="334.0" text="Are you sure you want to complete checked habits?" textAlignment="CENTER" underline="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="confirmCompleteHabitButton" layoutX="20.0" layoutY="39.0" mnemonicParsing="false" onAction="#confirmCompleteHabitButtonClicked" prefHeight="30.0" prefWidth="98.0" text="Yes" />
+                  <Button fx:id="completeHabitCancelButton" cancelButton="true" layoutX="257.0" layoutY="39.0" mnemonicParsing="false" onAction="#cancelButtonClicked" prefHeight="30.0" prefWidth="90.0" text="Cancel" />
                </children>
             </AnchorPane>
          </children>
