@@ -37,6 +37,11 @@
             <Font size="23.0" />
          </font>
       </Button>
+      <Button fx:id="removeHabitsButton" layoutX="435.0" layoutY="144.0" mnemonicParsing="false" onAction="#removeHabitsButtonClicked" prefHeight="53.0" prefWidth="52.0" text="X">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
       <AnchorPane id="addHabitBackgroundAnchorPane" fx:id="addHabitBackgroundAnchorPane" prefHeight="709.0" prefWidth="496.0" style="-fx-background-color: #00000099;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane fx:id="addHabitsAnchorPane" layoutX="98.0" layoutY="255.0" prefHeight="219.0" prefWidth="301.0" style="-fx-background-color: white;">
@@ -92,10 +97,5 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <Button fx:id="removeHabitsButton" layoutX="435.0" layoutY="144.0" mnemonicParsing="false" onAction="#removeHabitsButtonClicked" prefHeight="53.0" prefWidth="52.0" text="X">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>
