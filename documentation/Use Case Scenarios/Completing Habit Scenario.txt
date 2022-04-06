@@ -1,10 +1,15 @@
-Context: The user has loaded the application and has added a scenario
+Context: The user has loaded the application and has added a habit
 Primary Flow:
-1.	The user selects a habit
-2.	The user selects the circle next to the habit
-3.	The habit is marked as complete 
-4.	The habit is sent to the bottom of the list with the other completed habits.
-5.	The user receives coins for successfully completing the task.
-6.	The coin amount increases by the coins gained.
+1.  The user marks all the habits they want to complete
+2.  The user selects a complete or finish option
+3.  The user is prompted to ensure they want to complete the marked habits
+4.  The user confirms they want the marked habits to be marked as complete
+5.  The habits are added to a list of habits the user has completed
+6.  The habits are removed from a list of habits the user needs to do
+7.  The user is returned to the habit page
+8.  The user receives coins for all of the habits completed
+
 Alternative Flow(s):
-	None
+User Doesn't Want to complete the task:
+    4a.  The user cancels completing the marked habits
+    5a.  The user is returned to the habit page

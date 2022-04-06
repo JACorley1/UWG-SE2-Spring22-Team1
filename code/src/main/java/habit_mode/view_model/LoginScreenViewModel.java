@@ -1,6 +1,7 @@
 package habit_mode.view_model;
 
 import habit_mode.model.ServerCommunicator;
+import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -38,10 +39,11 @@ public class LoginScreenViewModel {
      * @precondition None
      * @postcondition None
      * 
-     * @return [true] iff the login credentials were validated, otherwise [false].
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *         30 if username or password are invalid, or 15 if an unknown error occurs.
      */
-    public boolean validateLogin() {
-        boolean result = this.serverCommunicator.validateLogin(this.usernameProperty.getValue(), this.passwordProperty.getValue());
+    public SuccessCode validateLogin() {
+        SuccessCode result = this.serverCommunicator.validateLogin(this.usernameProperty.getValue(), this.passwordProperty.getValue());
         return result;
     }
 

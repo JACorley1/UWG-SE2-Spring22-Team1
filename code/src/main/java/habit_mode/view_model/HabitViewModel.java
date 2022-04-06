@@ -3,6 +3,7 @@ package habit_mode.view_model;
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
+import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -73,7 +74,7 @@ public class HabitViewModel {
         }
 
         Habit habit = new Habit(this.habitNameProperty.getValue(), this.determineFrequency());
-        if (this.serverCommunicator.addHabit(habit)) {
+        if (this.serverCommunicator.addHabit(habit) == SuccessCode.OKAY) {
             this.habitListProperty.add(habit);
             this.closePopup();
         }
@@ -253,7 +254,7 @@ public class HabitViewModel {
         if (habit == null) {
             throw new IllegalArgumentException("habit cannot be null");
         }
-        if (this.serverCommunicator.completeHabit(habit)) {
+        if (this.serverCommunicator.completeHabit(habit) == SuccessCode.OKAY) {
             this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
         }
     }

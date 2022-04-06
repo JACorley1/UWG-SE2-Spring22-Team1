@@ -1,11 +1,11 @@
 package habit_mode.test.model.local_implementation.LocalServerCommunicator;
 
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 
 public class TestValidateLogin {
@@ -15,10 +15,10 @@ public class TestValidateLogin {
         LocalServerCommunicator communicator = new LocalServerCommunicator();
         String username = "username";
         String password = "password";
+        communicator.registerCredentials(username, password, "email");
+        SuccessCode result = communicator.validateLogin(username, password);
 
-        boolean result = communicator.validateLogin(username, password);
-
-        assertTrue(result, "Check if the result is correct.");
+        assertEquals(SuccessCode.OKAY, result, "Check if the result is correct.");
     }
 
     @Test
@@ -28,11 +28,7 @@ public class TestValidateLogin {
         String username = null;
         String password = "password";
 
-        assertThrows(
-            IllegalArgumentException.class, 
-            () -> {communicator.validateLogin(username, password);},
-            "Check if an exception is thrown when the username is null."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, communicator.validateLogin(username, password));
     }
 
     @Test
@@ -42,11 +38,7 @@ public class TestValidateLogin {
         String username = "";
         String password = "password";
 
-        assertThrows(
-            IllegalArgumentException.class, 
-            () -> {communicator.validateLogin(username, password);},
-            "Check if an exception is thrown when the username is empty."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, communicator.validateLogin(username, password));
     }
 
     @Test
@@ -56,11 +48,7 @@ public class TestValidateLogin {
         String username = "     ";
         String password = "password";
 
-        assertThrows(
-            IllegalArgumentException.class, 
-            () -> {communicator.validateLogin(username, password);},
-            "Check if an exception is thrown when the username is blank."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, communicator.validateLogin(username, password));
     }
 
     @Test
@@ -70,11 +58,7 @@ public class TestValidateLogin {
         String username = "username";
         String password = null;
 
-        assertThrows(
-            IllegalArgumentException.class, 
-            () -> {communicator.validateLogin(username, password);},
-            "Check if an exception is thrown when the password is null."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, communicator.validateLogin(username, password));
     }
 
     @Test
@@ -84,11 +68,7 @@ public class TestValidateLogin {
         String username = "username";
         String password = "";
 
-        assertThrows(
-            IllegalArgumentException.class, 
-            () -> {communicator.validateLogin(username, password);},
-            "Check if an exception is thrown when the password is empty."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, communicator.validateLogin(username, password));
     }
 
     @Test
@@ -98,10 +78,6 @@ public class TestValidateLogin {
         String username = "username";
         String password = "     ";
 
-        assertThrows(
-            IllegalArgumentException.class, 
-            () -> {communicator.validateLogin(username, password);},
-            "Check if an exception is thrown when the password is blank."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, communicator.validateLogin(username, password));
     }
 }
