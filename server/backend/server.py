@@ -522,16 +522,14 @@ class Server:
         Launches the server with a specified ServiceManager.
         The server will run indefinitely.
 
-        Precondition:  service_manager is not None and
-                       isinstance(service_manager, ServiceManager)
         Precondition:  isinstance(socket_info, tuple) and
                        len(socket_info) == 2 and
                        isinstance(socket_info[0], str) and
                        isinstance(socket_info[1], int) and
+                       isinstance(service_manager, ServiceManager) and
+                       isinstance(authentication_manager, AuthenticationManager)
         Postcondition: The server becomes active.
         """
-        if service_manager is None:
-            raise Exception("service_manager must not be None")
         if not isinstance(socket_info, tuple):
             raise Exception("socket_info must be a tuple")
         if len(socket_info) != 2:
@@ -542,8 +540,10 @@ class Server:
             raise Exception("socket_info[1] must be an integer")
         if not isinstance(service_manager, ServiceManager):
             raise Exception("service_manager must be an instance of ServiceManager.")
+        if not isinstance(authentication_manager, AuthenticationManager):
+            raise Exception("authentication_manager must be an instance of AuthenticationManager.")
 
-        request_handler = _RequestHandler(service_manager)
+        request_handler = _RequestHandler(service_manager, authentication_manager)
         context = zmq.Context()
         socket = context.socket(zmq.REP)
         socket.bind(f"tcp://{socket_info[0]}:{socket_info[1]}")
@@ -556,14 +556,13 @@ class Server:
             json_response: str
             print(f"Received request: {request}")
             if request == "exit":
+                print("Server closing...")
                 return
             try:
                 response = request_handler.handle_request(request)
             except:
-                print("-" * 15)
-                print("Exception was thrown. Please check the request.")
+                print(f"{'-' * 15}\nException was thrown. Please check the request.\n{'-' * 15}")
                 print(request)
-                print("-" * 15)
                 response = {
                     "success_code": 15,
                     "error_message": "Unknown error (Exception thrown)"
