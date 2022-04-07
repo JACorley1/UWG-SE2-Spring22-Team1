@@ -1,0 +1,25 @@
+Context: The user is a first time user
+Primary Flow:
+1.  The user loads the application
+2.  The user is taken to the login page
+3.  The user selects the option for new users
+4.  The login page changes to a registration page
+5.  The user enters in valid credentials for an account
+6.  The user selects a register account option
+7.  The user is prompted that their account was successfully registered
+8.  The user is returned to the login page
+
+Alternative Flow(s):
+User enters credentials for an already created account:
+    5a.  The user enters in credentials to an already created account
+    6a.  The user selects the register option
+    7a.  The user is prompted that their credentials are already in use and to try something else
+    8a.  The user remains at the registration page
+User cancels Registration:
+    5b.  The user cancels the registration process
+    6b.  Registration page will be changed to the login page
+User enters in invalid credentials:
+    5c.  The user enters in invalid credentials
+    6c.  The user selects the register option
+    7c.  The user is prompted that their credentials are invalid and to try something else
+    8c.  The user remains at the registration page

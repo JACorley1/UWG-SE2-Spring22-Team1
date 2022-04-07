@@ -1,18 +1,19 @@
 Context: The user has loaded into the application and has added 1 habit successfully
 Primary Flow:
-1.	The user selects a habit
-2.	The “Edit(?)” button becomes enabled
-3.	The user selects the “Edit(?)” button
-4.	The user is prompted a similar pop up page with the currently selected habit filling in the sections
-5.	The user makes their desired changes
-6.	The user selects the “confirm” button
-7.	The user is taken back to the home page with the habit updated.
+1.  The user selects a habit
+2.  The user selects an edit option
+3.  A pop up page with the currently selected habit's specifications appears
+4.  The user makes their desired changes
+5.  The user confirms they want these changes
+6.  The user is taken back to the home page with the habit updated
+
 Alternative Flow(s):
-	No habits selected:
-		1a. The user attempts to select the “Edit(?)” button 
-		2a. The “Edit(?)” button stays disabled and nothing happens.
-	Invalid Changes are made:
-		5b. The user makes changes that are not valid
-		6b. The user selects the “confirm” button
-		7b. The user is prompted that their changes are invalid
-		8b. The user is returned to the home page with the habit unchanged 
+No valid habits selected:
+    1a.  The user attempts to select the edit optioin
+    2a.  The user is informed they need to select a habit
+    3a.  Nothing happens and the user remains on the habit page
+Invalid Changes are made:
+    5b.  The user makes changes that are not valid
+    6b.  The user confirms that they want the changes
+    7b.  The user is prompted that their changes are invalid
+    8b.  The user is returned to the habit page with the habit unchanged 
