@@ -19,14 +19,14 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
         user_data: UserData = request_handler._service_manager._user_information[username]
 
-        self.assertEqual(result["successCode"], 0, "Check if success_code is correct")
-        self.assertEqual(user_data.get_username(), username, "Check if the username is correct")
-        self.assertEqual(user_data.get_password(), password, "Check if the password is correct")
-        self.assertEqual(user_data.get_email(), email, "Check if the email is correct")
+        self.assertEqual(result["success_code"], 0, "Check if success_code is correct")
+        self.assertEqual(user_data.username, username, "Check if the username is correct")
+        self.assertEqual(user_data.password, password, "Check if the password is correct")
+        self.assertEqual(user_data.email, email, "Check if the email is correct")
 
     def test_duplicate_username(self):
         """
@@ -35,11 +35,11 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         request_handler._register_user(username, password, email)
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 20, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 20, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) already exists")
 
     def test_empty_username(self):
@@ -49,10 +49,10 @@ class TestConstructor(unittest.TestCase):
         username = ""
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 21, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 21, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) is invalid", "Check if error_message is correct")
 
     def test_none_username(self):
@@ -62,10 +62,10 @@ class TestConstructor(unittest.TestCase):
         username = None
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 21, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 21, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) is invalid", "Check if error_message is correct")
 
     def test_non_str_username(self):
@@ -75,10 +75,10 @@ class TestConstructor(unittest.TestCase):
         username = 0
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 21, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 21, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) is invalid", "Check if error_message is correct")
 
     def test_empty_password(self):
@@ -88,10 +88,10 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = ""
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 22, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 22, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Password is invalid")
 
     def test_none_password(self):
@@ -101,10 +101,10 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = None
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 22, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 22, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Password is invalid")
 
     def test_non_str_password(self):
@@ -114,10 +114,10 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = 0
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 22, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 22, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Password is invalid")
 
     def test_empty_email(self):
@@ -127,10 +127,10 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = "password"
         email = ""
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 23, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 23, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Email ({email}) is invalid")
 
     def test_none_email(self):
@@ -140,10 +140,10 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = "password"
         email = None
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 23, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 23, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Email ({email}) is invalid")
 
     def test_non_str_email(self):
@@ -153,8 +153,8 @@ class TestConstructor(unittest.TestCase):
         username = "username"
         password = "password"
         email = 0
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         result = request_handler._register_user(username, password, email)
 
-        self.assertEqual(result["successCode"], 23, "Check if success_code is correct")
+        self.assertEqual(result["success_code"], 23, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Email ({email}) is invalid")

@@ -4,7 +4,7 @@ from backend.service_manager import ServiceManager
 
 def main():
     """
-    The main entrypoint for the application
+    The main entry point for the application
     """
     server = Server()
     server.run(ServiceManager())

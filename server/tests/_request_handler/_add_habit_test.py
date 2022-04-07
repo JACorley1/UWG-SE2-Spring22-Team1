@@ -1,8 +1,5 @@
-
-
 import unittest
 from backend.authentication_manager import AuthenticationManager
-
 from backend.server import _RequestHandler
 from backend.service_manager import ServiceManager
 
@@ -26,7 +23,10 @@ class TestAddHabit(unittest.TestCase):
         habit_name = "Habit"
         habit_freq = 0
 
-        request_handler._register_user(username, password, email)
+        print(request_handler._register_user(username, password, email))
+        print("*"*50)
+        print(request_handler._login(username, password))
+        print("*"*50)
         authentication_token = request_handler._login(username, password)["authentication_token"]
         response = request_handler._add_habit(authentication_token, habit_name, habit_freq)
 
