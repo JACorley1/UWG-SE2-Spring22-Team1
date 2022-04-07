@@ -11,8 +11,8 @@ Habit Mode is a habit-reinforcement application that encourages the development 
 
 ## Running
 1. Run `/server/habit_mode_server.py`. The server will launch at `127.0.0.1:5555` by default.
+   - `-h <host>` can be used to specify the IP address.
    - `-p <port>` can be used to specify the port.
-   - `-i <ip_address` can be used to specify the IP address.
 2. Move to the `code/` directory.
 3. Launch the client by with `mvn javafx:run`
 4. On the title screen, register for an account.
