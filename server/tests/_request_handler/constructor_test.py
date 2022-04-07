@@ -29,7 +29,6 @@ class TestConstructor(unittest.TestCase):
         self.assertRaises(Exception, _RequestHandler, (None, AuthenticationManager()), "Check if an exception is raised.")
 
     def test_service_manager_incorrect_type(self):
-        
         """
         Check if an exception is raised if service_manager is not a ServiceManager.
         """
