@@ -181,7 +181,8 @@ class UserData:
         """
         return self._username
 
-    def set_username(self, username: str):
+    @username.setter
+    def username(self, username: str):
         """
         Sets the user's username.
 
@@ -192,7 +193,8 @@ class UserData:
             raise Exception("username must be a string")
         self._username = username
 
-    def get_password(self) -> str:
+    @property
+    def password(self) -> str:
         """
         Gets the user's password.
 
@@ -203,7 +205,8 @@ class UserData:
         """
         return self._password
 
-    def set_password(self, password: str):
+    @password.setter
+    def password(self, password: str):
         """
         Sets the user's password.
 
@@ -214,7 +217,8 @@ class UserData:
             raise Exception("password must be a string")
         self._password = password
 
-    def get_email(self) -> str:
+    @property
+    def email(self) -> str:
         """
         Gets the user's email address.
 
@@ -225,7 +229,8 @@ class UserData:
         """
         return self._email
 
-    def set_email(self, email: str):
+    @email.setter
+    def email(self, email: str):
         """
         Sets the user's email address.
 
@@ -236,7 +241,8 @@ class UserData:
             raise Exception("email must be a string")
         self._email = email
 
-    def get_coins(self) -> int:
+    @property
+    def coins(self) -> int:
         """
         Gets the user's coin count.
 
@@ -247,7 +253,8 @@ class UserData:
         """
         return self._coins
 
-    def set_coins(self, coins: int):
+    @coins.setter
+    def coins(self, coins: int):
         """
         Sets the user's coins.
 

@@ -15,7 +15,7 @@ class TestConstructor(unittest.TestCase):
         """
         Checks if the field was detected correctly.
         """
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         request = {"field": 0}
         fields = ["field"]
 
@@ -26,7 +26,7 @@ class TestConstructor(unittest.TestCase):
         """
         Checks if checking for no fields causes issues.
         """
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         request = {"field": 0}
         fields = []
 
@@ -37,7 +37,7 @@ class TestConstructor(unittest.TestCase):
         """
         Checks if the missing field is detected correctly.
         """
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         request = {}
         fields = ["field"]
 
@@ -49,7 +49,7 @@ class TestConstructor(unittest.TestCase):
         """
         Checks if the missing fields are detected correctly.
         """
-        request_handler = _RequestHandler(ServiceManager())
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         request = {}
         fields = ["field1", "field2", "field3"]
 

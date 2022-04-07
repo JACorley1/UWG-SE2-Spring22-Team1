@@ -13,8 +13,9 @@ class _RequestHandler:
     @version Spring 2022
     """
     _service_manager: ServiceManager
+    _authentication_manager: AuthenticationManager
 
-    def __init__(self, service_manager: ServiceManager):
+    def __init__(self, service_manager: ServiceManager, authentication_manager: AuthenticationManager):
         """
         Creates a new RequestHandler using the specified ServiceManager.
 
@@ -29,8 +30,13 @@ class _RequestHandler:
             raise Exception("service_manager must not be None")
         if not isinstance(service_manager, ServiceManager):
             raise Exception("service_manager must be an instance of ServiceManager.")
+        if authentication_manager is None:
+            raise Exception("authentication_manager must not be None")
+        if not isinstance(authentication_manager, AuthenticationManager):
+            raise Exception("authentication_manager must be an instance of AuthenticationManager.")
 
         self._service_manager = service_manager
+        self._authentication_manager = authentication_manager
 
     def _get_missing_fields(self, request: MutableMapping[str, Any], fields: list[str]) -> list[str]:
         """
@@ -60,7 +66,7 @@ class _RequestHandler:
                 missing_fields.append(field)
         return missing_fields
 
-    def _register_user(self, username: str, email: str, password: str) -> MutableMapping[str, Any]:
+    def _register_user(self, username: str, password: str, email: str) -> MutableMapping[str, Any]:
         """
         Attempts to add a new user to the server using the specified username, password, and email.
         Generates and returns a response to be sent back to the client.
@@ -77,27 +83,27 @@ class _RequestHandler:
         response: MutableMapping[str, Any]
         if success_code == 20:
             response = {
-                "successCode": 20,
+                "success_code": 20,
                 "error_message": f"Username ({username}) already exists"
             }
         elif success_code == 21:
             response = {
-                "successCode": 21,
+                "success_code": 21,
                 "error_message": f"Username ({username}) is invalid"
             }
         elif success_code == 22:
             response = {
-                "successCode": 22,
+                "success_code": 22,
                 "error_message": "Password is invalid"
             }
         elif success_code == 23:
             response = {
-                "successCode": 23,
+                "success_code": 23,
                 "error_message": f"Email ({email}) is invalid"
             }
         else:
             response = {
-                "successCode": 0
+                "success_code": 0
             }
         return response
 
@@ -423,7 +429,7 @@ class _RequestHandler:
         response: MutableMapping[str, Any]
         if "request_type" not in request :
             return {
-                "successCode": 10,
+                "success_code": 10,
                 "error_message": "Malformed Request, missing Request Type"
             }
 
@@ -432,7 +438,7 @@ class _RequestHandler:
             missing_fields = self._get_missing_fields(request, ["username", "password", "email"])
             if len(missing_fields) > 0:
                 response = {
-                    "successCode": 12,
+                    "success_code": 12,
                     "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
                 }
             else:
@@ -500,7 +506,7 @@ class _RequestHandler:
 
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
-            response = {"successCode": 11, "error_message": error_message}
+            response = {"success_code": 11, "error_message": error_message}
         return response
 
 class Server:
