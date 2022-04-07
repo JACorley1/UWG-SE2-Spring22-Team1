@@ -112,14 +112,14 @@ public class HabitViewModel {
             this.errorVisibleProperty.set(true);
             throw new IllegalArgumentException(Habit.NULL_TEXT_ERROR);
         }
-        Habit removedHabit = new Habit(this.removeHabitNameProperty.getValue(), Frequency.DAILY);
+        Habit removedHabit = null;
         for (Habit habit : this.habitListProperty) {
 
             if (habit.getText() == this.removeHabitNameProperty.getValue() && habit.getFrequency() == this.determineFrequency()) {
                 removedHabit = habit;
             }
         }
-        if (this.serverCommunicator.removeHabit(removedHabit)) {
+        if (this.serverCommunicator.removeHabit(removedHabit) == SuccessCode.OKAY) {
             this.habitListProperty.remove(removedHabit);
             this.closePopup();
         }
@@ -139,7 +139,7 @@ public class HabitViewModel {
         if (habitToRemove == null) {
             throw new IllegalArgumentException("habit can't be null");
         }
-        if (this.serverCommunicator.removeHabit(habitToRemove)) {
+        if (this.serverCommunicator.removeHabit(habitToRemove) == SuccessCode.OKAY) {
             this.habitListProperty.remove(habitToRemove);
             this.closePopup();
         }
@@ -178,7 +178,6 @@ public class HabitViewModel {
      *                this.habitNameProperty().getValue().equals("")
      */
     public void closePopup() {
-        this.dailySelectedProperty.set(true);
         this.errorVisibleProperty.set(false);
         this.popupVisibleProperty.set(false);
         this.habitNameProperty.set("");
