@@ -1,4 +1,4 @@
-from typing import MutableMapping
+from typing import MutableMapping, Optional
 from backend.user_data import UserData
 
 class ServiceManager:
@@ -46,7 +46,7 @@ class ServiceManager:
         self._user_information[username] = new_user
         return 0
 
-    def get_data_for_user(self, username: str) -> UserData:
+    def get_data_for_user(self, username: str) -> Optional[UserData]:
         """
         Gets the user information for a specified username, if it has been registered.
 
@@ -133,6 +133,24 @@ class ServiceManager:
         habit.frequency = habit_frequency
         return 0
 
+    def complete_habit(self, username: str, habit_id: int) -> int:
+        """
+        Marks the specified habit as completed for the specified user. Returns the success code 
+        to be sent to the client.
+
+        Precondition:  None
+        Postcondition: The specified user has the habit marked as completed.
+
+        Params - username: The specified username.
+                 habit_id: The ids of the habit to mark as completed.
+        Return - The success code to be sent back to the user.
+        """
+        if username not in self._user_information:
+            return 14
+        
+        user_data = self._user_information[username]
+        user_data.complete_habit(habit_id)
+        return 0
 
 def _validate_username(username: str) -> bool:
     """
@@ -172,7 +190,7 @@ def _validate_email(email: str) -> bool:
 
 def _validate_habit_name(habit_name: str) -> bool:
     """
-    Determines whether a hahit name is valid or not.
+    Determines whether a habit name is valid or not.
 
     Precondition:  None
     Postcondition: None
@@ -184,7 +202,7 @@ def _validate_habit_name(habit_name: str) -> bool:
 
 def _validate_habit_frequency(habit_frequency: int) -> bool:
     """
-    Determines whether a hahit frequency is valid or not.
+    Determines whether a habit frequency is valid or not.
 
     Precondition:  None
     Postcondition: None

@@ -126,7 +126,7 @@ class TestModifyHabit(unittest.TestCase):
 
     def test_invalid_habit_id(self):
         """
-        Tests if _RequestHandler returns the correct success code whenno habit exists with the given id.
+        Tests if _RequestHandler returns the correct success code when no habit exists with the given id.
         """
         request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
         username = "username"

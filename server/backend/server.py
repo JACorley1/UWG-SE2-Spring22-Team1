@@ -1,5 +1,5 @@
 import json
-from typing import Any, MutableMapping
+from typing import Any, Iterable, MutableMapping, Optional
 from backend.user_data import UserData
 from backend.authentication_manager import AuthenticationManager
 from backend.service_manager import ServiceManager
@@ -13,8 +13,9 @@ class _RequestHandler:
     @version Spring 2022
     """
     _service_manager: ServiceManager
+    _authentication_manager: AuthenticationManager
 
-    def __init__(self, service_manager: ServiceManager):
+    def __init__(self, service_manager: ServiceManager, authentication_manager: AuthenticationManager):
         """
         Creates a new RequestHandler using the specified ServiceManager.
 
@@ -29,8 +30,13 @@ class _RequestHandler:
             raise Exception("service_manager must not be None")
         if not isinstance(service_manager, ServiceManager):
             raise Exception("service_manager must be an instance of ServiceManager.")
+        if authentication_manager is None:
+            raise Exception("authentication_manager must not be None")
+        if not isinstance(authentication_manager, AuthenticationManager):
+            raise Exception("authentication_manager must be an instance of AuthenticationManager.")
 
         self._service_manager = service_manager
+        self._authentication_manager = authentication_manager
 
     def _get_missing_fields(self, request: MutableMapping[str, Any], fields: list[str]) -> list[str]:
         """
@@ -60,7 +66,7 @@ class _RequestHandler:
                 missing_fields.append(field)
         return missing_fields
 
-    def _register_user(self, username: str, email: str, password: str) -> MutableMapping[str, Any]:
+    def _register_user(self, username: str, password: str, email: str) -> MutableMapping[str, Any]:
         """
         Attempts to add a new user to the server using the specified username, password, and email.
         Generates and returns a response to be sent back to the client.
@@ -77,27 +83,27 @@ class _RequestHandler:
         response: MutableMapping[str, Any]
         if success_code == 20:
             response = {
-                "successCode": 20,
+                "success_code": 20,
                 "error_message": f"Username ({username}) already exists"
             }
         elif success_code == 21:
             response = {
-                "successCode": 21,
+                "success_code": 21,
                 "error_message": f"Username ({username}) is invalid"
             }
         elif success_code == 22:
             response = {
-                "successCode": 22,
+                "success_code": 22,
                 "error_message": "Password is invalid"
             }
         elif success_code == 23:
             response = {
-                "successCode": 23,
+                "success_code": 23,
                 "error_message": f"Email ({email}) is invalid"
             }
         else:
             response = {
-                "successCode": 0
+                "success_code": 0
             }
         return response
 
@@ -171,7 +177,7 @@ class _RequestHandler:
                 "error_message": f"Invalid authentication token"
             }
         
-        user_data: UserData = self._service_manager.get_data_for_user(username)
+        user_data: Optional[UserData] = self._service_manager.get_data_for_user(username)
         if user_data is None:
             return {
                 "success_code": 14,
@@ -351,7 +357,58 @@ class _RequestHandler:
         return {
             "success_code": 0
         }
+
+    def _complete_habits(self, token: str, habit_ids: list[int]) -> MutableMapping[str, Any]:
+        """
+        Marks a habit as completed.
+
+        Precondition:  isinstance(token, str) and
+                       isinstance(habit_id, list)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 habit_ids: The ids of the habit to mark as completed.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if not isinstance(habit_ids, list):
+            raise Exception("habit_ids must be a list")
         
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        user_data: Any = self._service_manager.get_data_for_user(username)
+
+        unknown_habits: list[str] = list(
+            map(str, filter(lambda habit_id: habit_id not in user_data.habits, habit_ids))
+        )
+        if len(unknown_habits) > 0:
+            return {
+                "success_code": 52,
+                "error_message": f"No habit with id ({', '.join(unknown_habits)})"
+            }
+
+        incomplete_habits: list[int] = list(
+            filter(lambda habit_id: habit_id in user_data.get_incomplete_habit_ids(), habit_ids)
+        )
+        already_completed_habits: list[int] = list(
+            filter(lambda habit_id: not habit_id in incomplete_habits, habit_ids)
+        )
+
+        for habit_id in incomplete_habits:
+            self._service_manager.complete_habit(username, habit_id)
+
+        return {
+            "success_code": 0,
+            "already_completed": already_completed_habits,
+            "coins": user_data.coins
+        }
+
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
         Accepts a request from the client and performs an action depending on the request body.
@@ -372,7 +429,7 @@ class _RequestHandler:
         response: MutableMapping[str, Any]
         if "request_type" not in request :
             return {
-                "successCode": 10,
+                "success_code": 10,
                 "error_message": "Malformed Request, missing Request Type"
             }
 
@@ -381,7 +438,7 @@ class _RequestHandler:
             missing_fields = self._get_missing_fields(request, ["username", "password", "email"])
             if len(missing_fields) > 0:
                 response = {
-                    "successCode": 12,
+                    "success_code": 12,
                     "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
                 }
             else:
@@ -437,9 +494,19 @@ class _RequestHandler:
             else:
                 response = self._modify_habit(request["authentication_token"], request["habit_id"], request["habit_name"], request["habit_frequency"])
 
+        elif request["request_type"] == "complete_habits":
+            missing_fields = self._get_missing_fields(request, ["authentication_token", "habit_ids"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._complete_habits(request["authentication_token"], request["habit_ids"])
+
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
-            response = {"successCode": 11, "error_message": error_message}
+            response = {"success_code": 11, "error_message": error_message}
         return response
 
 class Server:

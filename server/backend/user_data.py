@@ -1,6 +1,14 @@
-from typing import MutableMapping
-from backend.habit import Habit
+from typing import Callable, MutableMapping, Optional
+from datetime import datetime
+from backend.habit import Habit, CompletionFrequency
 from backend.sudoku_puzzle import SudokuPuzzle
+import backend.datetime_extension
+
+_BONUS_RESET_FUNCTIONS: MutableMapping[int, Callable] = {
+    CompletionFrequency.DAILY.value: backend.datetime_extension.tomorrow,
+    CompletionFrequency.WEEKLY.value: backend.datetime_extension.next_sunday,
+    CompletionFrequency.MONTHLY.value: backend.datetime_extension.first_of_next_month,
+}
 
 class UserData:
     """
@@ -13,9 +21,10 @@ class UserData:
     _password: str
     _email: str
     _coins: int
-    _sudoku_puzzle: SudokuPuzzle
+    _sudoku_puzzle: Optional[SudokuPuzzle]
     _next_habit_id: int
     _habits: MutableMapping[int, Habit]
+    _bonus_reset_dates: MutableMapping[int, datetime]
 
     def __init__(self, username: str, password: str, email: str):
         """
@@ -26,6 +35,8 @@ class UserData:
                        isinstance(email, str)
         Postcondition:
         """
+        EPOCH_TIME = 30256871
+
         self.username = username
         self.password = password
         self.email = email
@@ -33,6 +44,11 @@ class UserData:
         self.sudoku_puzzle = None
         self._next_habit_id = 0
         self._habits = {}
+        self._bonus_reset_dates = {
+            CompletionFrequency.DAILY.value: datetime.fromtimestamp(EPOCH_TIME),
+            CompletionFrequency.WEEKLY.value: datetime.fromtimestamp(EPOCH_TIME),
+            CompletionFrequency.MONTHLY.value: datetime.fromtimestamp(EPOCH_TIME),
+        }
 
     def increment_habit_id(self):
         """
@@ -78,7 +94,54 @@ class UserData:
             return True
         return False
 
-    def get_habit(self, habit_id: int) -> Habit:
+    def complete_habit(self, habit_id: int) -> bool:
+        """
+        Attempts to complete a habit with the specified id and will return whether or not the
+        operation was successful. If the habit is complete, coins will be awarded based on whether
+        all habits for the habit's frequency are complete.
+
+        Precondition:  None
+        Postcondition: self.get_habit[habit_id].is_complete and
+                       self.coins == self.coins@prev + 70 if bonus is earned else
+                       self.coins == self.coins@prev + 20 if no bonus is earned else
+                       self.coins == self.coins@prev if habit was already complete
+
+        Params - habit_id: The id for the habit.
+        Return - Whether the habit was completed.
+        """
+        if habit_id not in self._habits or self._habits[habit_id].is_complete:
+            return False
+        
+        habit: Habit = self._habits[habit_id]
+        habit.complete()
+        self.coins += 20
+
+        incomplete_habits: list[Habit] = list(
+            filter(
+                lambda item: not item.is_complete and item.frequency == habit.frequency, 
+                self._habits.values()
+            )
+        )
+
+        if len(incomplete_habits) == 0 and datetime.now() > self._bonus_reset_dates[habit.frequency]:
+            self._bonus_reset_dates[habit.frequency] = _BONUS_RESET_FUNCTIONS[habit.frequency]()
+            self.coins += 50
+
+        return True
+
+    def contains_habit_id(self, habit_id: int) -> bool:
+        """
+        Determines whether the user contains a habit with the specified id.
+
+        Precondition:  None
+        Postcondition: None
+
+        Params - habit_id: The id for the habit.
+        Return - [True] iff the user contains a habit with the specified id, otherwise [False].
+        """
+        return habit_id in self._habits
+
+    def get_habit(self, habit_id: int) -> Optional[Habit]:
         """
         Gets the first instance of a habit from the habit list with the specified id.
 
@@ -86,13 +149,28 @@ class UserData:
         Postcondition: None
 
         Params - habit_id: The id for the habit.
-        Return - The first habit with the specified id if exists, otherwise None.
+        Return - The first habit with the specified id if it exists, otherwise None.
         """
         if habit_id in self._habits:
             return self._habits[habit_id]
         return None
+      
+    def get_incomplete_habit_ids(self):
+        """
+        Gets a list of all incomplete habit ids.
 
-    def get_username(self) -> str:
+        Precondition:  None
+        Postcondition: None
+
+        Params - None
+        Return - A list of all incomplete habit ids.
+        """
+        incomplete_habits = filter(lambda habit: not habit.is_complete, self._habits.values())
+        habit_ids = list(map(lambda habit: habit.id, incomplete_habits))
+        return habit_ids
+
+    @property
+    def username(self) -> str:
         """
         Gets the user's username.
 
@@ -103,7 +181,8 @@ class UserData:
         """
         return self._username
 
-    def set_username(self, username: str):
+    @username.setter
+    def username(self, username: str):
         """
         Sets the user's username.
 
@@ -114,7 +193,8 @@ class UserData:
             raise Exception("username must be a string")
         self._username = username
 
-    def get_password(self) -> str:
+    @property
+    def password(self) -> str:
         """
         Gets the user's password.
 
@@ -125,7 +205,8 @@ class UserData:
         """
         return self._password
 
-    def set_password(self, password: str):
+    @password.setter
+    def password(self, password: str):
         """
         Sets the user's password.
 
@@ -136,7 +217,8 @@ class UserData:
             raise Exception("password must be a string")
         self._password = password
 
-    def get_email(self) -> str:
+    @property
+    def email(self) -> str:
         """
         Gets the user's email address.
 
@@ -147,7 +229,8 @@ class UserData:
         """
         return self._email
 
-    def set_email(self, email: str):
+    @email.setter
+    def email(self, email: str):
         """
         Sets the user's email address.
 
@@ -158,7 +241,8 @@ class UserData:
             raise Exception("email must be a string")
         self._email = email
 
-    def get_coins(self) -> int:
+    @property
+    def coins(self) -> int:
         """
         Gets the user's coin count.
 
@@ -169,7 +253,8 @@ class UserData:
         """
         return self._coins
 
-    def set_coins(self, coins: int):
+    @coins.setter
+    def coins(self, coins: int):
         """
         Sets the user's coins.
 
@@ -180,7 +265,8 @@ class UserData:
             raise Exception("coins must be an int")
         self._coins = coins
 
-    def get_sudoku_puzzle(self) -> SudokuPuzzle:
+    @property
+    def sudoku_puzzle(self) ->  Optional[SudokuPuzzle]:
         """
         Gets the user's current sudoku puzzle.
 
@@ -191,7 +277,8 @@ class UserData:
         """
         return self._sudoku_puzzle
 
-    def set_sudoku_puzzle(self, sudoku_puzzle: SudokuPuzzle):
+    @sudoku_puzzle.setter
+    def sudoku_puzzle(self, sudoku_puzzle:  Optional[SudokuPuzzle]):
         """
         Sets the user's current sudoku puzzle.
 
