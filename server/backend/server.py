@@ -517,24 +517,36 @@ class Server:
     @author Team 1
     @version Spring 2022
     """
-    def run(self, service_manager: ServiceManager):
+    def run(self, socket_info: tuple[Any], service_manager: ServiceManager, authentication_manager: AuthenticationManager) -> None:
         """
         Launches the server with a specified ServiceManager.
         The server will run indefinitely.
 
         Precondition:  service_manager is not None and
                        isinstance(service_manager, ServiceManager)
+        Precondition:  isinstance(socket_info, tuple) and
+                       len(socket_info) == 2 and
+                       isinstance(socket_info[0], str) and
+                       isinstance(socket_info[1], int) and
         Postcondition: The server becomes active.
         """
         if service_manager is None:
             raise Exception("service_manager must not be None")
+        if not isinstance(socket_info, tuple):
+            raise Exception("socket_info must be a tuple")
+        if len(socket_info) != 2:
+            raise Exception("socket_info must be a tuple of length 2")
+        if not isinstance(socket_info[0], str):
+            raise Exception("socket_info[0] must be a string")
+        if not isinstance(socket_info[1], int):
+            raise Exception("socket_info[1] must be an integer")
         if not isinstance(service_manager, ServiceManager):
             raise Exception("service_manager must be an instance of ServiceManager.")
 
         request_handler = _RequestHandler(service_manager)
         context = zmq.Context()
         socket = context.socket(zmq.REP)
-        socket.bind("tcp://0.0.0.0:8000")
+        socket.bind(f"tcp://{socket_info[0]}:{socket_info[1]}")
 
         while True:
             #  Wait for next request from client
