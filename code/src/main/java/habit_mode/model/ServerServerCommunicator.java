@@ -1,4 +1,4 @@
-package habit_mode.model.local_implementation;
+package habit_mode.model;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -11,9 +11,6 @@ import com.google.gson.reflect.TypeToken;
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
-import habit_mode.model.Habit;
-import habit_mode.model.ServerCommunicator;
-import habit_mode.model.SuccessCode;
 import habit_mode.model.sudoku.SudokuPuzzle;
 
 import org.zeromq.ZContext;
@@ -23,19 +20,28 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_REGISTER_USER = "register_user";
     private static final String REQUEST_TYPE_LOGIN = "login";
     private static final String TCP_CONNECTION_ADDRESS = "tcp://0.0.0.0:8000";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String EMAIL = "email";
+    private static final String SUCCESS_CODE = "success_code";
     
-    private static final ZContext context = new ZContext();
+    private static final ZContext CONTEXT = new ZContext();
+    private static final Type TYPE = new TypeToken<HashMap<String, Object>>() { } .getType();
 
+    private SuccessCode successCode;
     private ZMQ.Socket socket;
     private Gson gson;
     private HashMap<String, String> message;
     private String jsonMessage;
+    private HashMap<String, Object> response;
+    private String authenticationToken;
+    private String jsonResponse;
 
-    public ServerServerCommunicator(){
-        this.socket = context.createSocket(SocketType.REQ);
+    public ServerServerCommunicator() {
+        this.socket = CONTEXT.createSocket(SocketType.REQ);
         this.gson = new Gson();
         this.message = new HashMap<String, String>();
-        this.message.put(REQUEST_TYPE, "");
+        this.authenticationToken = "";
     }
 
     public HashMap<String, String> getMessage() {
@@ -55,12 +61,30 @@ public class ServerServerCommunicator extends ServerCommunicator {
     }
 
     public ZContext getContext() {
-        return context;
+        return CONTEXT;
     }
 
     @Override
     public SuccessCode registerCredentials(String username, String password, String email) {
-        return SuccessCode.OKAY;
+        this.socket.connect(TCP_CONNECTION_ADDRESS);
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_REGISTER_USER);
+        this.message.put(USERNAME, username);
+        this.message.put(PASSWORD, password);
+        this.message.put(EMAIL, email);
+
+        this.jsonMessage = this.gson.toJson(this.message);
+
+        this.socket.send(this.jsonMessage);
+
+        this.jsonResponse = this.socket.recvStr();
+        this.response = this.gson.fromJson(this.jsonResponse, TYPE);
+
+        this.socket.disconnect(TCP_CONNECTION_ADDRESS);
+
+        this.successCode = SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
+
+        this.message.clear();
+        return successCode;
     }
 
     
