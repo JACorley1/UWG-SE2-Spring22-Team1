@@ -1,17 +1,12 @@
 Context: The user has their account for the app
- Primary Flow: 
-1.	The user is taken to the log in page
-2.	The user enters in their correct log in credentials
-3.	The user selects “Login”
-4.	The user is sent to the home page
+Primary Flow: 
+1.  The user is taken to the log in page
+2.  The user enters in their correct log in credentials
+3.  The user selects the login option
+4.  The user is sent to the home page
+
 Alternative Flow(s):
-	User enters the invalid credentials:
-		2a. The user enters in incorrect login credentials
-		3a. The user is notified that the credentials are invalid and to try again
-		4a. the user is returned to the log in page
-	User does not have an account:
-		2b. The user selects “New User”
-		3b. A create account page is displayed to the user
-		4b. The user fills in valid credentials for the application
-		5b. The system adds the user to the system
-		6b. the user is sent to the home page
+User enters the invalid credentials:
+    2a.  The user enters in incorrect login credentials
+    3a.  The user is notified that the credentials are invalid and to try again
+    4a.  The user is returned to the log in page
