@@ -27,4 +27,5 @@ class TestGettersAndSetters {
 
         assertEquals("Habit", habit.getText(), "Checking that the text is set");
     }
+
 }
