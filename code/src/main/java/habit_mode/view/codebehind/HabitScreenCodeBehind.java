@@ -136,6 +136,7 @@ public class HabitScreenCodeBehind {
     @FXML
     private Button sendCompleteHabitsButton;
 
+    @FXML
     private Label noSelectedHabitLabel;
 
     @FXML
@@ -151,15 +152,15 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void removeHabitsButtonClicked(ActionEvent event) {
-    if (this.habitListView.getSelectionModel().getSelectedItem() == null) {
-        this.noSelectedHabitLabel.setVisible(true);
-    } else {
-        this.noSelectedHabitLabel.setVisible(false);
-        this.addHabitBackgroundAnchorPane.setVisible(true);
-        this.removeHabitAnchorPane.setVisible(true);
-        this.addHabitsAnchorPane.setVisible(false);
-        this.completeHabitAnchorPane.setVisible(false);
-}
+        if (this.habitListView.getSelectionModel().getSelectedItem() == null) {
+            this.noSelectedHabitLabel.setVisible(true);
+        } else {
+            this.noSelectedHabitLabel.setVisible(false);
+            this.addHabitBackgroundAnchorPane.setVisible(true);
+            this.removeHabitAnchorPane.setVisible(true);
+            this.addHabitsAnchorPane.setVisible(false);
+            this.completeHabitAnchorPane.setVisible(false);
+        }
     }
 
     @FXML
@@ -256,6 +257,8 @@ public class HabitScreenCodeBehind {
     private void assertFields() {
         assert this.sudokuButton != null
                 : "fx:id=\"sudokuButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.noSelectedHabitLabel != null
+                : "fx:id=\"noSelectedHabitLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.habitListButton != null
                 : "fx:id=\"habitListButton\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.settingsButton != null

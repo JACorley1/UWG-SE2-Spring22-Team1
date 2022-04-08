@@ -53,7 +53,7 @@
             <Font size="23.0" />
          </font>
       </Button>
-      <Button fx:id="sendCompleteHabitsButton" layoutX="176.0" layoutY="559.0" mnemonicParsing="false" onAction="#sendCompleteHabitsButtonClicked" prefHeight="17.0" prefWidth="145.0" text="Send Completed">
+      <Button fx:id="sendCompleteHabitsButton" layoutX="176.0" layoutY="559.0" mnemonicParsing="false" onAction="#sendCompleteHabitsButtonClicked" prefHeight="17.0" prefWidth="145.0" text="Send Completed"/>
       <Button fx:id="removeHabitsButton" layoutX="435.0" layoutY="144.0" mnemonicParsing="false" onAction="#removeHabitsButtonClicked" prefHeight="53.0" prefWidth="52.0" text="X">
          <font>
             <Font size="14.0" />
