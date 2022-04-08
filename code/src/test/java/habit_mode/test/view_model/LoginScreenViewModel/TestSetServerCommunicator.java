@@ -10,7 +10,7 @@ import habit_mode.view_model.LoginScreenViewModel;
 public class TestSetServerCommunicator {
     @Test
     void testValidServerCommunicator() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         LocalServerCommunicator serverCommunicator = new LocalServerCommunicator();
 
         viewModel.setServerCommunicator(serverCommunicator);
@@ -18,7 +18,7 @@ public class TestSetServerCommunicator {
 
     @Test
     void testNullServerCommunicator() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
 
         assertThrows(
             IllegalArgumentException.class,

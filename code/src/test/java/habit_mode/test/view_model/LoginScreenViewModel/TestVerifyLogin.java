@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
 public class TestVerifyLogin {
     @Test
     void testValidLogin() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
 
@@ -29,7 +29,7 @@ public class TestVerifyLogin {
 
     @Test
     void testBlankUsername() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
 
@@ -45,7 +45,7 @@ public class TestVerifyLogin {
 
     @Test
     void testBlankPassword() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
 

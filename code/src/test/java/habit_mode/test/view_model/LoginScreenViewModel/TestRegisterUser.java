@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
 public class TestRegisterUser {
     @Test
     void testValidCredentials() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
         StringProperty emailProperty = new SimpleStringProperty();
@@ -32,7 +32,7 @@ public class TestRegisterUser {
 
     @Test
     void testInvalidkUsername() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
         StringProperty emailProperty = new SimpleStringProperty();
@@ -53,7 +53,7 @@ public class TestRegisterUser {
 
     @Test
     void testInvalidPassword() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
         StringProperty emailProperty = new SimpleStringProperty();
@@ -73,7 +73,7 @@ public class TestRegisterUser {
 
     @Test
     void testInvalidEmail() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
         StringProperty emailProperty = new SimpleStringProperty();
@@ -93,7 +93,7 @@ public class TestRegisterUser {
 
     @Test
     void testUsernameAlredyInUse() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
         StringProperty emailProperty = new SimpleStringProperty();

@@ -1,6 +1,7 @@
 package habit_mode.view_model;
 
 import habit_mode.model.ServerCommunicator;
+import habit_mode.model.ServerServerCommunicator;
 import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,6 +30,24 @@ public class LoginScreenViewModel {
      *                 this.serverCommunicator() != null
      */
     public LoginScreenViewModel() {
+        this.serverCommunicator = new ServerServerCommunicator();
+        this.usernameProperty = new SimpleStringProperty();
+        this.passwordProperty = new SimpleStringProperty();
+        this.emailProperty = new SimpleStringProperty();
+    }
+
+    /**
+     * A special constructor for use during tests.
+     * 
+     * @precondition none
+     * @postcondition this.serverCommunicator.getClass().equals(LocalServerCommunicator.class) &&
+     *                this.usernameProperty() != null && 
+     *                this.passwordProperty() != null &&
+     *                this.serverCommunicator() != null
+     * 
+     * @param dummy A boolean value that exists to allow constructor overloading.
+     */
+    public LoginScreenViewModel(boolean dummy) {
         this.serverCommunicator = new LocalServerCommunicator();
         this.usernameProperty = new SimpleStringProperty();
         this.passwordProperty = new SimpleStringProperty();
