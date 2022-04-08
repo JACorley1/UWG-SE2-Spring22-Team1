@@ -21,6 +21,9 @@ import org.zeromq.ZContext;
  * ServerCommunicator abstract class. 
  * Uses ZeroMQ and Gson to facilitate proper communication. 
  * 
+ * *NOTE FOR TESTING*
+ * Make sure the server is running before pulling tests until a TestDouble is implemented.
+ * 
  * @author Team 1
  * @version Spring 2022
  */
@@ -30,7 +33,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_LOGIN = "login";
     private static final String REQUEST_TYPE_ADD_HABIT = "add_habit";
    // private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
-    //private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
+   // private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
     private static final String TCP_CONNECTION_ADDRESS = "tcp://127.0.0.1:5555";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -120,9 +123,17 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return CONTEXT;
     }
 
+    /**
+     * Simple getter for the authentication token.
+     * 
+     * @return The authentication token.
+     */
+    public String getToken() {
+        return this.authenticationToken;
+    }
+
     @Override
     public SuccessCode registerCredentials(String username, String password, String email) {
-        this.socket.connect(TCP_CONNECTION_ADDRESS);
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_REGISTER_USER);
         this.message.put(USERNAME, username);
         this.message.put(PASSWORD, password);
@@ -218,6 +229,8 @@ public class ServerServerCommunicator extends ServerCommunicator {
     }
 
     private void sendMessage() {
+        this.socket.connect(TCP_CONNECTION_ADDRESS);
+
         this.jsonMessage = this.gson.toJson(this.message);
 
         this.socket.send(this.jsonMessage);
