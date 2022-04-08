@@ -18,6 +18,7 @@ public class Habit {
     private StringProperty textProperty;
     private BooleanProperty completionProperty;
     private Frequency completionFrequency;
+    private int id = 0;
 
     /** 
      * Creates a new habit.
@@ -45,6 +46,18 @@ public class Habit {
      */
     public boolean isComplete() {
         return this.completionProperty.get();
+    }
+
+    /** 
+     * Gets the id of the habit. Is 0 unless set.
+     * 
+     * @precondition None
+     * @postcondition None
+     * 
+     * @return the id of the habit
+     */
+    public int getId() {
+        return this.id;
     }
 
     /**
@@ -93,6 +106,19 @@ public class Habit {
      */
     public Frequency getFrequency() {
         return this.completionFrequency;
+    }
+
+    
+    /** 
+     * Sets the id of the habit
+     * 
+     * @precondition none
+     * @postcondition this.getId() == id;
+     * 
+     * @param id The habit id.
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     /** 
