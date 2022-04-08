@@ -20,7 +20,7 @@ class TestRemoveHabit {
         
         viewModel.removeHabit(habit);
 
-        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was added to the list");
+        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was removed to the list");
         
 
     }
@@ -36,7 +36,7 @@ class TestRemoveHabit {
         
         viewModel.removeHabit(habit);
 
-        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was added to the list");
+        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was removed to the list");
         
     }
 
@@ -51,7 +51,7 @@ class TestRemoveHabit {
         
         viewModel.removeHabit(habit);
 
-        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was added to the list");
+        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was removed to the list");
         
     }
 
@@ -108,7 +108,7 @@ class TestRemoveHabit {
 
         viewModel.removeHabit();
 
-        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was added to the list");
+        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was removed to the list");
     }
 
 
@@ -124,7 +124,7 @@ class TestRemoveHabit {
 
         viewModel.removeHabit();
 
-        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was added to the list");
+        assertEquals(0, viewModel.habitListProperty().getValue().size(), "Checking that the habit was removed to the list");
     }
 
 }

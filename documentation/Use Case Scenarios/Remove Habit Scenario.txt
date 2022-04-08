@@ -1,12 +1,20 @@
-Context: User has loaded the application and has added at least one habit.
+Context: User has loaded the application and has added at least one habit
 Primary Flow:
-1.	The user selects a habit
-2.	The “Edit(?)” button becomes enabled for the user
-3.	The user selects “Edit(?)” button 
-4.	The user is prompted a similar pop up page with the currently selected habit filling in the sections
-5.	The user selects the “Remove” button
-6.	The user is returned to the home page
+1.  The user selects a habit
+2.  The user selects the edit option
+3.  A pop up page with the currently selected habit's specifications appears
+4.  The user selects the remove option
+5.  The user is prompted to ensure they want to remove the habit
+6.  The user confirms they want to remove the habit
+7.  The user is prompted that the habit was successfully deleted
+8.  The user closes the prompt
+9.  The user is returned to the home page
+
 Alternative Flow(s):
-	No habit selected:
-		1a. The user attempts to select the “Edit(?)” button 
-		2a. The “Edit(?)” button remains disabled and nothing happens
+No habit selected:
+    1a.  The user attempts to select the edit option
+    2a.  The user is informed they need to select a habit
+    3a.  Nothing happens and the user remains on the habit page
+User decides not to remove habit:
+    6b.  The user cancels removing the habit
+    7b.  The user is returned to the home page

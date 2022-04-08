@@ -1,14 +1,15 @@
 package habit_mode.test.model.local_implementation.LocalServerCommunicator;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
+import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 
 public class TestCompleteHabit {
@@ -22,7 +23,7 @@ public class TestCompleteHabit {
         Habit serverHabit = communicator.getServerSideHabit(habit);
 
         assertAll(
-            () -> {assertTrue(communicator.completeHabit(habit), "Check if return is correct");},
+            () -> {assertEquals(communicator.completeHabit(habit), SuccessCode.OKAY, "Check if return is correct");},
             () -> {assertTrue(serverHabit.isComplete(), "Check if habit was completed");}
         );
     }
@@ -40,8 +41,8 @@ public class TestCompleteHabit {
         Habit serverHabit2 = communicator.getServerSideHabit(habit2);
 
         assertAll(
-            () -> {assertTrue(communicator.completeHabit(habit1), "Check if return is correct");},
-            () -> {assertTrue(communicator.completeHabit(habit2), "Check if return is correct");},
+            () -> {assertEquals(communicator.completeHabit(habit1), SuccessCode.OKAY, "Check if return is correct");},
+            () -> {assertEquals(communicator.completeHabit(habit2), SuccessCode.OKAY, "Check if return is correct");},
             () -> {assertTrue(serverHabit1.isComplete(), "Check if habit was completed");},
             () -> {assertTrue(serverHabit2.isComplete(), "Check if habit was completed");}
         );
@@ -62,7 +63,7 @@ public class TestCompleteHabit {
         Habit serverHabit2 = communicator.getServerSideHabit(habit2);
 
         assertAll(
-            () -> {assertTrue(communicator.completeHabit(habit2), "Check if return is correct");},
+            () -> {assertEquals(communicator.completeHabit(habit2), SuccessCode.OKAY, "Check if return is correct");},
             () -> {assertTrue(serverHabit1.isComplete(), "Check if habit was completed");},
             () -> {assertTrue(serverHabit2.isComplete(), "Check if habit was completed");}
         );
@@ -75,7 +76,7 @@ public class TestCompleteHabit {
         Habit habit = new Habit("habit", Frequency.DAILY);
 
         assertAll(
-            () -> {assertFalse(communicator.completeHabit(habit), "Check if return is correct");},
+            () -> {assertEquals(communicator.completeHabit(habit), SuccessCode.NO_HABIT_FOUND, "Check if return is correct");},
             () -> {assertFalse(habit.isComplete(), "Check if habit was not completed");}
         );
     }
@@ -91,7 +92,7 @@ public class TestCompleteHabit {
         Habit serverHabit = communicator.getServerSideHabit(habit);
 
         assertAll(
-            () -> {assertFalse(communicator.completeHabit(habit), "Check if return is correct");},
+            () -> {assertEquals(communicator.completeHabit(habit), SuccessCode.OKAY, "Check if return is correct");},
             () -> {assertTrue(serverHabit.isComplete(), "Check if habit was not completed");}
         );
     }
@@ -101,10 +102,6 @@ public class TestCompleteHabit {
         LocalServerCommunicator.reset();
         LocalServerCommunicator communicator = new LocalServerCommunicator();
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> {communicator.completeHabit(null);},
-            "Check is exception is thrown when completing a null habit."
-        );
+        assertEquals(SuccessCode.INVALID_HABIT_NAME, communicator.completeHabit(null));
     }
 }

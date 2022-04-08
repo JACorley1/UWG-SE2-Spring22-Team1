@@ -12,6 +12,23 @@ import habit_mode.model.sudoku.SudokuPuzzle;
  */
 public abstract class ServerCommunicator {
 
+    /**
+     * Adds a set of valid user credentials to the registry.
+     * 
+     * @precondition username != null && !username.isBlank() && password != null && !password.isBlank() &&
+     *               email != null && !email.isBlank()
+     * @postcondition tbd 
+     * 
+     * @param username The username to be registered in the registry. 
+     * @param password The password to be associated with the given username.
+     * @param email The email address associated with the given credentials.
+     * 
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-12 if request breaks,
+     *         20 if username is taken, 21 if username is invalid, 22 if password is invalid, 23 if email
+     *         is invalid, or 15 if an unknown error occurs. 
+     */
+    public abstract SuccessCode registerCredentials(String username, String password, String email);
+
     /** 
      * Checks with the server whether a specified username and password pair is valid.
      * 
@@ -21,9 +38,10 @@ public abstract class ServerCommunicator {
      * @param username The specified username.
      * @param password The specified password.
      * 
-     * @return [true] iff the provided credentials are a valid pair, otherwise [false]
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *         30 if username or password are invalid, or 15 if an unknown error occurs. 
      */
-    public abstract boolean validateLogin(String username, String password);
+    public abstract SuccessCode validateLogin(String username, String password);
 
     /** 
      * Retrieves the user's current coin count from the server.
@@ -73,9 +91,10 @@ public abstract class ServerCommunicator {
      * @postcondition this.getHabits().contains(habit)
      * 
      * @param habit The new habit to add.
-     * @return [true] iff the habit was successfully added, otherwise [false].
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *         50 if habit does not exist, or 15 if an unknown error occurs.
      */
-    public abstract boolean addHabit(Habit habit);
+    public abstract SuccessCode addHabit(Habit habit);
 
     /** 
      * Adds a habit to the user's habit list on the server.
@@ -84,9 +103,10 @@ public abstract class ServerCommunicator {
      * @postcondition !this.getHabits().contains(habit)
      * 
      * @param habit The specified habit to remove. 
-     * @return [true] iff the habit was successfully removed, otherwise [false].
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *         50 if habit does not exist, or 15 if an unknown error occurs. 
      */
-    public abstract boolean removeHabit(Habit habit);
+    public abstract SuccessCode removeHabit(Habit habit);
 
     /** 
      * Marks a specified habit as completed on the server.
@@ -95,9 +115,10 @@ public abstract class ServerCommunicator {
      * @postcondition None
      * 
      * @param habit The specified habit to mark as completed.
-     * @return [true] iff the habit was successfully completed, otherwise [false].
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *         50 if habit does not exist, or 15 if an unknown error occurs.
      */
-    public abstract boolean completeHabit(Habit habit);
+    public abstract SuccessCode completeHabit(Habit habit);
 
     /** 
      * Updates the puzzle state saved on the server.
@@ -106,7 +127,8 @@ public abstract class ServerCommunicator {
      * @postcondition this.getSudokuPuzzle().Equals(puzzle)
      * 
      * @param puzzle The current puzzle state.
-     * @return [true] iff the puzzle was successfully updated, otherwise [false].
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *         or 15 if an unknown error occurs.
      */
-    public abstract boolean updateSudokuPuzzle(SudokuPuzzle puzzle);
+    public abstract SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle);
 }

@@ -136,11 +136,13 @@ public class HabitScreenCodeBehind {
     @FXML
     private Button sendCompleteHabitsButton;
 
+    private Label noSelectedHabitLabel;
 
     @FXML
     void removeButtonClicked(ActionEvent event) {
         try {
-            this.viewModel.removeHabit();
+            this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
+            this.updateHabitNameTextField.clear();
         } catch (Exception err) {
             System.out.println(err.getMessage());
         }
@@ -149,10 +151,15 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void removeHabitsButtonClicked(ActionEvent event) {
+    if (this.habitListView.getSelectionModel().getSelectedItem() == null) {
+        this.noSelectedHabitLabel.setVisible(true);
+    } else {
+        this.noSelectedHabitLabel.setVisible(false);
         this.addHabitBackgroundAnchorPane.setVisible(true);
         this.removeHabitAnchorPane.setVisible(true);
         this.addHabitsAnchorPane.setVisible(false);
         this.completeHabitAnchorPane.setVisible(false);
+}
     }
 
     @FXML
@@ -174,6 +181,7 @@ public class HabitScreenCodeBehind {
         this.habitListView.refresh();
         this.addHabitBackgroundAnchorPane.setVisible(false);
         this.removeHabitAnchorPane.setVisible(false);
+        this.updateHabitNameTextField.clear();
     }
 
     @FXML

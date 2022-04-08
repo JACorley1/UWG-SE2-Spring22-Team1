@@ -1,14 +1,14 @@
 package habit_mode.test.model.local_implementation.LocalServerCommunicator;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
+import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 
 public class TestRemoveHabit {
@@ -21,7 +21,7 @@ public class TestRemoveHabit {
         communicator.addHabit(habit);
 
         assertAll(
-            () -> {assertTrue(communicator.removeHabit(habit), "Check if return is correct");},
+            () -> {assertEquals(communicator.removeHabit(habit), SuccessCode.OKAY, "Check if return is correct");},
             () -> {assertFalse(communicator.getHabits().contains(habit), "Check if habit was removed");}
         );
     }
@@ -36,8 +36,8 @@ public class TestRemoveHabit {
         communicator.addHabit(habit2);
 
         assertAll(
-            () -> {assertTrue(communicator.removeHabit(habit1), "Check if return for first habit is correct");},
-            () -> {assertTrue(communicator.removeHabit(habit2), "Check if return for second habit is correct");},
+            () -> {assertEquals(communicator.removeHabit(habit1), SuccessCode.OKAY, "Check if return for first habit is correct");},
+            () -> {assertEquals(communicator.removeHabit(habit2), SuccessCode.OKAY, "Check if return for second habit is correct");},
             () -> {assertFalse(communicator.getHabits().contains(habit1), "Check if first habit was removed");},
             () -> {assertFalse(communicator.getHabits().contains(habit2), "Check if second habit was removed");}
         );
@@ -48,11 +48,7 @@ public class TestRemoveHabit {
         LocalServerCommunicator.reset();
         LocalServerCommunicator communicator = new LocalServerCommunicator();
         
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> {communicator.removeHabit(null);},
-            "Check if exception is thrown when removing a null habit."
-        );
+        assertEquals(SuccessCode.INVALID_HABIT_NAME, communicator.removeHabit(null));
     }
 
     @Test
@@ -61,8 +57,9 @@ public class TestRemoveHabit {
         LocalServerCommunicator communicator = new LocalServerCommunicator();
         Habit habit = new Habit("Habit", Frequency.DAILY);
         communicator.addHabit(habit);
+        communicator.removeHabit(habit);
         
-        assertFalse(communicator.addHabit(habit), "Check if false is returned when removing a duplicate twice.");
+        assertEquals(communicator.removeHabit(habit), SuccessCode.NO_HABIT_FOUND, "Check if false is returned when removing a duplicate twice.");
     }
 
     @Test
@@ -71,6 +68,6 @@ public class TestRemoveHabit {
         LocalServerCommunicator communicator = new LocalServerCommunicator();
         Habit habit = new Habit("Habit", Frequency.DAILY);
         
-        assertFalse(communicator.removeHabit(habit), "Check if false is returned when removing from an empty list.");
+        assertEquals(communicator.removeHabit(habit), SuccessCode.NO_HABIT_FOUND, "Check if false is returned when removing from an empty list.");
     }
 }

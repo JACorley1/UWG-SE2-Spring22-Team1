@@ -3,6 +3,7 @@ package habit_mode.view_model;
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
+import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -79,7 +80,7 @@ public class HabitViewModel {
         }
 
         Habit habit = new Habit(this.habitNameProperty.getValue(), this.determineFrequency());
-        if (this.serverCommunicator.addHabit(habit)) {
+        if (this.serverCommunicator.addHabit(habit) == SuccessCode.OKAY) {
             this.habitListProperty.add(habit);
             this.closePopup();
         }
@@ -111,14 +112,14 @@ public class HabitViewModel {
             this.errorVisibleProperty.set(true);
             throw new IllegalArgumentException(Habit.NULL_TEXT_ERROR);
         }
-        Habit removedHabit = new Habit(this.removeHabitNameProperty.getValue(), Frequency.DAILY);
+        Habit removedHabit = null;
         for (Habit habit : this.habitListProperty) {
 
             if (habit.getText() == this.removeHabitNameProperty.getValue() && habit.getFrequency() == this.determineFrequency()) {
                 removedHabit = habit;
             }
         }
-        if (this.serverCommunicator.removeHabit(removedHabit)) {
+        if (this.serverCommunicator.removeHabit(removedHabit) == SuccessCode.OKAY) {
             this.habitListProperty.remove(removedHabit);
             this.closePopup();
         }
@@ -138,7 +139,7 @@ public class HabitViewModel {
         if (habitToRemove == null) {
             throw new IllegalArgumentException("habit can't be null");
         }
-        if (this.serverCommunicator.removeHabit(habitToRemove)) {
+        if (this.serverCommunicator.removeHabit(habitToRemove) == SuccessCode.OKAY) {
             this.habitListProperty.remove(habitToRemove);
             this.closePopup();
         }
@@ -177,7 +178,6 @@ public class HabitViewModel {
      *                this.habitNameProperty().getValue().equals("")
      */
     public void closePopup() {
-        this.dailySelectedProperty.set(true);
         this.errorVisibleProperty.set(false);
         this.popupVisibleProperty.set(false);
         this.habitNameProperty.set("");
@@ -362,7 +362,7 @@ public class HabitViewModel {
         if (habit == null) {
             throw new IllegalArgumentException("habit cannot be null");
         }
-        if (this.serverCommunicator.completeHabit(habit)) {
+        if (this.serverCommunicator.completeHabit(habit) == SuccessCode.OKAY) {
             this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
         }
     }
