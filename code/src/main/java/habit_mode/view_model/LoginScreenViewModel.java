@@ -45,8 +45,7 @@ public class LoginScreenViewModel {
      *         30 if username or password are invalid, or 15 if an unknown error occurs.
      */
     public SuccessCode validateLogin() {
-        //SuccessCode result = this.serverCommunicator.validateLogin(this.usernameProperty.getValue(), this.passwordProperty.getValue());
-        SuccessCode result = SuccessCode.OKAY;
+        SuccessCode result = this.serverCommunicator.validateLogin(this.usernameProperty.getValue(), this.passwordProperty.getValue());
         return result;
     }
 
