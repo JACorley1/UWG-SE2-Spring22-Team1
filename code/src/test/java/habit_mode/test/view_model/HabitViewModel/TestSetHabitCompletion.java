@@ -13,7 +13,7 @@ class TestSetHabitCompletion {
     @Test
     void testSetHabitCompletionWithAValueSelected() {
         LocalServerCommunicator.reset();
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
 
@@ -31,7 +31,7 @@ class TestSetHabitCompletion {
     @Test
     void testSetHabitCompletionWithNoValueSelected() {
         LocalServerCommunicator.reset();
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         viewModel.habitNameProperty().set("Test");
         viewModel.addHabit();
 
@@ -46,7 +46,7 @@ class TestSetHabitCompletion {
     @Test
     void testSetHabitCompletionWithEmptyCollection() {
         LocalServerCommunicator.reset();
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         Habit selectedHabit = new Habit("TestHabit", Frequency.DAILY);
         viewModel.selectedHabitProperty().set(selectedHabit);
          

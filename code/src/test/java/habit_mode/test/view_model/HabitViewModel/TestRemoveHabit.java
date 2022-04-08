@@ -11,7 +11,7 @@ import habit_mode.view_model.HabitViewModel;
 class TestRemoveHabit {
     @Test
     void testRemoveDailyHabitParameterWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.dailySelectedProperty().set(true);
@@ -27,7 +27,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveWeeklyHabitParameterWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.weeklySelectedProperty().set(true);
@@ -42,7 +42,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveMonthlyHabitParameterWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.monthlySelectedProperty().set(true);
@@ -58,7 +58,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveHabitWithNullStringProperty() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         viewModel.removeHabitNameProperty().set(null);
 
         assertAll(
@@ -81,7 +81,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveNullHabit() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         assertAll(
                 () -> {
                     assertThrows(
@@ -98,7 +98,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveWeeklyHabitWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.weeklySelectedProperty().set(true);
@@ -114,7 +114,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveDailyHabitWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);        
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.dailySelectedProperty().set(true);

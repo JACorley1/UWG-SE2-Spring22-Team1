@@ -11,7 +11,7 @@ import habit_mode.view_model.LoginScreenViewModel;
 public class TestGetServerCommunicator {
     @Test
     void testGetServerCommunicator() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         ServerCommunicator serverCommunicator = new LocalServerCommunicator();
 
         viewModel.setServerCommunicator(serverCommunicator);

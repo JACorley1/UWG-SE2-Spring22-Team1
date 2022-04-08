@@ -9,7 +9,7 @@ import habit_mode.view_model.HabitViewModel;
 class TestAddHabit {
     @Test
     void testAddDailyHabitWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.dailySelectedProperty().set(true);
@@ -21,7 +21,7 @@ class TestAddHabit {
 
     @Test
     void testAddWeeklyHabitWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.weeklySelectedProperty().set(true);
@@ -33,7 +33,7 @@ class TestAddHabit {
 
     @Test
     void testAddMonthlyHabitWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.monthlySelectedProperty().set(true);
@@ -45,7 +45,7 @@ class TestAddHabit {
 
     @Test
     void testAddHabitWithNullStringProperty() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);
         viewModel.habitNameProperty().set(null);
 
         assertAll(
@@ -68,7 +68,7 @@ class TestAddHabit {
 
     @Test
     void testAddHabitWithEmptyStringProperty() {
-        HabitViewModel viewModel = new HabitViewModel();
+        HabitViewModel viewModel = new HabitViewModel(true);
         viewModel.habitNameProperty().set("");
 
         assertAll(

@@ -3,6 +3,7 @@ package habit_mode.view_model;
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
+import habit_mode.model.ServerServerCommunicator;
 import habit_mode.model.SuccessCode;
 import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.BooleanProperty;
@@ -47,6 +48,35 @@ public class HabitViewModel {
      *                 FXCollections.observableArrayList(new HabitManager());
      */
     public HabitViewModel() {
+        this.serverCommunicator = new ServerServerCommunicator();
+        this.dailySelectedProperty = new SimpleBooleanProperty();
+        this.weeklySelectedProperty = new SimpleBooleanProperty();
+        this.monthlySelectedProperty = new SimpleBooleanProperty();
+        this.removeDailySelectedProperty = new SimpleBooleanProperty();
+        this.removeWeeklySelectedProperty = new SimpleBooleanProperty();
+        this.popupVisibleProperty = new SimpleBooleanProperty();
+        this.errorVisibleProperty = new SimpleBooleanProperty();
+        this.selectedHabitProperty = new SimpleObjectProperty<Habit>();
+        this.habitNameProperty = new SimpleStringProperty("");
+        this.removeHabitNameProperty = new SimpleStringProperty("");
+        this.coinsLabelProperty = new SimpleStringProperty("");
+        this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
+    }
+
+    /**
+     * A special constructor for use during tests.
+     * 
+     * @precondition none
+     * @postcondition this.serverCommunicator.getClass().equals(LocalServerCommunicator.class) &&
+     *                this.frequencyProperty() == new
+     *                SimpleObjectProperty<Frequency>(), this.habitNameProperty()
+     *                == new SimpleStringProperty(""),
+     *                this.habitListProperty() ==
+     *                FXCollections.observableArrayList(new HabitManager());
+     * 
+     * @param dummy A boolean value that exists to allow constructor overloading.
+     */
+    public HabitViewModel(boolean dummy) {
         this.serverCommunicator = new LocalServerCommunicator();
         this.dailySelectedProperty = new SimpleBooleanProperty();
         this.weeklySelectedProperty = new SimpleBooleanProperty();
