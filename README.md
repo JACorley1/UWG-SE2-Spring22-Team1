@@ -6,14 +6,16 @@ Habit Mode is a habit-reinforcement application that encourages the development 
 - Client tests can be run through Maven
   - Coverage can be checked by opening `code/target/site/jacoco/index.html`
 - Server tests are run using the `/server/tests/run_tests.bat` script.
-  - Coverage can be checked by opening `server/tests/htmlcov/index.html`
+  - The `coverage` and `pytest` modules must be installed through pip to run the script.
+  - Coverage can be checked by opening `server/tests/htmlcov/index.html`.
   - Adding `-o` will display the code coverage in a webpage immediately after finishing.
 
 ## Running
-1. Run `/server/habit_mode_server.py`. The server will launch at `127.0.0.1:5555` by default.
+1. Ensure python's zmq module is installed by running `pip install zmq`.
+2. Run `/server/habit_mode_server.py`. The server will launch at `127.0.0.1:5555` by default.
+   - `-h <host>` can be used to specify the IP address.
    - `-p <port>` can be used to specify the port.
-   - `-i <ip_address` can be used to specify the IP address.
-2. Move to the `code/` directory.
-3. Launch the client by with `mvn javafx:run`
-4. On the title screen, register for an account.
-5. After registering, login using the provided credentials.
+3. Move to the `code/` directory.
+4. Launch the client by with `mvn javafx:run`.
+5. On the title screen, register for an account.
+6. Once the account has been successfully registered, you will be logged in automatically.
