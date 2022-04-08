@@ -85,7 +85,15 @@ public class LoginScreen {
 
     @FXML
     void registerButtonPressed(ActionEvent event) throws IOException {
-        this.loginButtonPress(event);
+        try {
+            if (this.viewModel.registerUser() == SuccessCode.OKAY) {
+                this.loginButtonPress(event);
+            } else {
+                System.out.print("Registration failed.");
+            }
+        } catch (Exception error) {
+            System.out.print(error.getLocalizedMessage());
+        }
     }
 
     @FXML
@@ -95,6 +103,7 @@ public class LoginScreen {
 
         this.viewModel.usernameProperty().bindBidirectional(this.userNameTextField.textProperty());
         this.viewModel.passwordProperty().bindBidirectional(this.passwordTextField.textProperty());
+        this.viewModel.emailProperty().bindBidirectional(this.emailTextField.textProperty());
 
         assert this.loginButton != null : "fx:id=\"loginButton\" was not injected: check your FXML file 'LoginScreen.fxml'.";
         assert this.passwordTextField != null : "fx:id=\"passwordTextField\" was not injected: check your FXML file 'LoginScreen.fxml'.";

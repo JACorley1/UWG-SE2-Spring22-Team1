@@ -32,6 +32,9 @@ public class HabitViewModel {
     private StringProperty coinsLabelProperty;
     private ObjectProperty<Habit> selectedHabitProperty;
     private ListProperty<Habit> habitListProperty;
+    private BooleanProperty removeDailySelectedProperty;
+    private BooleanProperty removeWeeklySelectedProperty;
+    private StringProperty removeHabitNameProperty;
 
     /**
      * Creates a new habit view model.
@@ -48,10 +51,13 @@ public class HabitViewModel {
         this.dailySelectedProperty = new SimpleBooleanProperty();
         this.weeklySelectedProperty = new SimpleBooleanProperty();
         this.monthlySelectedProperty = new SimpleBooleanProperty();
+        this.removeDailySelectedProperty = new SimpleBooleanProperty();
+        this.removeWeeklySelectedProperty = new SimpleBooleanProperty();
         this.popupVisibleProperty = new SimpleBooleanProperty();
         this.errorVisibleProperty = new SimpleBooleanProperty();
         this.selectedHabitProperty = new SimpleObjectProperty<Habit>();
         this.habitNameProperty = new SimpleStringProperty("");
+        this.removeHabitNameProperty = new SimpleStringProperty("");
         this.coinsLabelProperty = new SimpleStringProperty("");
         this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
     }
@@ -81,11 +87,78 @@ public class HabitViewModel {
 
     }
 
-    private Frequency determineFrequency() {
-        if (this.dailySelectedProperty.getValue()) {
+    
+
+     /**
+     * Gets the server communicator.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return the server communicator
+     */
+    public ServerCommunicator getServerCommunicator() {
+        return this.serverCommunicator;
+    }
+    /**
+     * Removes a habit from the system
+     * 
+     * @precondition this.habitNameProperty.getValue() != null;
+     * @postcondition this.habitListProperty().getValue().size() ==
+     *                this.habitListProperty().getValue().size() @pre - 1;
+     */
+    public void removeHabit() {
+        if (this.removeHabitNameProperty.getValue() == null) {
+            this.errorVisibleProperty.set(true);
+            throw new IllegalArgumentException(Habit.NULL_TEXT_ERROR);
+        }
+        Habit removedHabit = null;
+        for (Habit habit : this.habitListProperty) {
+
+            if (habit.getText() == this.removeHabitNameProperty.getValue() && habit.getFrequency() == this.determineFrequency()) {
+                removedHabit = habit;
+            }
+        }
+        if (this.serverCommunicator.removeHabit(removedHabit) == SuccessCode.OKAY) {
+            this.habitListProperty.remove(removedHabit);
+            this.closePopup();
+        }
+
+    }
+
+     /**
+     * Removes a habit from the system
+     * 
+     * @precondition habitToRemove != null;
+     * @postcondition this.habitListProperty().getValue().size() ==
+     *                this.habitListProperty().getValue().size() @pre - 1;
+     * 
+     * @param habitToRemove the habit to remove.
+     */
+    public void removeHabit(Habit habitToRemove) {
+        if (habitToRemove == null) {
+            throw new IllegalArgumentException("habit can't be null");
+        }
+        if (this.serverCommunicator.removeHabit(habitToRemove) == SuccessCode.OKAY) {
+            this.habitListProperty.remove(habitToRemove);
+            this.closePopup();
+        }
+
+    }
+
+     /**
+     * Gets the currently selected frequency.
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return Frequency.
+     */
+    public Frequency determineFrequency() {
+        if (this.dailySelectedProperty.getValue() || this.removeDailySelectedProperty.getValue()) {
             return Frequency.DAILY;
         }
-        if (this.weeklySelectedProperty.getValue()) {
+        if (this.weeklySelectedProperty.getValue() || this.removeWeeklySelectedProperty.getValue()) {
             return Frequency.WEEKLY;
         }
         return Frequency.MONTHLY;
@@ -105,7 +178,6 @@ public class HabitViewModel {
      *                this.habitNameProperty().getValue().equals("")
      */
     public void closePopup() {
-        this.dailySelectedProperty.set(true);
         this.errorVisibleProperty.set(false);
         this.popupVisibleProperty.set(false);
         this.habitNameProperty.set("");
@@ -143,6 +215,30 @@ public class HabitViewModel {
      */
     public ObjectProperty<Habit> selectedHabitProperty() {
         return this.selectedHabitProperty;
+    }
+
+    /**
+     * The remove daily selected property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove daily selected property.
+     */
+    public BooleanProperty removeDailySelectedProperty() {
+        return this.removeDailySelectedProperty;
+    }
+
+     /**
+     * The remove weekly selected property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove weekly selected property.
+     */
+    public BooleanProperty removeWeeklySelectedProperty() {
+        return this.removeWeeklySelectedProperty;
     }
 
     /**
@@ -230,6 +326,18 @@ public class HabitViewModel {
     }
 
     /**
+     * The remove habit name property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove habit name property.
+     */
+    public StringProperty removeHabitNameProperty() {
+        return this.removeHabitNameProperty;
+    }
+
+    /**
      * The habit name property.
      * 
      * @precondition None.
@@ -258,6 +366,5 @@ public class HabitViewModel {
             this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
         }
     }
-
 
 }

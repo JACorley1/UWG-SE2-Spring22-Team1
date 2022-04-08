@@ -85,8 +85,86 @@ public class HabitScreenCodeBehind {
     private TextField habitNameTextField;
 
     @FXML
+    private Button removeHabitsButton;
+
+    @FXML
+    private AnchorPane removeHabitAnchorPane;
+
+    @FXML
+    private RadioButton removeDailyRadioButton;
+
+    @FXML
+    private ToggleGroup updateFrequencyToggleGroup;
+
+    @FXML
+    private RadioButton removeWeeklyRadioButton;
+
+    @FXML
+    private RadioButton removeMonthlyRadioButton;
+
+    @FXML
+    private Button updateConfirmButton;
+
+    @FXML
+    private Button removeButton;
+
+    @FXML
+    private Label updateErrorLabel;
+
+    @FXML
+    private TextField updateHabitNameTextField;
+
+    @FXML
+    private AnchorPane addHabitsAnchorPane;
+
+    @FXML
+    private Button removeCancelButton;
+
+    @FXML
+    private Label noSelectedHabitLabel;
+
+    @FXML
+    void removeButtonClicked(ActionEvent event) {
+        try {
+            this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
+            this.updateHabitNameTextField.clear();
+        } catch (Exception err) {
+            System.out.println(err.getMessage());
+        }
+
+    }
+
+    @FXML
+    void removeHabitsButtonClicked(ActionEvent event) {
+        if (this.habitListView.getSelectionModel().getSelectedItem() == null) {
+            this.noSelectedHabitLabel.setVisible(true);
+        } else {
+            this.noSelectedHabitLabel.setVisible(false);
+            this.addHabitBackgroundAnchorPane.setVisible(true);
+            this.removeHabitAnchorPane.setVisible(true);
+            this.addHabitsAnchorPane.setVisible(false);
+        }
+    }
+
+    @FXML
+    void confirmUpdateHabitButtonClicked(ActionEvent event) {
+        Habit updatedHabit = new Habit(this.viewModel.removeHabitNameProperty().getValue(), this.viewModel.determineFrequency());
+        this.habitListView.getSelectionModel().getSelectedItem().setFrequency(this.viewModel.determineFrequency());
+        int index = this.habitListView.getSelectionModel().getSelectedIndex();
+        this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
+        this.habitListView.getItems().add(index, updatedHabit);
+        this.viewModel.getServerCommunicator().addHabit(updatedHabit);
+        this.habitListView.refresh();
+        this.addHabitBackgroundAnchorPane.setVisible(false);
+        this.removeHabitAnchorPane.setVisible(false);
+        this.updateHabitNameTextField.clear();
+    }
+
+    @FXML
     void addButtonClicked(ActionEvent event) {
         this.addHabitBackgroundAnchorPane.setVisible(true);
+        this.addHabitsAnchorPane.setVisible(true);
+        this.removeHabitAnchorPane.setVisible(false);
     }
 
     @FXML
@@ -173,19 +251,24 @@ public class HabitScreenCodeBehind {
         this.viewModel.dailySelectedProperty().bindBidirectional(this.dailyRadioButton.selectedProperty());
         this.viewModel.weeklySelectedProperty().bindBidirectional(this.weeklyRadioButton.selectedProperty());
         this.viewModel.monthlySelectedProperty().bindBidirectional(this.monthlyRadioButton.selectedProperty());
+        this.viewModel.removeDailySelectedProperty().bindBidirectional(this.removeDailyRadioButton.selectedProperty());
+        this.viewModel.removeWeeklySelectedProperty().bindBidirectional(this.removeWeeklyRadioButton.selectedProperty());
         this.viewModel.popupVisibleProperty().bindBidirectional(this.addHabitBackgroundAnchorPane.visibleProperty());
         this.viewModel.errorVisibleProperty().bindBidirectional(this.habitNameErrorLabel.visibleProperty());
         this.viewModel.habitNameProperty().bindBidirectional(this.habitNameTextField.textProperty());
+        this.viewModel.removeHabitNameProperty().bindBidirectional(this.updateHabitNameTextField.textProperty());
         this.viewModel.habitListProperty().bindBidirectional(this.habitListView.itemsProperty());
         this.viewModel.coinsLabelProperty().bindBidirectional(this.coinsLabel.textProperty());
 
         this.viewModel.habitListProperty().addListener((observable, oldValue, newValue) -> {
             var list = this.habitListView.itemsProperty().get();
-            Habit newestItem = list.get(list.size() - 1);
+            if (!list.isEmpty()) {
+                Habit newestItem = list.get(list.size() - 1);
 
-            newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
-                this.viewModel.sendCompletedHabit(newestItem);
-            });
+                newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
+                    this.viewModel.sendCompletedHabit(newestItem);
+                });
+            }
         });
     }
 

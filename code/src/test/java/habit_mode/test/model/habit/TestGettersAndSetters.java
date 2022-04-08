@@ -27,7 +27,7 @@ class TestGettersAndSetters {
 
         assertEquals("Habit", habit.getText(), "Checking that the text is set");
     }
-
+    
     @Test
     void testsetId() {
         Habit habit = new Habit("Hello!", Frequency.DAILY);
