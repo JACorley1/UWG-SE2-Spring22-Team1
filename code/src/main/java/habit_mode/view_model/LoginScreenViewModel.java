@@ -18,6 +18,7 @@ public class LoginScreenViewModel {
     private ServerCommunicator serverCommunicator;
     private StringProperty usernameProperty;
     private StringProperty passwordProperty;
+    private StringProperty emailProperty;
 
     /** 
      * Creates a new LoginScreenViewModel.
@@ -31,6 +32,7 @@ public class LoginScreenViewModel {
         this.serverCommunicator = new LocalServerCommunicator();
         this.usernameProperty = new SimpleStringProperty();
         this.passwordProperty = new SimpleStringProperty();
+        this.emailProperty = new SimpleStringProperty();
     }
 
     /**
@@ -67,6 +69,15 @@ public class LoginScreenViewModel {
     }
 
     /**
+     * Gets the email property.
+     * 
+     * @return The email property.
+     */
+    public StringProperty emailProperty() {
+        return this.emailProperty;
+    }
+
+    /**
      * Sets the server communicator.
      * 
      * @precondition serverCommunicator != null
@@ -92,5 +103,19 @@ public class LoginScreenViewModel {
      */
     public ServerCommunicator getServerCommunicator() {
         return this.serverCommunicator;
+    }
+
+    /**
+     * Registers the user's credentials into the server
+     * 
+     * @precondition None
+     * @postcondition None
+     * 
+     * @return  OKAY(0) if everything works fine, USERNAME_ALREADY_EXISTS(20) if the username is already in use
+     *          INVALID_USERNAME(21) if the username is invalid, INVALID_PASSWORD(22) if the password is Invalid
+     *          INVALID_EMAIL(23) if the email entered is invalid.
+     */
+    public SuccessCode registerUser() {
+        return this.serverCommunicator.registerCredentials(this.usernameProperty.getValue(), this.passwordProperty.getValue(), this.emailProperty.getValue());
     }
 }
