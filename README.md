@@ -9,6 +9,8 @@ Habit Mode is a habit-reinforcement application that encourages the development 
   - The `coverage` and `pytest` modules must be installed through pip to run the script.
   - Coverage can be checked by opening `server/tests/htmlcov/index.html`.
   - Adding `-o` will display the code coverage in a webpage immediately after finishing.
+- *NOTE ABOUT TESTING SERVERSERVERCOMMUNICATOR*
+  - Currently, there is not a test double implemented for ServerServerCommunicator. Its tests will only pass if the server is currently running.
 
 ## Running
 1. Ensure python's zmq module is installed by running `pip install zmq`.
