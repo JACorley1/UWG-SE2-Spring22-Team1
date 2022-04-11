@@ -1,15 +1,23 @@
 from datetime import datetime, timedelta
 
 def tomorrow():
-    return datetime.today() + timedelta(days=1)
+    tomorrow = datetime.today() + timedelta(days=1)
+    tomorrow.replace(hour = 0, minute=0, second=0, microsecond=0)
+    return tomorrow
 
 def yesterday():
-    return datetime.today() + timedelta(days=-1)
+    yesterday = datetime.today() + timedelta(days=-1)
+    yesterday.replace(hour = 0, minute=0, second=0, microsecond=0)
+    return yesterday
 
 def next_sunday():
     today = datetime.today()
-    return today + timedelta(days=7 - today.weekday())
+    next_sunday = today + timedelta(days=7 - today.weekday())
+    next_sunday.replace(hour = 0, minute=0, second=0, microsecond=0)
+    return next_sunday
 
 def first_of_next_month():
     today = datetime.today()
-    return (today.replace(day=1) + timedelta(days=32)).replace(day=1)
+    next_month = (today.replace(day=1) + timedelta(days=32)).replace(day=1)
+    next_month.replace(hour = 0, minute=0, second=0, microsecond=0)
+    return next_month
