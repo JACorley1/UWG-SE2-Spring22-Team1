@@ -188,13 +188,14 @@ public class HabitScreenCodeBehind {
     @FXML
     void confirmCompleteHabitButtonClicked(ActionEvent event) {
         ArrayList<Habit> habits = new ArrayList<Habit>();
-        for (Habit habit : this.habitListView.getItems()) {
-            if (habit.isComplete()) {
-                habits.add(habit);
+        for (Habit item : this.viewModel.habitListProperty().get()) {
+            if (item.completionProperty().get()) {
+                habits.add(item);
             }
         }
 
         for (Habit habit : habits) {
+            this.viewModel.sendCompletedHabit(habit);
             this.completedHabitListView.getItems().add(habit);
             this.habitListView.getItems().remove(habit);
 
@@ -310,16 +311,7 @@ public class HabitScreenCodeBehind {
         this.viewModel.habitListProperty().bindBidirectional(this.habitListView.itemsProperty());
         this.viewModel.coinsLabelProperty().bindBidirectional(this.coinsLabel.textProperty());
 
-        this.viewModel.habitListProperty().addListener((observable, oldValue, newValue) -> {
-            var list = this.habitListView.itemsProperty().get();
-            if (!list.isEmpty()) {
-                Habit newestItem = list.get(list.size() - 1);
-
-                newestItem.completionProperty().addListener((obs, wasOn, isNowOn) -> {
-                    this.viewModel.sendCompletedHabit(newestItem);
-                });
-            }
-        });
+        
     }
 
     private void setHabitListeners() {
