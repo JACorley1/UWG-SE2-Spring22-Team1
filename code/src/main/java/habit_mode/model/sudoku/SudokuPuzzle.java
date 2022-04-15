@@ -222,14 +222,14 @@ public class SudokuPuzzle {
         if (!this.checkUniqueValues(unique)) {
             return false;
         }
-        for (int i = 0; i < PUZZLE_SIZE - 2; i += 3) {
-            for (int j = 0; j < PUZZLE_SIZE - 2; j += 3) {
+        for (int column = 0; column < PUZZLE_SIZE - 2; column += 3) {
+            for (int row = 0; row < PUZZLE_SIZE - 2; row += 3) {
                 Arrays.fill(unique, false);
-                for (int k = 0; k < 3; k++) {
-                    for (int e = 0; e < 3; e++) {
+                for (int squareColumn = 0; squareColumn < 3; squareColumn++) {
+                    for (int squareRow = 0; squareRow < 3; squareRow++) {
                         
-                        int x = i + k;
-                        int y = j + e;
+                        int x = column + squareColumn;
+                        int y = row + squareRow;
                         int value = this.numbers[x][y];
                         if (unique[value]) {
                             return false;
@@ -244,23 +244,23 @@ public class SudokuPuzzle {
     }
 
     private boolean checkUniqueValues(boolean[] unique) {
-        for (int i = 0; i < PUZZLE_SIZE; i++) {
+        for (int x = 0; x < PUZZLE_SIZE; x++) {
             Arrays.fill(unique, false);
 
-            for (int j = 0; j < PUZZLE_SIZE; j++) {
-                int value = this.numbers[i][j];
+            for (int y = 0; y < PUZZLE_SIZE; y++) {
+                int value = this.numbers[x][y];
                 if (unique[value]) {
                     return false;
                 }
                 unique[value] = true;
             }
         }
-        for (int i = 0; i < PUZZLE_SIZE; i++) {
+        for (int y = 0; y < PUZZLE_SIZE; y++) {
             Arrays.fill(unique, false);
     
-            for (int j = 0; j < PUZZLE_SIZE; j++) {
+            for (int x = 0; x < PUZZLE_SIZE; x++) {
 
-                int value = this.numbers[j][i];
+                int value = this.numbers[x][y];
 
                 if (unique[value]) {
                     return false;
@@ -272,10 +272,10 @@ public class SudokuPuzzle {
     }
 
     private boolean isinRange(int[][] puzzle) {
-        for (int i = 0; i < PUZZLE_SIZE; i++) {
-            for (int j = 0; j < PUZZLE_SIZE; j++) {
+        for (int x = 0; x < PUZZLE_SIZE; x++) {
+            for (int y = 0; y < PUZZLE_SIZE; y++) {
                 
-                if (puzzle[i][j] <= 0 || puzzle[i][j] > 9) {
+                if (puzzle[x][y] <= 0 || puzzle[x][y] > 9) {
                     return false;
                 }
             }
