@@ -213,20 +213,17 @@ public class SudokuPuzzle {
      * @return [true] iff the game has been completed, otherwise [false]
      */
     public boolean isComplete() {
-       
         if (!this.isinRange(this.numbers)) {
             return false;
         } 
 
-      boolean[] unique = new boolean[PUZZLE_SIZE + 1];
+        boolean[] unique = new boolean[PUZZLE_SIZE + 1];
  
-       if (!this.checkUniqueValues(unique)) {
-        return false;
-       }
+        if (!this.checkUniqueValues(unique)) {
+            return false;
+        }
         for (int i = 0; i < PUZZLE_SIZE - 2; i += 3) {
-
             for (int j = 0; j < PUZZLE_SIZE - 2; j += 3) {
-
                 Arrays.fill(unique, false);
                 for (int k = 0; k < 3; k++) {
                     for (int e = 0; e < 3; e++) {
@@ -244,10 +241,7 @@ public class SudokuPuzzle {
         }
     
         return true;
-
-
     }
-
 
     private boolean checkUniqueValues(boolean[] unique) {
         for (int i = 0; i < PUZZLE_SIZE; i++) {
@@ -276,17 +270,17 @@ public class SudokuPuzzle {
         }
         return true;
     }
+
     private boolean isinRange(int[][] puzzle) {
         for (int i = 0; i < PUZZLE_SIZE; i++) {
             for (int j = 0; j < PUZZLE_SIZE; j++) {
                 
-            
                 if (puzzle[i][j] <= 0 || puzzle[i][j] > 9) {
                     return false;
                 }
             }
         }
-    return true;
+        return true;
     }
 
 
@@ -321,5 +315,4 @@ public class SudokuPuzzle {
         this.checkColumnAndRow(column, row);
         return this.defaultAnswer[row][column];
     }
-
 }
