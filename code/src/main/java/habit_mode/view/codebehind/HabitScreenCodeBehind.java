@@ -173,8 +173,8 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void confirmUpdateHabitButtonClicked(ActionEvent event) {
-        Habit updatedHabit = new Habit(this.viewModel.removeHabitNameProperty().getValue(), this.viewModel.determineFrequency());
-        this.habitListView.getSelectionModel().getSelectedItem().setFrequency(this.viewModel.determineFrequency());
+        Habit updatedHabit = new Habit(this.viewModel.removeHabitNameProperty().getValue(), this.viewModel.determineRemoveFrequency());
+        this.habitListView.getSelectionModel().getSelectedItem().setFrequency(this.viewModel.determineRemoveFrequency());
         int index = this.habitListView.getSelectionModel().getSelectedIndex();
         this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
         this.habitListView.getItems().add(index, updatedHabit);
@@ -246,7 +246,7 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void initialize() {
-        this.viewModel = new HabitViewModel();
+        this.viewModel = new HabitViewModel(true);
 
         this.assertFields();
 
