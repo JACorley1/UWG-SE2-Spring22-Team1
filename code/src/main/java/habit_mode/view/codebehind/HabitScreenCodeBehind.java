@@ -12,10 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.view_model.HabitViewModel;
 
@@ -160,6 +162,8 @@ public class HabitScreenCodeBehind {
             this.removeHabitAnchorPane.setVisible(true);
             this.addHabitsAnchorPane.setVisible(false);
             this.completeHabitAnchorPane.setVisible(false);
+            this.updateHabitNameTextField.setText(this.habitListView.getSelectionModel().getSelectedItem().getText());
+            this.updateFrequencyToggleGroup.selectToggle(this.selectedFrequency());
         }
     }
 
@@ -174,7 +178,6 @@ public class HabitScreenCodeBehind {
     @FXML
     void confirmUpdateHabitButtonClicked(ActionEvent event) {
         Habit updatedHabit = new Habit(this.viewModel.removeHabitNameProperty().getValue(), this.viewModel.determineRemoveFrequency());
-        this.habitListView.getSelectionModel().getSelectedItem().setFrequency(this.viewModel.determineRemoveFrequency());
         int index = this.habitListView.getSelectionModel().getSelectedIndex();
         this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
         this.habitListView.getItems().add(index, updatedHabit);
@@ -197,7 +200,6 @@ public class HabitScreenCodeBehind {
         for (Habit habit : habits) {
             this.completedHabitListView.getItems().add(habit);
             this.habitListView.getItems().remove(habit);
-
         }
         this.completeHabitAnchorPane.setVisible(false);
         this.addHabitBackgroundAnchorPane.setVisible(false);
@@ -337,5 +339,16 @@ public class HabitScreenCodeBehind {
                 return habit.completionProperty();
             }
         }));
+    }
+
+    private Toggle selectedFrequency() {
+        Frequency selectedHabitsFrequency = this.habitListView.getSelectionModel().getSelectedItem().getFrequency();
+        if (selectedHabitsFrequency == Frequency.DAILY) {
+            return this.removeDailyRadioButton;
+        }
+        if (selectedHabitsFrequency == Frequency.WEEKLY) {
+            return this.removeWeeklyRadioButton;
+        }
+        return this.removeMonthlyRadioButton;
     }
 }
