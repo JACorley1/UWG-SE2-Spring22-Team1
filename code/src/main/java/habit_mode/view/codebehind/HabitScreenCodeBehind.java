@@ -15,8 +15,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import habit_mode.model.Habit;
+import habit_mode.model.ServerServerCommunicator;
 import habit_mode.view_model.HabitViewModel;
 
 /**
@@ -152,6 +154,7 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void removeHabitsButtonClicked(ActionEvent event) {
+        this.ensureToken();
         if (this.habitListView.getSelectionModel().getSelectedItem() == null) {
             this.noSelectedHabitLabel.setVisible(true);
         } else {
@@ -165,6 +168,7 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void sendCompleteHabitsButtonClicked(ActionEvent event) {
+        this.ensureToken();
         this.addHabitBackgroundAnchorPane.setVisible(true);
         this.removeHabitAnchorPane.setVisible(false);
         this.addHabitsAnchorPane.setVisible(false);
@@ -207,6 +211,7 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void addButtonClicked(ActionEvent event) {
+        this.ensureToken();
         this.addHabitBackgroundAnchorPane.setVisible(true);
         this.addHabitsAnchorPane.setVisible(true);
         this.removeHabitAnchorPane.setVisible(false);
@@ -246,7 +251,7 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void initialize() {
-        this.viewModel = new HabitViewModel(true);
+        this.viewModel = new HabitViewModel();
 
         this.assertFields();
 
@@ -337,5 +342,10 @@ public class HabitScreenCodeBehind {
                 return habit.completionProperty();
             }
         }));
+    }
+
+    private void ensureToken() {
+        Window window = this.habitNameTextField.getScene().getWindow();
+        ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) window.getUserData());
     }
 }

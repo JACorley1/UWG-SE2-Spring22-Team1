@@ -137,6 +137,20 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return this.authenticationToken;
     }
 
+    /**
+     * Simple setter for the authentication token.
+     * 
+     * @precondition token != null 
+     * 
+     * @param token The string to set as the new authentication token.
+     */
+    public void setToken(String token) {
+        if (token == null) {
+            return;
+        }
+        this.authenticationToken = token;
+    }
+
     @Override
     public SuccessCode registerCredentials(String username, String password, String email) {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_REGISTER_USER);

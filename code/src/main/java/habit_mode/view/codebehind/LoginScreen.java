@@ -66,7 +66,7 @@ public class LoginScreen {
                 Scene scene = new Scene(loader);
 
                 Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
+                app_stage.setUserData(this.viewModel.getAuthenticationToken());
                 app_stage.setScene(scene); 
 
                 app_stage.show();
