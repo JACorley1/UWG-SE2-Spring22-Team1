@@ -81,7 +81,4 @@ def generate_sudoku_puzzle() -> SudokuPuzzle:
     _generate_cells(puzzle)
     _set_default_cells(puzzle)
 
-    for row in puzzle._numbers:
-        print(" ".join(map(str, row)))
-
     return puzzle
