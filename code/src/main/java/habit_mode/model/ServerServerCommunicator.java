@@ -32,18 +32,21 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_REGISTER_USER = "register_user";
     private static final String REQUEST_TYPE_LOGIN = "login";
     private static final String REQUEST_TYPE_ADD_HABIT = "add_habit";
-   // private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
-   // private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
+    private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
+    private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
     private static final String TCP_CONNECTION_ADDRESS = "tcp://127.0.0.1:5555";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
+    private static final String COINS = "coins";
     private static final String SUCCESS_CODE = "success_code";
     private static final String AUTHENTICATION_TOKEN = "authentication_token";
     private static final String FIELDS = "fields";
     private static final String HABITS = "habits";
     private static final String HABIT_NAME = "habit_name";
     private static final String HABIT_FREQ = "habit_frequency";
+    private static final String HABIT_ID = "habit_id";
+    private static final String HABIT_IDS = "habit_ids";
     
     
     private static final ZContext CONTEXT = new ZContext();
@@ -58,6 +61,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private String authenticationToken;
     private String jsonResponse;
     private String[] fields;
+    private int coins;
 
     /**
      * The default constructor for ServerServerCommunicator. 
@@ -76,6 +80,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
         this.message = new HashMap<String, Object>();
         this.authenticationToken = "";
         this.fields = new String[1];
+        this.coins = 0;
     }
 
     /**
@@ -162,7 +167,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public int getCoins() {
-        return 0;
+        return this.coins;
     }
 
     @Override
@@ -186,6 +191,10 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public boolean setCoins(int amount) {
+        this.coins = amount;
+        if (this.coins == amount) {
+            return true;
+        }
         return false;
     }
 
@@ -214,13 +223,28 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public SuccessCode removeHabit(Habit habit) {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_REMOVE_HABIT);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.message.put(HABIT_ID, habit.getId());
+        
+        this.sendMessage();
 
-        return null;
+        return SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
     }
 
     @Override
     public SuccessCode completeHabit(Habit habit) {
-        return null;
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_COMPLETE_HABIT);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        int[] ids = {habit.getId()};
+
+        this.message.put(HABIT_IDS, this.gson.toJsonTree(ids));
+
+        this.sendMessage();
+        Double coins = (Double) this.response.get(COINS);
+        this.setCoins(coins.intValue());
+
+        return SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
     }
 
     @Override

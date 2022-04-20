@@ -145,7 +145,7 @@ public class HabitViewModel {
         Habit removedHabit = null;
         for (Habit habit : this.habitListProperty) {
 
-            if (habit.getText() == this.removeHabitNameProperty.getValue() && habit.getFrequency() == this.determineFrequency()) {
+            if (habit.getText() == this.removeHabitNameProperty.getValue() && habit.getFrequency() == this.determineRemoveFrequency()) {
                 removedHabit = habit;
             }
         }
@@ -185,10 +185,28 @@ public class HabitViewModel {
      * @return Frequency.
      */
     public Frequency determineFrequency() {
-        if (this.dailySelectedProperty.getValue() || this.removeDailySelectedProperty.getValue()) {
+        if (this.dailySelectedProperty.getValue()) {
             return Frequency.DAILY;
         }
-        if (this.weeklySelectedProperty.getValue() || this.removeWeeklySelectedProperty.getValue()) {
+        if (this.weeklySelectedProperty.getValue()) {
+            return Frequency.WEEKLY;
+        }
+        return Frequency.MONTHLY;
+    }
+
+    /**
+     * Gets the currently selected remove frequency.
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return Frequency.
+     */
+    public Frequency determineRemoveFrequency() {
+        if (this.removeDailySelectedProperty.getValue()) {
+            return Frequency.DAILY;
+        }
+        if (this.removeWeeklySelectedProperty.getValue()) {
             return Frequency.WEEKLY;
         }
         return Frequency.MONTHLY;
