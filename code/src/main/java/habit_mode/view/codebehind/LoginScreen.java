@@ -62,11 +62,11 @@ public class LoginScreen {
         try {
             if (this.viewModel.validateLogin() == SuccessCode.OKAY) {
                 Parent loader = FXMLLoader.load(getClass().getResource("HabitScreen.fxml"));
+                loader.setUserData(this.viewModel.getAuthenticationToken());
 
                 Scene scene = new Scene(loader);
 
                 Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                app_stage.setUserData(this.viewModel.getAuthenticationToken());
                 app_stage.setScene(scene); 
 
                 app_stage.show();
