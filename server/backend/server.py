@@ -1,9 +1,12 @@
 import json
-from typing import Any, Iterable, MutableMapping, Optional
+from typing import Any, List, MutableMapping, Optional, Tuple
 from backend.user_data import UserData
 from backend.authentication_manager import AuthenticationManager
 from backend.service_manager import ServiceManager
+from backend.sudoku_puzzle import SudokuPuzzle, PUZZLE_SIZE, HINT_COST
+import backend.sudoku_generator
 import zmq
+
 
 class _RequestHandler:
     """
@@ -415,6 +418,180 @@ class _RequestHandler:
             "coins": user_data.coins
         }
 
+    def _generate_sudoku_puzzle(self, token: str) -> MutableMapping[str, Any]:
+        """
+        Generates a sudoku puzzle.
+
+        Precondition:  isinstance(token, str)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise TypeError("token must be a str")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        user_data: Optional[UserData] = self._service_manager.get_data_for_user(username)
+
+        if user_data is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        sudoku_puzzle: SudokuPuzzle = backend.sudoku_generator.generate_sudoku_puzzle()
+        user_data.sudoku_puzzle = sudoku_puzzle
+
+        return {
+            "success_code": 0,
+            "sudoku_puzzle": {
+                "numbers": user_data.sudoku_puzzle.numbers,
+                "number_locks": user_data.sudoku_puzzle.number_locks,
+            }
+        }
+
+    def _update_sudoku_puzzle(self, token: str, numbers: List[List[int]]):
+        """
+        Updates the sudoku puzzle.
+
+        Precondition:  isinstance(token, str) and
+                       isinstance(numbers, list)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+                 numbers: The numbers to update the puzzle with.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        if not isinstance(numbers, list):
+            raise Exception("numbers must be a list")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": "Invalid authentication token"
+            }
+
+        if len(numbers) != PUZZLE_SIZE:
+            return {
+                "success_code": 64,
+                "error_message": "Invalid puzzle size"
+            }
+        for row in numbers:
+            if len(row) != PUZZLE_SIZE:
+                return {
+                    "success_code": 64,
+                    "error_message": "Invalid puzzle size"
+                }
+
+        user_data: Optional[UserData] = self._service_manager.get_data_for_user(username)
+
+        if user_data is None:
+            return {
+                "success_code": 14,
+                "error_message": "Invalid authentication token"
+            }
+
+        if user_data.sudoku_puzzle is None:
+            return {
+                "success_code": 61,
+                "error_message": "No puzzle in progress"
+            }
+
+        puzzle: SudokuPuzzle = user_data.sudoku_puzzle
+
+        for row in range(PUZZLE_SIZE):
+            for col in range(PUZZLE_SIZE):
+                cur_number = numbers[row][col]
+                cur_colution = puzzle.solution[row][col]
+                if cur_number not in range(PUZZLE_SIZE + 1):
+                    return {
+                        "success_code": 60,
+                        "error_message": f"Invalid number ({row}, {col})"
+                    }
+                if puzzle.is_number_locked_at(row, col) and cur_number != cur_colution:
+                    return {
+                        "success_code": 62,
+                        "error_message": f"Can't change locked number ({row}, {col})"
+                    }
+        
+        for row in range(PUZZLE_SIZE):
+            for col in range(PUZZLE_SIZE):
+                puzzle.set_number_at(row, col, numbers[row][col])
+        
+        return {
+            "success_code": 0,
+        }
+
+    def _buy_hint(self, token: str) -> MutableMapping[str, Any]:
+        """
+        Buys a hint.
+
+        Precondition:  isinstance(token, str)
+        Postcondition: None
+
+        Params - token: The specified authentication token.
+        Return - The response to the client.
+        """
+        if not isinstance(token, str):
+            raise Exception("token must be a str")
+        
+        username: str = self._authentication_manager.get_username_for_token(token)
+        if username is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        user_data: Optional[UserData] = self._service_manager.get_data_for_user(username)
+
+        if user_data is None:
+            return {
+                "success_code": 14,
+                "error_message": f"Invalid authentication token"
+            }
+
+        if user_data.coins < HINT_COST:
+            return {
+                "success_code": 70,
+                "error_message": f"Not enough coins (have {user_data.coins}, need {HINT_COST})"
+            }
+
+        sudoku_puzzle: Optional[SudokuPuzzle] = user_data.sudoku_puzzle
+
+        if sudoku_puzzle is None:
+            return {
+                "success_code": 61,
+                "error_message": f"No puzzle in progress"
+            }
+        
+        hint_coords: Optional[Tuple[int, int]] = sudoku_puzzle.unlock_random_hint()
+        if hint_coords is None:
+            return {
+                "success_code": 63,
+                "error_message": "No valid cells for hint"
+            }
+        row: int = hint_coords[0]
+        col: int = hint_coords[1]
+
+        user_data.coins -= HINT_COST
+        return {
+            "success_code": 0,
+            "number": sudoku_puzzle.get_number_at(row, col),
+            "row": row,
+            "col": col,
+            "coins": user_data.coins,
+        }
+
     def handle_request(self, request: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
         """
         Accepts a request from the client and performs an action depending on the request body.
@@ -440,6 +617,7 @@ class _RequestHandler:
             }
 
         missing_fields: list[str]
+
         if request["request_type"] == "register_user" :
             missing_fields = self._get_missing_fields(request, ["username", "password", "email"])
             if len(missing_fields) > 0:
@@ -510,6 +688,36 @@ class _RequestHandler:
             else:
                 response = self._complete_habits(request["authentication_token"], request["habit_ids"])
 
+        elif request["request_type"] == "generate_sudoku_puzzle":
+            missing_fields = self._get_missing_fields(request, ["authentication_token"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._generate_sudoku_puzzle(request["authentication_token"])
+
+        elif request["request_type"] == "update_sudoku_puzzle":
+            missing_fields = self._get_missing_fields(request, ["authentication_token", "numbers"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._update_sudoku_puzzle(request["authentication_token"], request["numbers"])
+        
+        elif request["request_type"] == "buy_hint":
+            missing_fields = self._get_missing_fields(request, ["authentication_token"])
+            if len(missing_fields) > 0:
+                response = {
+                    "success_code": 12,
+                    "error_message": f"Malformed Request, missing Request Fields ({', '.join(missing_fields)})"
+                }
+            else:
+                response = self._buy_hint(request["authentication_token"])
+
         else :
             error_message = f"Unsupported Request Type ({request['request_type']})"
             response = {"success_code": 11, "error_message": error_message}
@@ -523,7 +731,7 @@ class Server:
     @author Team 1
     @version Spring 2022
     """
-    def run(self, socket_info: tuple[Any], service_manager: ServiceManager, authentication_manager: AuthenticationManager) -> None:
+    def run(self, socket_info: tuple[Any, Any], service_manager: ServiceManager, authentication_manager: AuthenticationManager) -> None:
         """
         Launches the server with a specified ServiceManager.
         The server will run indefinitely.

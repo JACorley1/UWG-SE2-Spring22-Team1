@@ -1,7 +1,9 @@
-from typing import List
+import random
+from typing import List, Optional, Tuple
 
 PUZZLE_SIZE: int = 9
 SQUARE_SIZE: int = 3
+HINT_COST: int = 20
 
 class SudokuPuzzle:
     _numbers: List[List[int]]
@@ -64,6 +66,29 @@ class SudokuPuzzle:
         if self._square_contains_number(row, col, number):
             return False
         return True
+
+    def unlock_random_hint(self) -> Optional[Tuple[int, int]]:
+        """
+        Randomly selects a cell that isn't locked, replaces the number with the solution, and
+        locks the cell.
+
+        Precondition:  None
+        Postcondition: A cell is locked and the number is replaced with the solution.
+
+        Params: None
+        Return: A tuple containing the row and column of the cell that was filled if a hint was 
+                given, otherwise None.
+        """
+        coords: List[Tuple[int, int]] = [(row, col) for row in range(PUZZLE_SIZE) for col in range(PUZZLE_SIZE)]
+        unlocked_cells: List[Tuple[int, int]] = list(filter(lambda coord: not self._number_locks[coord[0]][coord[1]], coords))
+
+        if not unlocked_cells:
+            return None
+        
+        hint_cell = random.choice(unlocked_cells)
+        self._numbers[hint_cell[0]][hint_cell[1]] = self._solution[hint_cell[0]][hint_cell[1]]
+        self._number_locks[hint_cell[0]][hint_cell[1]] = True
+        return hint_cell
 
     def _column_contains_number(self, row: int, col: int, number: int) -> bool:
         """
