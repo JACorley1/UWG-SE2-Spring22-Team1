@@ -203,7 +203,13 @@ class _RequestHandler:
             elif field == "coins":
                 message["coins"] = user_data.coins
             elif field == "sudoku_puzzle":
-                message["sudoku_puzzle"] = user_data.sudoku_puzzle
+                if user_data.sudoku_puzzle is None:
+                    message["sudoku_puzzle"] = None
+                else:
+                    message["sudoku_puzzle"] = {
+                        "numbers": user_data.sudoku_puzzle.numbers,
+                        "number_locks": user_data.sudoku_puzzle.number_locks,
+                    }
             elif field == "habits":
                 message["habits"] = list(map(lambda habit: habit.create_json_dict(), user_data.habits.values()))
             else:

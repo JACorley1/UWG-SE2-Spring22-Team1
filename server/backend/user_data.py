@@ -286,7 +286,7 @@ class UserData:
                        isinstance(sudoku_puzzle, SudokuPuzzle)
         Postcondition: self.get_sudoku_puzzle() == sudoku_puzzle
         """
-        if sudoku_puzzle is not None and not isinstance(sudoku_puzzle, str):
+        if sudoku_puzzle is not None and not isinstance(sudoku_puzzle, SudokuPuzzle):
             raise Exception("sudoku_puzzle must be a SudokuPuzzle")
         self._sudoku_puzzle = sudoku_puzzle
 
