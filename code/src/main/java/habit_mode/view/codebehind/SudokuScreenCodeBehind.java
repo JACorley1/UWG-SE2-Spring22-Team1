@@ -154,7 +154,10 @@ public class SudokuScreenCodeBehind {
                 field.setPrefWidth(50);
                 field.setAlignment(Pos.CENTER);
                 field.setFont(Font.font(20));
+                
                 this.sudokuBoard[row][column] = field;
+                this.sudokuPane.setHgap(5);
+                this.sudokuPane.setVgap(35);
                 this.sudokuPane.add(field, row, column);
             }
         }
