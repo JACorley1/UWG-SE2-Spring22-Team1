@@ -176,6 +176,28 @@ public class HabitViewModel {
 
     }
 
+    /**
+     * Updates the currently selected habit
+     * 
+     * @precondition index >= 0 & index < this.habitListProperty().getValue().size();
+     * @postcondition this.selectedHabitProperty().getText() == this.removeHabitNameProperty()
+     *                this.selectedHabitProperty().getFrequency() == the selected frequency property;
+     * 
+     * @param index the index of the habit to update.
+     */
+    public void updateHabit(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("the index cannot be less than 0");
+        }
+        if (index > this.habitListProperty.getValue().size()) {
+            throw new IllegalArgumentException("the index cannot be greater than the size of the habit list");
+        }
+        Habit updatedHabit = new Habit(this.removeHabitNameProperty().getValue(), this.determineRemoveFrequency());
+        this.removeHabit(this.habitListProperty.getValue().get(index));
+        this.habitListProperty.getValue().add(index, updatedHabit);
+        this.getServerCommunicator().addHabit(updatedHabit);
+    }
+
      /**
      * Gets the currently selected frequency.
      * 

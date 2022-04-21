@@ -115,6 +115,9 @@ public class HabitScreenCodeBehind {
     private Label updateErrorLabel;
 
     @FXML
+    private Label invalidHabitTextLabel;
+
+    @FXML
     private TextField updateHabitNameTextField;
 
     @FXML
@@ -156,6 +159,7 @@ public class HabitScreenCodeBehind {
     void removeHabitsButtonClicked(ActionEvent event) {
         if (this.habitListView.getSelectionModel().getSelectedItem() == null) {
             this.noSelectedHabitLabel.setVisible(true);
+            this.invalidHabitTextLabel.setVisible(false);
         } else {
             this.noSelectedHabitLabel.setVisible(false);
             this.addHabitBackgroundAnchorPane.setVisible(true);
@@ -177,15 +181,19 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void confirmUpdateHabitButtonClicked(ActionEvent event) {
-        Habit updatedHabit = new Habit(this.viewModel.removeHabitNameProperty().getValue(), this.viewModel.determineRemoveFrequency());
-        int index = this.habitListView.getSelectionModel().getSelectedIndex();
-        this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
-        this.habitListView.getItems().add(index, updatedHabit);
-        this.viewModel.getServerCommunicator().addHabit(updatedHabit);
-        this.habitListView.refresh();
-        this.addHabitBackgroundAnchorPane.setVisible(false);
-        this.removeHabitAnchorPane.setVisible(false);
-        this.updateHabitNameTextField.clear();
+        try {
+            int index = this.habitListView.getSelectionModel().getSelectedIndex();
+            this.viewModel.updateHabit(index);
+            this.habitListView.refresh();
+            this.addHabitBackgroundAnchorPane.setVisible(false);
+            this.removeHabitAnchorPane.setVisible(false);
+            this.updateHabitNameTextField.clear();
+        } catch (Exception error) {
+            this.addHabitBackgroundAnchorPane.setVisible(false);
+            this.removeHabitAnchorPane.setVisible(false);
+            this.updateHabitNameTextField.clear();
+            this.invalidHabitTextLabel.setVisible(true);
+        } 
     }
 
     @FXML
