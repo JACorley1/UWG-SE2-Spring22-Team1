@@ -89,7 +89,7 @@ class SudokuPuzzle:
         self._numbers[hint_cell[0]][hint_cell[1]] = self._solution[hint_cell[0]][hint_cell[1]]
         self._number_locks[hint_cell[0]][hint_cell[1]] = True
         return hint_cell
-
+      
     def _column_contains_number(self, row: int, col: int, number: int) -> bool:
         """
         Returns whether the specified column contains the specified number. Ignores the number
