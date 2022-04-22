@@ -34,6 +34,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_ADD_HABIT = "add_habit";
     private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
     private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
+    private static final String REQUEST_TYPE_RETRIEVE_DATA = "retrieve_data";
     private static final String TCP_CONNECTION_ADDRESS = "tcp://127.0.0.1:5555";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -137,6 +138,20 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return this.authenticationToken;
     }
 
+    /**
+     * Simple setter for the authentication token.
+     * 
+     * @precondition token != null 
+     * 
+     * @param token The string to set as the new authentication token.
+     */
+    public void setToken(String token) {
+        if (token == null) {
+            return;
+        }
+        this.authenticationToken = token;
+    }
+
     @Override
     public SuccessCode registerCredentials(String username, String password, String email) {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_REGISTER_USER);
@@ -167,12 +182,23 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public int getCoins() {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_RETRIEVE_DATA);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.fields[0] = COINS;
+
+        this.message.put(FIELDS, this.fields);
+
+        this.sendMessage();
+
+        Double coins = (Double) this.response.get(COINS);
+        this.setCoins(coins.intValue());
+
         return this.coins;
     }
 
     @Override
     public List<Habit> getHabits() {
-        this.message.put(REQUEST_TYPE, "retrieve_data");
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_RETRIEVE_DATA);
         this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
         
         this.fields[0] = HABITS;

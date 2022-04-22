@@ -55,6 +55,15 @@ public class LoginScreenViewModel {
     }
 
     /**
+     * Basic getter for transferring the authentication token.
+     * 
+     * @return The user's authentication token as a string.
+     */
+    public String getAuthenticationToken() {
+        return ((ServerServerCommunicator) this.serverCommunicator).getToken();
+    }
+
+    /**
      * Validates the login information.
      * 
      * @precondition None
