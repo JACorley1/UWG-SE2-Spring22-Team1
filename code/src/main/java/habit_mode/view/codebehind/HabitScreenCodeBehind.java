@@ -17,6 +17,7 @@ import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import habit_mode.model.Habit;
+import habit_mode.model.ServerServerCommunicator;
 import habit_mode.view_model.HabitViewModel;
 
 /**
@@ -27,6 +28,9 @@ import habit_mode.view_model.HabitViewModel;
  */
 public class HabitScreenCodeBehind {
     private HabitViewModel viewModel;
+
+    @FXML
+    private AnchorPane mainPane;
 
     @FXML
     private ResourceBundle resources;
@@ -247,12 +251,13 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void initialize() {
-        this.viewModel = new HabitViewModel(true);
+        this.viewModel = new HabitViewModel();
 
         this.assertFields();
 
         this.setHabitListeners();
         this.setViewModelBindings();
+        this.setPaneListener();
     }
 
     private void assertFields() {
@@ -296,6 +301,18 @@ public class HabitScreenCodeBehind {
                 : "fx:id=\"habitNameErrorLabel\" was not injected: check your FXML file 'HabitScreen.fxml'.";
         assert this.habitNameTextField != null
                 : "fx:id=\"habitNameTextField\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+        assert this.mainPane != null 
+                : "fx:id=\"mainPane\" was not injected: check your FXML file 'HabitScreen.fxml'.";
+    }
+
+    private void setPaneListener() {
+        this.mainPane.sceneProperty().addListener((obs, wasNull, exists) -> {
+            if (this.mainPane.sceneProperty().isNotNull().get()) {
+                ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
+                this.viewModel.getHabitsFromServer();
+                this.viewModel.updateCoins();
+            }
+        });
     }
 
     private void setViewModelBindings() {
@@ -309,6 +326,7 @@ public class HabitScreenCodeBehind {
         this.viewModel.habitNameProperty().bindBidirectional(this.habitNameTextField.textProperty());
         this.viewModel.removeHabitNameProperty().bindBidirectional(this.updateHabitNameTextField.textProperty());
         this.viewModel.habitListProperty().bindBidirectional(this.habitListView.itemsProperty());
+        this.viewModel.completedHabitListProperty().bindBidirectional(this.completedHabitListView.itemsProperty());
         this.viewModel.coinsLabelProperty().bindBidirectional(this.coinsLabel.textProperty());
 
         
@@ -330,4 +348,5 @@ public class HabitScreenCodeBehind {
             }
         }));
     }
+
 }

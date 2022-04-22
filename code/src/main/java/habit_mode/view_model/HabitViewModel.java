@@ -1,5 +1,7 @@
 package habit_mode.view_model;
 
+import java.util.List;
+
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
@@ -33,6 +35,7 @@ public class HabitViewModel {
     private StringProperty coinsLabelProperty;
     private ObjectProperty<Habit> selectedHabitProperty;
     private ListProperty<Habit> habitListProperty;
+    private ListProperty<Habit> completedHabitListProperty;
     private BooleanProperty removeDailySelectedProperty;
     private BooleanProperty removeWeeklySelectedProperty;
     private StringProperty removeHabitNameProperty;
@@ -61,6 +64,7 @@ public class HabitViewModel {
         this.removeHabitNameProperty = new SimpleStringProperty("");
         this.coinsLabelProperty = new SimpleStringProperty("");
         this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
+        this.completedHabitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
     }
 
     /**
@@ -117,7 +121,23 @@ public class HabitViewModel {
 
     }
 
-    
+    /**
+     * Gets the list of habits currently stored in the server and updates the list property.
+     *
+     * @postcondition this.habitListProperty().getValue().size() == 
+     *                numberOfHabitsOnServer 
+     */
+    public void getHabitsFromServer() {
+        List<Habit> habits = this.serverCommunicator.getHabits();
+        for (Habit habit : habits) {
+            if (habit.isComplete()) {
+                this.completedHabitListProperty.add(habit);
+            } else {
+                this.habitListProperty.add(habit);
+            }
+        }
+    }
+
 
      /**
      * Gets the server communicator.
@@ -130,6 +150,7 @@ public class HabitViewModel {
     public ServerCommunicator getServerCommunicator() {
         return this.serverCommunicator;
     }
+
     /**
      * Removes a habit from the system
      * 
@@ -411,8 +432,31 @@ public class HabitViewModel {
             throw new IllegalArgumentException("habit cannot be null");
         }
         if (this.serverCommunicator.completeHabit(habit) == SuccessCode.OKAY) {
-            this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
+            this.updateCoins();
         }
+    }
+
+    /**
+     * Simple updater for the value of the coin label.
+     * 
+     * @precondition none
+     * @postconition none
+     * 
+     */
+    public void updateCoins() {
+        this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
+    }
+
+    /**
+     * Simple getter for the completed habits list
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return The completed habit list property.
+     */
+    public ListProperty<Habit> completedHabitListProperty() {
+        return this.completedHabitListProperty;
     }
 
 }
