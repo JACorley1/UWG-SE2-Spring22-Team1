@@ -4,16 +4,23 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
@@ -79,13 +86,15 @@ public class SudokuScreenCodeBehind {
     @FXML
     private GridPane sudokuPane;
 
-    private TextField[][] sudokuBoard;
+    private Pane[][] sudokuBoard;
 
     @FXML
     private Button eraseButton;
 
     @FXML
     private Button hintButton;
+
+    private static Pane mostRecentlySelectedPane;
 
     @FXML
     void hintButtonClicked(ActionEvent event) {
@@ -119,6 +128,7 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void numberButtonClicked(ActionEvent event) {
+    
 
     }
 
@@ -134,7 +144,8 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void initialize() {
-        this.sudokuBoard = new TextField[9][9];
+        this.sudokuBoard = new Pane[9][9];
+        mostRecentlySelectedPane = this.sudokuBoard[0][0];
         assert this.noSelectedHabitLabel != null : "fx:id=\"noSelectedHabitLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
@@ -158,19 +169,38 @@ public class SudokuScreenCodeBehind {
     void addTextFields() {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
-                TextField field = new TextField();
-                field.setPrefHeight(50);
-                field.setPrefWidth(50);
-                field.setAlignment(Pos.CENTER);
-                field.setFont(Font.font(20));
-                
-                this.sudokuBoard[row][column] = field;
-                this.sudokuPane.setHgap(5);
-                this.sudokuPane.setVgap(35);
-                this.sudokuPane.add(field, row, column);
+                Pane pane = new Pane();
+                Label label = new Label();
+                label.alignmentProperty().set(Pos.CENTER);
+                label.setFont(Font.font(15));
+                label.textAlignmentProperty().set(TextAlignment.CENTER);
+                label.layoutXProperty().bind(pane.widthProperty().subtract(label.widthProperty()).divide(2));
+                label.layoutYProperty().bind(pane.heightProperty().subtract(label.heightProperty()).divide(2));
+                pane.getChildren().add(label);
+                pane.setBackground(new Background(new BackgroundFill(Color.web("#D3D3D3"), CornerRadii.EMPTY, Insets.EMPTY)));
+                pane.setStyle("-fx-border-color: black");
+                pane.setMinHeight(35);
+                pane.setMinWidth(35);
+                EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
+                @Override 
+                public void handle(javafx.scene.input.MouseEvent event) { 
+                        SudokuScreenCodeBehind.mostRecentlySelectedPane = (Pane) event.getSource();
+                        var list = SudokuScreenCodeBehind.mostRecentlySelectedPane.getChildren();
+                        Label label = (Label) list.get(0);
+                        System.out.print(label.getText());        
+                    } 
+                };
+                pane.setOnMouseClicked(eventHandler);
+                this.sudokuPane.setLayoutX(50);
+                this.sudokuBoard[row][column] = pane;
+                this.sudokuPane.setHgap(15);
+                this.sudokuPane.setVgap(30);
+                this.sudokuPane.add(pane, row, column);
             }
         }
     }
+
+  
 }
 
 
