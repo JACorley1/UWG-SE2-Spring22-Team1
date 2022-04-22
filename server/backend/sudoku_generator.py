@@ -83,5 +83,5 @@ def generate_sudoku_puzzle() -> SudokuPuzzle:
 
     for row in puzzle._numbers:
         print(" ".join(map(str, row)))
-
+      
     return puzzle

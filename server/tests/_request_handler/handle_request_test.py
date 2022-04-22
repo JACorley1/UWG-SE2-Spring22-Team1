@@ -281,6 +281,143 @@ class TestHandleRequest(unittest.TestCase):
         self.assertEqual(already_completed, [], "Check if no habits were already completed")
         self.assertTrue(habit.is_complete)
 
+    def test_valid_generate_sudoku_puzzle(self):
+        """
+        Checks if a valid generate_sudoku_puzzle request is handled correctly.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        username = "username"
+        password = "password"
+        email = "email@email.com"
+
+        register_request = {
+            "request_type": "register_user",
+            "username": username,
+            "password": password,
+            "email": email,
+        }
+        login_request = {
+            "request_type": "login",
+            "username": username,
+            "password": password,
+        }
+        generate_sudoku_puzzle_request = {
+            "request_type": "generate_sudoku_puzzle",
+        }
+
+        request_handler.handle_request(register_request)
+        generate_sudoku_puzzle_request["authentication_token"] = request_handler.handle_request(login_request)["authentication_token"]
+        response = request_handler.handle_request(generate_sudoku_puzzle_request)
+
+        success_code = response["success_code"]
+        numbers = response["sudoku_puzzle"]["numbers"]
+        number_locks = response["sudoku_puzzle"]["number_locks"]
+
+        self.assertEqual(success_code, 0, "Check if success_code is correct.")
+        self.assertEqual(len(numbers), 9, "Check if puzzle is 9 rows long.")
+        for row in numbers:
+            self.assertEqual(len(row), 9, "Check if puzzle is 9 columns long.")
+        self.assertEqual(len(number_locks), 9, "Check if puzzle is 9 rows long.")
+        for row in number_locks:
+            self.assertEqual(len(row), 9, "Check if puzzle is 9 columns long.")
+
+    def test_valid_update_sudoku_puzzle(self):
+        """
+        Checks if a valid update_sudoku_puzzle request is handled correctly.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        username = "username"
+        password = "password"
+        email = "email@email.com"
+
+        register_request = {
+            "request_type": "register_user",
+            "username": username,
+            "password": password,
+            "email": email,
+        }
+        login_request = {
+            "request_type": "login",
+            "username": username,
+            "password": password,
+        }
+        generate_sudoku_puzzle_request = {
+            "request_type": "generate_sudoku_puzzle",
+        }
+        update_sudoku_puzzle_request = {
+            "request_type": "update_sudoku_puzzle",
+        }
+
+        request_handler.handle_request(register_request)
+        generate_sudoku_puzzle_request["authentication_token"] = request_handler.handle_request(login_request)["authentication_token"]
+        response = request_handler.handle_request(generate_sudoku_puzzle_request)
+
+        numbers = response["sudoku_puzzle"]["numbers"]
+        for row, col in [(row, col) for row in range(9) for col in range(9)]:
+            if numbers[row][col] == 0:
+                numbers[row][col] = 1
+                break
+        
+        update_sudoku_puzzle_request["authentication_token"] = generate_sudoku_puzzle_request["authentication_token"]
+        update_sudoku_puzzle_request["numbers"] = numbers
+
+        response = request_handler.handle_request(update_sudoku_puzzle_request)
+        success_code = response["success_code"]
+
+        self.assertEqual(success_code, 0, "Check if success_code is correct.")
+
+    def test_valid_buy_hint(self):
+        """
+        Checks if a valid buy_hint request is handled correctly.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+        username = "username"
+        password = "password"
+        email = "email@email.com"
+
+        register_request = {
+            "request_type": "register_user",
+            "username": username,
+            "password": password,
+            "email": email,
+        }
+        retrieve_data_request = {
+            "request_type": "retrieve_data",
+            "fields": ["sudoku_puzzle"]
+        }
+        login_request = {
+            "request_type": "login",
+            "username": username,
+            "password": password,
+        }
+        generate_sudoku_puzzle_request = {
+            "request_type": "generate_sudoku_puzzle",
+        }
+        buy_hint_request = {
+            "request_type": "buy_hint",
+        }
+
+        request_handler.handle_request(register_request)
+        generate_sudoku_puzzle_request["authentication_token"] = request_handler.handle_request(login_request)["authentication_token"]
+        request_handler._service_manager.get_data_for_user(username).coins = 20
+        response = request_handler.handle_request(generate_sudoku_puzzle_request)
+
+        buy_hint_request["authentication_token"] = generate_sudoku_puzzle_request["authentication_token"]
+        retrieve_data_request["authentication_token"] = buy_hint_request["authentication_token"]
+        response = request_handler.handle_request(buy_hint_request)
+        data_response = request_handler.handle_request(retrieve_data_request)
+
+        success_code = response["success_code"]
+        number = response["number"]
+        row = response["row"]
+        col = response["col"]
+        numbers = data_response["sudoku_puzzle"]["numbers"]
+        number_locks = data_response["sudoku_puzzle"]["number_locks"]
+
+        self.assertEqual(success_code, 0, "Check if success_code is correct.")
+        self.assertEqual(number, numbers[row][col], "Check if number is correct.")
+        self.assertTrue(number_locks[row][col], "Check if number_lock is correct.")
+
     def test_missing_request_type(self):
         """
         Checks if a the correct response is created when not providing a request type.
@@ -632,5 +769,56 @@ class TestHandleRequest(unittest.TestCase):
         self.assertEqual(
             error_message, 
             f"Malformed Request, missing Request Fields (habit_ids)", 
+            "Check if error_message is correct."
+        )
+
+    def test_generate_sudoku_puzzle_missing_fields(self):
+        """
+        Checks if a the correct response is created when missing fields.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+
+        response = request_handler.handle_request({"request_type": "generate_sudoku_puzzle"})
+        success_code = response["success_code"]
+        error_message = response["error_message"]
+        
+        self.assertEqual(success_code, 12, "Check if success_code is correct.")
+        self.assertEqual(
+            error_message, 
+            f"Malformed Request, missing Request Fields (authentication_token)", 
+            "Check if error_message is correct."
+        )
+
+    def test_update_sudoku_puzzle_missing_fields(self):
+        """
+        Checks if a the correct response is created when missing fields.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+
+        response = request_handler.handle_request({"request_type": "update_sudoku_puzzle"})
+        success_code = response["success_code"]
+        error_message = response["error_message"]
+        
+        self.assertEqual(success_code, 12, "Check if success_code is correct.")
+        self.assertEqual(
+            error_message, 
+            f"Malformed Request, missing Request Fields (authentication_token, numbers)", 
+            "Check if error_message is correct."
+        )
+
+    def test_buy_hint_missing_fields(self):
+        """
+        Checks if a the correct response is created when missing fields.
+        """
+        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
+
+        response = request_handler.handle_request({"request_type": "buy_hint"})
+        success_code = response["success_code"]
+        error_message = response["error_message"]
+        
+        self.assertEqual(success_code, 12, "Check if success_code is correct.")
+        self.assertEqual(
+            error_message, 
+            f"Malformed Request, missing Request Fields (authentication_token)", 
             "Check if error_message is correct."
         )
