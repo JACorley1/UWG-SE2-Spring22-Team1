@@ -16,7 +16,7 @@ import javafx.scene.Scene;
  */
 public class Main extends Application {
     public static final String WINDOW_TITLE = "Habit Mode";
-    public static final String GUI_RESOURCE = "view/codebehind/SudokuScreen.fxml";
+    public static final String GUI_RESOURCE = "view/codebehind/LoginScreen.fxml";
 
     /**
      * JavaFX entry point.

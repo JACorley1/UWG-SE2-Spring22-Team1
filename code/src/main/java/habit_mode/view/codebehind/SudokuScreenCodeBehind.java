@@ -80,8 +80,17 @@ public class SudokuScreenCodeBehind {
     private GridPane sudokuPane;
 
     private TextField[][] sudokuBoard;
+
     @FXML
     private Button eraseButton;
+
+    @FXML
+    private Button hintButton;
+
+    @FXML
+    void hintButtonClicked(ActionEvent event) {
+
+    }
 
     @FXML
     void eraseButtonClicked(ActionEvent event) {

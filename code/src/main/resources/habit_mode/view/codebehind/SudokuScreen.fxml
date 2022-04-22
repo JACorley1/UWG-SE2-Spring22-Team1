@@ -105,5 +105,10 @@
             <Font size="11.0" />
          </font>
       </Button>
+      <Button id="sudokuButton" fx:id="hintButton" layoutX="432.0" layoutY="155.0" mnemonicParsing="false" onAction="#hintButtonClicked" prefHeight="53.0" prefWidth="52.0" text="Hint">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
