@@ -1,4 +1,4 @@
-from typing import Callable, MutableMapping, Optional
+from typing import Callable, List, MutableMapping, Optional
 from datetime import datetime
 from backend.habit import Habit, CompletionFrequency
 from backend.sudoku_puzzle import SudokuPuzzle
@@ -116,7 +116,7 @@ class UserData:
         habit.complete()
         self.coins += 20
 
-        incomplete_habits: list[Habit] = list(
+        incomplete_habits: List[Habit] = list(
             filter(
                 lambda item: not item.is_complete and item.frequency == habit.frequency, 
                 self._habits.values()
