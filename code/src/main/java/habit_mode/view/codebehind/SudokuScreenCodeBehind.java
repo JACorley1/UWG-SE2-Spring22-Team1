@@ -3,6 +3,8 @@ package habit_mode.view.codebehind;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import habit_mode.view_model.SudokuScreenViewModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -94,6 +96,8 @@ public class SudokuScreenCodeBehind {
     @FXML
     private Button hintButton;
 
+    private SudokuScreenViewModel viewModel;
+
     private static Pane mostRecentlySelectedPane;
 
     @FXML
@@ -115,6 +119,7 @@ public class SudokuScreenCodeBehind {
     void habitButtonClicked(ActionEvent event) throws IOException {
 
         Parent loader = FXMLLoader.load(getClass().getResource("HabitScreen.fxml"));
+        loader.setUserData(this.viewModel.getAuthenticationToken());
 
         Scene scene = new Scene(loader);
 
@@ -144,6 +149,7 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void initialize() {
+        this.viewModel = new SudokuScreenViewModel();
         this.sudokuBoard = new Pane[9][9];
         mostRecentlySelectedPane = this.sudokuBoard[0][0];
         assert this.noSelectedHabitLabel != null : "fx:id=\"noSelectedHabitLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
@@ -194,7 +200,7 @@ public class SudokuScreenCodeBehind {
                 this.sudokuPane.setLayoutX(50);
                 this.sudokuBoard[row][column] = pane;
                 this.sudokuPane.setHgap(15);
-                this.sudokuPane.setVgap(30);
+                this.sudokuPane.setVgap(30);              
                 this.sudokuPane.add(pane, row, column);
             }
         }
