@@ -12,10 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerServerCommunicator;
 import habit_mode.view_model.HabitViewModel;
@@ -117,6 +119,9 @@ public class HabitScreenCodeBehind {
     private Label updateErrorLabel;
 
     @FXML
+    private Label invalidHabitTextLabel;
+
+    @FXML
     private TextField updateHabitNameTextField;
 
     @FXML
@@ -158,12 +163,15 @@ public class HabitScreenCodeBehind {
     void removeHabitsButtonClicked(ActionEvent event) {
         if (this.habitListView.getSelectionModel().getSelectedItem() == null) {
             this.noSelectedHabitLabel.setVisible(true);
+            this.invalidHabitTextLabel.setVisible(false);
         } else {
             this.noSelectedHabitLabel.setVisible(false);
             this.addHabitBackgroundAnchorPane.setVisible(true);
             this.removeHabitAnchorPane.setVisible(true);
             this.addHabitsAnchorPane.setVisible(false);
             this.completeHabitAnchorPane.setVisible(false);
+            this.updateHabitNameTextField.setText(this.habitListView.getSelectionModel().getSelectedItem().getText());
+            this.updateFrequencyToggleGroup.selectToggle(this.selectedFrequency());
         }
     }
 
@@ -177,16 +185,19 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void confirmUpdateHabitButtonClicked(ActionEvent event) {
-        Habit updatedHabit = new Habit(this.viewModel.removeHabitNameProperty().getValue(), this.viewModel.determineRemoveFrequency());
-        this.habitListView.getSelectionModel().getSelectedItem().setFrequency(this.viewModel.determineRemoveFrequency());
-        int index = this.habitListView.getSelectionModel().getSelectedIndex();
-        this.viewModel.removeHabit(this.habitListView.getSelectionModel().getSelectedItem());
-        this.habitListView.getItems().add(index, updatedHabit);
-        this.viewModel.getServerCommunicator().addHabit(updatedHabit);
-        this.habitListView.refresh();
-        this.addHabitBackgroundAnchorPane.setVisible(false);
-        this.removeHabitAnchorPane.setVisible(false);
-        this.updateHabitNameTextField.clear();
+        try {
+            int index = this.habitListView.getSelectionModel().getSelectedIndex();
+            this.viewModel.updateHabit(index);
+            this.habitListView.refresh();
+            this.addHabitBackgroundAnchorPane.setVisible(false);
+            this.removeHabitAnchorPane.setVisible(false);
+            this.updateHabitNameTextField.clear();
+        } catch (Exception error) {
+            this.addHabitBackgroundAnchorPane.setVisible(false);
+            this.removeHabitAnchorPane.setVisible(false);
+            this.updateHabitNameTextField.clear();
+            this.invalidHabitTextLabel.setVisible(true);
+        } 
     }
 
     @FXML
@@ -202,7 +213,6 @@ public class HabitScreenCodeBehind {
             this.viewModel.sendCompletedHabit(habit);
             this.completedHabitListView.getItems().add(habit);
             this.habitListView.getItems().remove(habit);
-
         }
         this.completeHabitAnchorPane.setVisible(false);
         this.addHabitBackgroundAnchorPane.setVisible(false);
@@ -349,4 +359,14 @@ public class HabitScreenCodeBehind {
         }));
     }
 
+    private Toggle selectedFrequency() {
+        Frequency selectedHabitsFrequency = this.habitListView.getSelectionModel().getSelectedItem().getFrequency();
+        if (selectedHabitsFrequency == Frequency.DAILY) {
+            return this.removeDailyRadioButton;
+        }
+        if (selectedHabitsFrequency == Frequency.WEEKLY) {
+            return this.removeWeeklyRadioButton;
+        }
+        return this.removeMonthlyRadioButton;
+    }
 }
