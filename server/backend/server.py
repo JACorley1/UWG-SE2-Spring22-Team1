@@ -41,7 +41,7 @@ class _RequestHandler:
         self._service_manager = service_manager
         self._authentication_manager = authentication_manager
 
-    def _get_missing_fields(self, request: MutableMapping[str, Any], fields: list[str]) -> list[str]:
+    def _get_missing_fields(self, request: MutableMapping[str, Any], fields: List[str]) -> List[str]:
         """
         Creates a list of anf missing fields from a request.
 
@@ -63,7 +63,7 @@ class _RequestHandler:
             raise Exception("fields must not be None")
         if not isinstance(fields, list):
             raise Exception("fields must be a list of str")
-        missing_fields: list[str] = []
+        missing_fields: List[str] = []
         for field in fields:
             if field not in request:
                 missing_fields.append(field)
@@ -150,7 +150,7 @@ class _RequestHandler:
             "authentication_token": token,
         }
 
-    def _retrieve_data(self, token: str, fields: list[str]) -> MutableMapping[str, Any]:
+    def _retrieve_data(self, token: str, fields: List[str]) -> MutableMapping[str, Any]:
         """
         Attempts to retrieve a set of data for a user using their authentication token.
 
@@ -367,7 +367,7 @@ class _RequestHandler:
             "success_code": 0
         }
 
-    def _complete_habits(self, token: str, habit_ids: list[int]) -> MutableMapping[str, Any]:
+    def _complete_habits(self, token: str, habit_ids: List[int]) -> MutableMapping[str, Any]:
         """
         Marks a habit as completed.
 
@@ -393,7 +393,7 @@ class _RequestHandler:
 
         user_data: Any = self._service_manager.get_data_for_user(username)
 
-        unknown_habits: list[str] = list(
+        unknown_habits: List[str] = list(
             map(str, filter(lambda habit_id: habit_id not in user_data.habits, habit_ids))
         )
         if len(unknown_habits) > 0:
@@ -402,10 +402,10 @@ class _RequestHandler:
                 "error_message": f"No habit with id ({', '.join(unknown_habits)})"
             }
 
-        incomplete_habits: list[int] = list(
+        incomplete_habits: List[int] = list(
             filter(lambda habit_id: habit_id in user_data.get_incomplete_habit_ids(), habit_ids)
         )
-        already_completed_habits: list[int] = list(
+        already_completed_habits: List[int] = list(
             filter(lambda habit_id: not habit_id in incomplete_habits, habit_ids)
         )
 
@@ -486,8 +486,8 @@ class _RequestHandler:
                 "success_code": 64,
                 "error_message": "Invalid puzzle size"
             }
-        for row in numbers:
-            if len(row) != PUZZLE_SIZE:
+        for num_row in numbers:
+            if len(num_row) != PUZZLE_SIZE:
                 return {
                     "success_code": 64,
                     "error_message": "Invalid puzzle size"
@@ -509,24 +509,24 @@ class _RequestHandler:
 
         puzzle: SudokuPuzzle = user_data.sudoku_puzzle
 
-        for row in range(PUZZLE_SIZE):
-            for col in range(PUZZLE_SIZE):
-                cur_number = numbers[row][col]
-                cur_colution = puzzle.solution[row][col]
-                if cur_number not in range(PUZZLE_SIZE + 1):
-                    return {
-                        "success_code": 60,
-                        "error_message": f"Invalid number ({row}, {col})"
-                    }
-                if puzzle.is_number_locked_at(row, col) and cur_number != cur_colution:
+        coords = [(row, col) for row in range(PUZZLE_SIZE) for col in range(PUZZLE_SIZE)]
+
+        for row, col in coords:
+            cur_number = numbers[row][col]
+            cur_colution = puzzle.solution[row][col]
+            if cur_number not in range(PUZZLE_SIZE + 1):
+                return {
+                    "success_code": 60,
+                    "error_message": f"Invalid number ({row}, {col})"
+                }
+            if puzzle.is_number_locked_at(row, col) and cur_number != cur_colution:
                     return {
                         "success_code": 62,
                         "error_message": f"Can't change locked number ({row}, {col})"
                     }
         
-        for row in range(PUZZLE_SIZE):
-            for col in range(PUZZLE_SIZE):
-                puzzle.set_number_at(row, col, numbers[row][col])
+        for row, col in coords:
+            puzzle.set_number_at(row, col, numbers[row][col])
         
         return {
             "success_code": 0,
@@ -616,7 +616,7 @@ class _RequestHandler:
                 "error_message": "Malformed Request, missing Request Type"
             }
 
-        missing_fields: list[str]
+        missing_fields: List[str]
 
         if request["request_type"] == "register_user" :
             missing_fields = self._get_missing_fields(request, ["username", "password", "email"])
@@ -731,7 +731,7 @@ class Server:
     @author Team 1
     @version Spring 2022
     """
-    def run(self, socket_info: tuple[Any, Any], service_manager: ServiceManager, authentication_manager: AuthenticationManager) -> None:
+    def run(self, socket_info: Tuple[str, int], service_manager: ServiceManager, authentication_manager: AuthenticationManager) -> None:
         """
         Launches the server with a specified ServiceManager.
         The server will run indefinitely.
