@@ -124,6 +124,7 @@ public class LoginScreen {
     }
 
     private String determineErrorMessage(SuccessCode errorCode) {
+        
         switch (errorCode) {
             case INVALID_LOGIN_CREDENTIALS:
                 return "The login credentials provided are invalid, please try again or register a new account.";

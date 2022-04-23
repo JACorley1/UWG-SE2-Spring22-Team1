@@ -20,4 +20,9 @@ public class SudokuScreenViewModel {
     public String getAuthenticationToken() {
         return ((ServerServerCommunicator) this.serverCommunicator).getToken();
     }
+
+    public ServerServerCommunicator getServerCommunicator() {
+        return (ServerServerCommunicator) this.serverCommunicator;
+    }
+
 }

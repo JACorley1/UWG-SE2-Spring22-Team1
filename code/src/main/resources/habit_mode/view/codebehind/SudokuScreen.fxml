@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="screenLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="habit_mode.view.codebehind.SudokuScreenCodeBehind">
+<AnchorPane id="screenLabel" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="habit_mode.view.codebehind.SudokuScreenCodeBehind">
    <children>
       <Line endX="202.0" layoutX="294.0" layoutY="602.0" startX="-294.0" />
       <Label fx:id="noSelectedHabitLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="55.0" prefHeight="17.0" prefWidth="350.0" text="No habit selected. To remove select a habit." visible="false" />

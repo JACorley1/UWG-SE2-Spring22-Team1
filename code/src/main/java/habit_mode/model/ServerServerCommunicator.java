@@ -149,6 +149,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
         if (token == null) {
             return;
         }
+        System.out.println("setting the authentication token to : " + token);
         this.authenticationToken = token;
     }
 
@@ -192,8 +193,21 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
         Double coins = (Double) this.response.get(COINS);
         this.setCoins(coins.intValue());
+        
 
         return this.coins;
+    }
+
+     /**
+     * The habit name property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The habit name property.
+     */
+    public StringProperty coinsLabelProperty() {
+        return this.coinsLabelProperty;
     }
 
     @Override
@@ -295,6 +309,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private List<Habit> parseRetrieveHabitsResponse() {
         List<Habit> habits = new ArrayList<Habit>();
         ArrayList<LinkedTreeMap<String, Object>> map = (ArrayList<LinkedTreeMap<String, Object>>) this.response.get(HABITS);
+       
         for (LinkedTreeMap<String, Object> habMap : map) {
             Double freque = (Double) habMap.get("frequency");
             Double idd = (Double) habMap.get("id");

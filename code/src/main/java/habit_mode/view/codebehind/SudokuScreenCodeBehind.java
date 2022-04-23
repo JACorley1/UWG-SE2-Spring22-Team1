@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -25,11 +26,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import habit_mode.model.ServerServerCommunicator;
 
 
 
 
 public class SudokuScreenCodeBehind {
+
+    @FXML
+    private AnchorPane mainPane;
 
     @FXML
     private ResourceBundle resources;
@@ -124,7 +129,6 @@ public class SudokuScreenCodeBehind {
         Scene scene = new Scene(loader);
 
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         app_stage.setScene(scene); 
 
         app_stage.show();
@@ -169,7 +173,16 @@ public class SudokuScreenCodeBehind {
         assert this.eightButton != null : "fx:id=\"eightButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.nineButton != null : "fx:id=\"nineButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         this.addTextFields();
+        this.setPaneListener();
 
+    }
+
+    private void setPaneListener() {
+        this.mainPane.sceneProperty().addListener((obs, wasNull, exists) -> {
+            if (this.mainPane.sceneProperty().isNotNull().get()) {
+                ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
+            }
+        });
     }
 
     void addTextFields() {
@@ -188,14 +201,14 @@ public class SudokuScreenCodeBehind {
                 pane.setMinHeight(35);
                 pane.setMinWidth(35);
                 EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
-                @Override 
-                public void handle(javafx.scene.input.MouseEvent event) { 
-                        SudokuScreenCodeBehind.mostRecentlySelectedPane = (Pane) event.getSource();
-                        var list = SudokuScreenCodeBehind.mostRecentlySelectedPane.getChildren();
-                        Label label = (Label) list.get(0);
-                        System.out.print(label.getText());        
-                    } 
-                };
+                    @Override 
+                    public void handle(javafx.scene.input.MouseEvent event) { 
+                            SudokuScreenCodeBehind.mostRecentlySelectedPane = (Pane) event.getSource();
+                            var list = SudokuScreenCodeBehind.mostRecentlySelectedPane.getChildren();
+                            Label label = (Label) list.get(0);
+                            System.out.print(label.getText());        
+                        } 
+                    };
                 pane.setOnMouseClicked(eventHandler);
                 this.sudokuPane.setLayoutX(50);
                 this.sudokuBoard[row][column] = pane;
