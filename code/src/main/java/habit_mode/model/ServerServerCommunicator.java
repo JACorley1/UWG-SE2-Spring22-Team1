@@ -149,7 +149,6 @@ public class ServerServerCommunicator extends ServerCommunicator {
         if (token == null) {
             return;
         }
-        System.out.println("setting the authentication token to : " + token);
         this.authenticationToken = token;
     }
 
@@ -197,18 +196,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
         return this.coins;
     }
-
-     /**
-     * The habit name property.
-     * 
-     * @precondition None.
-     * @postcondition None.
-     * 
-     * @return The habit name property.
-     */
-    public StringProperty coinsLabelProperty() {
-        return this.coinsLabelProperty;
-    }
+    
 
     @Override
     public List<Habit> getHabits() {
