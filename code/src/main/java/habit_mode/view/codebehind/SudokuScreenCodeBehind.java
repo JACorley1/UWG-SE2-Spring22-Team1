@@ -27,6 +27,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import habit_mode.model.ServerServerCommunicator;
+import javafx.scene.input.MouseEvent;
 
 
 
@@ -200,9 +201,9 @@ public class SudokuScreenCodeBehind {
                 pane.setStyle("-fx-border-color: black");
                 pane.setMinHeight(35);
                 pane.setMinWidth(35);
-                EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
+                EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
                     @Override 
-                    public void handle(javafx.scene.input.MouseEvent event) { 
+                    public void handle(MouseEvent event) { 
                             SudokuScreenCodeBehind.mostRecentlySelectedPane = (Pane) event.getSource();
                             var list = SudokuScreenCodeBehind.mostRecentlySelectedPane.getChildren();
                             Label label = (Label) list.get(0);
