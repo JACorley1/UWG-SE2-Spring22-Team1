@@ -5,6 +5,7 @@ import habit_mode.model.ServerServerCommunicator;
 import habit_mode.model.sudoku.SudokuPuzzle;
 
 
+
 /**
  * The view model for the SudokuScreen.
  * 
@@ -52,4 +53,14 @@ public class SudokuScreenViewModel {
         return (ServerServerCommunicator) this.serverCommunicator;
     }
 
+    /**
+     * Converts the text of the Labels to numbers to store in the numbers matrix for the puzzle
+     * 
+     * @param text the text to convert
+     * @param row the row
+     * @param column the column
+     */
+    public void convertLabelsToPuzzle(String text, int row, int column) {
+        this.puzzle.setNumber(Integer.parseInt(text), row, column);
+    }
 }

@@ -12,7 +12,7 @@
 <AnchorPane id="screenLabel" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#mouseEvent" onMouseMoved="#mouseEvent" onMousePressed="#mouseEvent" onMouseReleased="#mouseEvent" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="habit_mode.view.codebehind.SudokuScreenCodeBehind">
    <children>
       <Line endX="202.0" layoutX="294.0" layoutY="602.0" startX="-294.0" />
-      <Label fx:id="winLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="44.0" layoutY="472.0" prefHeight="29.0" prefWidth="350.0" text="You Win">
+      <Label fx:id="winLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="44.0" layoutY="472.0" prefHeight="29.0" prefWidth="350.0" text="You Win" visible="false">
          <font>
             <Font name="System Bold" size="24.0" />
          </font></Label>

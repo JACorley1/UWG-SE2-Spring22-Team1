@@ -190,9 +190,16 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void mouseEvent(MouseEvent event) {
-        this.convertPanesToPuzzle();
-        if (this.viewModel.getPuzzle().isComplete()) {
-            this.winLabel.setVisible(true);
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Label label = (Label) this.sudokuBoard[row][column].getChildren().get(0);
+                if (!label.getText().isEmpty()) {
+                    this.viewModel.convertLabelsToPuzzle(label.getText(), row, column);
+                    if (this.viewModel.getPuzzle().isComplete()) {
+                        this.winLabel.setVisible(true);
+                    }
+                }
+            }
         }
     }
 
@@ -204,18 +211,6 @@ public class SudokuScreenCodeBehind {
         });
     }
 
-    private void convertPanesToPuzzle() {
-        int[][] numbers = new int[9][9];               
-        for (int row = 0; row < 9; row++) {
-            for (int column = 0; column < 9; column++) {
-                Label label = (Label) this.sudokuBoard[row][column].getChildren().get(0);
-                if (!label.getText().equals("")) {
-                    numbers[row][column] = Integer.parseInt(label.getText());
-                    this.viewModel.getPuzzle().setNumbers(numbers);
-                }
-            }
-        }
-    }
 
     private void addPanes() {
         for (int row = 0; row < 9; row++) {
