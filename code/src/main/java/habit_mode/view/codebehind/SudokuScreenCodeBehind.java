@@ -178,7 +178,7 @@ public class SudokuScreenCodeBehind {
         assert this.sevenButton != null : "fx:id=\"sevenButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.eightButton != null : "fx:id=\"eightButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.nineButton != null : "fx:id=\"nineButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
-        this.addTextFields();
+        this.addPanes();
         this.setPaneListener();
 
     }
@@ -191,7 +191,7 @@ public class SudokuScreenCodeBehind {
         });
     }
 
-    void addTextFields() {
+    private void addPanes() {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane pane = new Pane();
