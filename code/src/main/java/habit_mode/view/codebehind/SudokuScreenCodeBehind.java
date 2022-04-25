@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -27,6 +28,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import habit_mode.model.ServerServerCommunicator;
+import habit_mode.model.sudoku.SudokuPuzzle;
 
 
 
@@ -43,7 +45,7 @@ public class SudokuScreenCodeBehind {
     private URL location;
 
     @FXML
-    private Label noSelectedHabitLabel;
+    private Label winLabel;
 
     @FXML
     private Button habitListButton;
@@ -107,6 +109,8 @@ public class SudokuScreenCodeBehind {
 
     private static Pane mostRecentlySelectedPane;
 
+    private static SudokuPuzzle sudokuPuzzle;
+
     @FXML
     void hintButtonClicked(ActionEvent event) {
 
@@ -160,7 +164,7 @@ public class SudokuScreenCodeBehind {
         this.sudokuBoard = new Pane[9][9];
         mostRecentlySelectedPane = this.sudokuBoard[0][0];
         mostRecentlySelectedButton = null;
-        assert this.noSelectedHabitLabel != null : "fx:id=\"noSelectedHabitLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
+        assert this.winLabel != null : "fx:id=\"winLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.coinsLabel != null : "fx:id=\"coinsLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
@@ -181,12 +185,33 @@ public class SudokuScreenCodeBehind {
 
     }
 
+    @FXML
+    void mouseEvent(MouseEvent event) {
+        this.convertPanesToPuzzle();
+        if (this.viewModel.getPuzzle().isComplete()) {
+            this.winLabel.setVisible(true);
+        }
+    }
+
     private void setPaneListener() {
         this.mainPane.sceneProperty().addListener((obs, wasNull, exists) -> {
             if (this.mainPane.sceneProperty().isNotNull().get()) {
                 ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
             }
         });
+    }
+
+    private void convertPanesToPuzzle() {
+        int[][] numbers = new int[9][9];               
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Label label = (Label) this.sudokuBoard[row][column].getChildren().get(0);
+                if (!label.getText().equals("")) {
+                    numbers[row][column] = Integer.parseInt(label.getText());
+                    this.viewModel.getPuzzle().setNumbers(numbers);
+                }
+            }
+        }
     }
 
     void addPanes() {
@@ -214,7 +239,7 @@ public class SudokuScreenCodeBehind {
                             if (SudokuScreenCodeBehind.mostRecentlySelectedButton != null) {
                             label.setText(SudokuScreenCodeBehind.mostRecentlySelectedButton.getText());
                             }
-                        } 
+                        }
                     };
                 pane.setOnMouseClicked(eventHandler);
                 this.setSudokuPane(row, column, pane);

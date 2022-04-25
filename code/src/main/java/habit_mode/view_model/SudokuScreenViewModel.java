@@ -2,14 +2,22 @@ package habit_mode.view_model;
 
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.ServerServerCommunicator;
+import habit_mode.model.sudoku.SudokuPuzzle;
 
 
 
 public class SudokuScreenViewModel {
     private ServerCommunicator serverCommunicator;
+    private SudokuPuzzle puzzle;
     
     public SudokuScreenViewModel() {
         this.serverCommunicator = new ServerServerCommunicator();
+        this.puzzle = new SudokuPuzzle();
+
+    }
+
+    public SudokuPuzzle getPuzzle() {
+        return this.puzzle;
     }
 
     /**
