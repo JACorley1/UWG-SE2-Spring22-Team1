@@ -103,6 +103,8 @@ public class SudokuScreenCodeBehind {
 
     private SudokuScreenViewModel viewModel;
 
+    private static Button mostRecentlySelectedButton;
+
     private static Pane mostRecentlySelectedPane;
 
     @FXML
@@ -137,7 +139,8 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void numberButtonClicked(ActionEvent event) {
-    
+        Button number = (Button) event.getSource();
+        mostRecentlySelectedButton = number;
 
     }
 
@@ -156,6 +159,7 @@ public class SudokuScreenCodeBehind {
         this.viewModel = new SudokuScreenViewModel();
         this.sudokuBoard = new Pane[9][9];
         mostRecentlySelectedPane = this.sudokuBoard[0][0];
+        mostRecentlySelectedButton = null;
         assert this.noSelectedHabitLabel != null : "fx:id=\"noSelectedHabitLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
@@ -172,7 +176,7 @@ public class SudokuScreenCodeBehind {
         assert this.sevenButton != null : "fx:id=\"sevenButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.eightButton != null : "fx:id=\"eightButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.nineButton != null : "fx:id=\"nineButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
-        this.addTextFields();
+        this.addPanes();
         this.setPaneListener();
 
     }
@@ -185,11 +189,12 @@ public class SudokuScreenCodeBehind {
         });
     }
 
-    void addTextFields() {
+    void addPanes() {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane pane = new Pane();
                 Label label = new Label();
+                               
                 label.alignmentProperty().set(Pos.CENTER);
                 label.setFont(Font.font(15));
                 label.textAlignmentProperty().set(TextAlignment.CENTER);
@@ -206,17 +211,23 @@ public class SudokuScreenCodeBehind {
                             SudokuScreenCodeBehind.mostRecentlySelectedPane = (Pane) event.getSource();
                             var list = SudokuScreenCodeBehind.mostRecentlySelectedPane.getChildren();
                             Label label = (Label) list.get(0);
-                            System.out.print(label.getText());        
+                            if (SudokuScreenCodeBehind.mostRecentlySelectedButton != null) {
+                            label.setText(SudokuScreenCodeBehind.mostRecentlySelectedButton.getText());
+                            }
                         } 
                     };
                 pane.setOnMouseClicked(eventHandler);
-                this.sudokuPane.setLayoutX(50);
-                this.sudokuBoard[row][column] = pane;
-                this.sudokuPane.setHgap(15);
-                this.sudokuPane.setVgap(30);              
-                this.sudokuPane.add(pane, row, column);
+                this.setSudokuPane(row, column, pane);
             }
         }
+    }
+
+    private void setSudokuPane(int row, int column, Pane pane) {
+        this.sudokuPane.setLayoutX(50);
+        this.sudokuBoard[row][column] = pane;
+        this.sudokuPane.setHgap(15);
+        this.sudokuPane.setVgap(30);              
+        this.sudokuPane.add(pane, row, column);
     }
 
   
