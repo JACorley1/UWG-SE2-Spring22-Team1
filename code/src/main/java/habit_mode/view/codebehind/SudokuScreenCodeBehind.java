@@ -28,11 +28,16 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import habit_mode.model.ServerServerCommunicator;
-import habit_mode.model.sudoku.SudokuPuzzle;
 
 
 
 
+/**
+ * The class SudokuScreenCodeBehind.
+ * 
+ * @author Team 1
+ * @version Spring 2022
+ */
 public class SudokuScreenCodeBehind {
 
     @FXML
@@ -108,8 +113,6 @@ public class SudokuScreenCodeBehind {
     private static Button mostRecentlySelectedButton;
 
     private static Pane mostRecentlySelectedPane;
-
-    private static SudokuPuzzle sudokuPuzzle;
 
     @FXML
     void hintButtonClicked(ActionEvent event) {
@@ -214,7 +217,7 @@ public class SudokuScreenCodeBehind {
         }
     }
 
-    void addPanes() {
+    private void addPanes() {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane pane = new Pane();
@@ -230,9 +233,9 @@ public class SudokuScreenCodeBehind {
                 pane.setStyle("-fx-border-color: black");
                 pane.setMinHeight(35);
                 pane.setMinWidth(35);
-                EventHandler<javafx.scene.input.MouseEvent> eventHandler = new EventHandler<javafx.scene.input.MouseEvent>() { 
+                EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
                     @Override 
-                    public void handle(javafx.scene.input.MouseEvent event) { 
+                    public void handle(MouseEvent event) { 
                             SudokuScreenCodeBehind.mostRecentlySelectedPane = (Pane) event.getSource();
                             var list = SudokuScreenCodeBehind.mostRecentlySelectedPane.getChildren();
                             Label label = (Label) list.get(0);
