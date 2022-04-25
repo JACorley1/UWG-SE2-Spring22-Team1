@@ -31,7 +31,12 @@ import javafx.scene.input.MouseEvent;
 
 
 
-
+/**
+ * The class SudokuScreenCodeBehind.
+ * 
+ * @author Team 1
+ * @version Spring 2022
+ */
 public class SudokuScreenCodeBehind {
 
     @FXML
