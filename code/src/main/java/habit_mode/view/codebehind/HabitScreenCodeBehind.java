@@ -1,5 +1,6 @@
 package habit_mode.view.codebehind;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -7,6 +8,9 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -16,11 +20,13 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerServerCommunicator;
 import habit_mode.view_model.HabitViewModel;
+import javafx.scene.Node;
 
 /**
  * The class HabitScreenCodeBehind.
@@ -255,8 +261,18 @@ public class HabitScreenCodeBehind {
     }
 
     @FXML
-    void sudokuButtonSelected(ActionEvent event) {
+    void sudokuButtonSelected(ActionEvent event) throws IOException {
+        Parent loader = FXMLLoader.load(getClass().getResource("SudokuScreen.fxml"));
+        loader.setUserData(this.viewModel.getAuthenticationToken());
 
+
+        Scene scene = new Scene(loader);
+
+        Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        app_stage.setScene(scene); 
+
+        app_stage.show();
     }
 
     @FXML

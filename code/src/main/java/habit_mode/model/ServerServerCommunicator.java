@@ -192,9 +192,11 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
         Double coins = (Double) this.response.get(COINS);
         this.setCoins(coins.intValue());
+        
 
         return this.coins;
     }
+    
 
     @Override
     public List<Habit> getHabits() {
@@ -295,6 +297,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private List<Habit> parseRetrieveHabitsResponse() {
         List<Habit> habits = new ArrayList<Habit>();
         ArrayList<LinkedTreeMap<String, Object>> map = (ArrayList<LinkedTreeMap<String, Object>>) this.response.get(HABITS);
+       
         for (LinkedTreeMap<String, Object> habMap : map) {
             Double freque = (Double) habMap.get("frequency");
             Double idd = (Double) habMap.get("id");
