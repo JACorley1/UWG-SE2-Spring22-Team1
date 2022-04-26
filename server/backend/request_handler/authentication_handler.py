@@ -17,7 +17,7 @@ def register_user(service_manager: ServiceManager, username: str, password: str,
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be an instance of ServiceManager")
+        raise TypeError("service_manager must be an instance of ServiceManager")
 
     success_code: int = service_manager.create_user(username, password, email)
     response: MutableMapping[str, Any]
@@ -64,13 +64,13 @@ def login(service_manager: ServiceManager, authentication_manager: Authenticatio
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be an instance of ServiceManager")
+        raise TypeError("service_manager must be an instance of ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be an instance of AuthenticationManager")
+        raise TypeError("authentication_manager must be an instance of AuthenticationManager")
     if not isinstance(username, str):
-        raise Exception("username must be a str")
+        raise TypeError("username must be a str")
     if not isinstance(password, str):
-        raise Exception("password must be a str")
+        raise TypeError("password must be a str")
     
     user_data = service_manager.get_data_for_user(username)
     if user_data is None or user_data.password != password:

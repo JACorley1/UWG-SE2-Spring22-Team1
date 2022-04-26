@@ -20,15 +20,15 @@ def add_habit(service_manager: ServiceManager, authentication_manager: Authentic
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be a ServiceManager")
+        raise TypeError("service_manager must be a ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be an AuthenticationManager")
+        raise TypeError("authentication_manager must be an AuthenticationManager")
     if not isinstance(token, str):
-        raise Exception("token must be a str")
+        raise TypeError("token must be a str")
     if not isinstance(habit_name, str):
-        raise Exception("habit_name must be a str")
+        raise TypeError("habit_name must be a str")
     if not isinstance(habit_frequency, int):
-        raise Exception("habit_frequency must be an int")
+        raise TypeError("habit_frequency must be an int")
     
     username: str = authentication_manager.get_username_for_token(token)
     if username is None:
@@ -73,13 +73,13 @@ def remove_habit(service_manager: ServiceManager, authentication_manager: Authen
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be a ServiceManager")
+        raise TypeError("service_manager must be a ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be an AuthenticationManager")
+        raise TypeError("authentication_manager must be an AuthenticationManager")
     if not isinstance(token, str):
-        raise Exception("token must be a str")
+        raise TypeError("token must be a str")
     if not isinstance(habit_id, int):
-        raise Exception("habit_id must be an int")
+        raise TypeError("habit_id must be an int")
     
     username: str = authentication_manager.get_username_for_token(token)
     if username is None:
@@ -123,17 +123,17 @@ def modify_habit(service_manager: ServiceManager, authentication_manager: Authen
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be a ServiceManager")
+        raise TypeError("service_manager must be a ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be an AuthenticationManager")
+        raise TypeError("authentication_manager must be an AuthenticationManager")
     if not isinstance(token, str):
-        raise Exception("token must be a str")
+        raise TypeError("token must be a str")
     if not isinstance(habit_id, int):
-        raise Exception("habit_id must be an int")
+        raise TypeError("habit_id must be an int")
     if not isinstance(habit_name, str):
-        raise Exception("habit_name must be a str")
+        raise TypeError("habit_name must be a str")
     if not isinstance(habit_frequency, int):
-        raise Exception("habit_frequency must be an int")
+        raise TypeError("habit_frequency must be an int")
     
     username: str = authentication_manager.get_username_for_token(token)
     if username is None:
@@ -183,13 +183,13 @@ def complete_habits(service_manager: ServiceManager, authentication_manager: Aut
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be a ServiceManager")
+        raise TypeError("service_manager must be a ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be an AuthenticationManager")        
+        raise TypeError("authentication_manager must be an AuthenticationManager")        
     if not isinstance(token, str):
-        raise Exception("token must be a str")
+        raise TypeError("token must be a str")
     if not isinstance(habit_ids, list):
-        raise Exception("habit_ids must be a list")
+        raise TypeError("habit_ids must be a list")
     
     username: str = authentication_manager.get_username_for_token(token)
     if username is None:

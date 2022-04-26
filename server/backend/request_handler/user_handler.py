@@ -8,7 +8,9 @@ def retrieve_data(service_manager: ServiceManager, authentication_manager: Authe
     """
     Attempts to retrieve a set of data for a user using their authentication token.
 
-    Precondition:  token is not None and
+    Precondition:   isinstance(service_manager, ServiceManager) and
+                    isinstance(authentication_manager, AuthenticationManager) and
+                    token is not None and
                     isinstance(token, str) and
                     fields is not None and
                     isinstance(fields, list)
@@ -18,14 +20,18 @@ def retrieve_data(service_manager: ServiceManager, authentication_manager: Authe
                 fields: The requested data fields
     Return - The response to the client.
     """
+    if not isinstance(service_manager, ServiceManager):
+        raise TypeError("service_manager must be a ServiceManager")
+    if not isinstance(authentication_manager, AuthenticationManager):
+        raise TypeError("authentication_manager must be an AuthenticationManager")
     if token is None:
-        raise Exception("token must not be None")
+        raise TypeError("token must not be None")
     if not isinstance(token, str):
-        raise Exception("token must be a str")
+        raise TypeError("token must be a str")
     if fields is None:
-        raise Exception("fields must not be None")
+        raise TypeError("fields must not be None")
     if not isinstance(fields, list):
-        raise Exception("fields must be a list of str")
+        raise TypeError("fields must be a list of str")
     
     username: str = authentication_manager.get_username_for_token(token)
     if username is None:

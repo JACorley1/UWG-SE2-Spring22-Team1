@@ -21,9 +21,9 @@ def generate_sudoku_puzzle(service_manager: ServiceManager, authentication_manag
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be a ServiceManager")
+        raise TypeError("service_manager must be a ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be a AuthenticationManager")
+        raise TypeError("authentication_manager must be a AuthenticationManager")
     if not isinstance(token, str):
         raise TypeError("token must be a str")
     
@@ -69,13 +69,13 @@ def update_sudoku_puzzle(service_manager: ServiceManager, authentication_manager
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be a ServiceManager")
+        raise TypeError("service_manager must be a ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be a AuthenticationManager")
+        raise TypeError("authentication_manager must be a AuthenticationManager")
     if not isinstance(token, str):
-        raise Exception("token must be a str")
+        raise TypeError("token must be a str")
     if not isinstance(numbers, list):
-        raise Exception("numbers must be a list")
+        raise TypeError("numbers must be a list")
     
     username: str = authentication_manager.get_username_for_token(token)
     if username is None:
@@ -149,11 +149,11 @@ def buy_hint(service_manager: ServiceManager, authentication_manager: Authentica
     Return - The response to the client.
     """
     if not isinstance(service_manager, ServiceManager):
-        raise Exception("service_manager must be a ServiceManager")
+        raise TypeError("service_manager must be a ServiceManager")
     if not isinstance(authentication_manager, AuthenticationManager):
-        raise Exception("authentication_manager must be a AuthenticationManager")
+        raise TypeError("authentication_manager must be a AuthenticationManager")
     if not isinstance(token, str):
-        raise Exception("token must be a str")
+        raise TypeError("token must be a str")
     
     username: str = authentication_manager.get_username_for_token(token)
     if username is None:
