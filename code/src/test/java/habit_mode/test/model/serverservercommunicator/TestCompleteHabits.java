@@ -2,10 +2,20 @@ package habit_mode.test.model.serverservercommunicator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
+
 import org.junit.jupiter.api.Test;
+import org.zeromq.SocketType;
+import org.zeromq.ZContext;
+import org.zeromq.ZMQ;
 
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
@@ -13,20 +23,95 @@ import habit_mode.model.ServerCommunicator;
 import habit_mode.model.ServerServerCommunicator;
 
 public class TestCompleteHabits {
+    private class TrueMockServer extends Thread {
+        private final Type TYPE = new TypeToken<HashMap<String, Object>>() { } .getType();
+        private final String succ = "success_code";
+        @Override
+        public void run() {
+            
+            try (ZContext context = new ZContext()) {
+                // Socket to talk to clients
+                ZMQ.Socket socket = context.createSocket(SocketType.REP);
+                socket.bind("tcp://*:5551");
+                HashMap<String, Object> map1 = new HashMap<String, Object>();
+                HashMap<String, Object> response = new HashMap<String, Object>();
+                ArrayList<LinkedTreeMap<String, Object>> map = new ArrayList<LinkedTreeMap<String, Object>>();
+                List<Habit> habits = new ArrayList<Habit>();
+                Gson gson = new Gson();
+                int responses = 0;
+                while (responses < 10) {
+                    // Block until a message is received
+                    HashMap<String, Object> reply = gson.fromJson(socket.recvStr(), TYPE);
+
+                    switch ((String) reply.get("request_type")) {
+                        case "register_user":
+                            map1 = reply;
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
+                        case "login":
+                            if (map1.containsValue(reply.get("username")) && map1.containsValue(reply.get("password"))) {
+                                response.put(succ, 00);
+                                response.put("authentication_token", "1");
+                                socket.send(gson.toJson(response));
+                                response.clear();
+                                break;
+                            } else {
+                                response.put(succ, 15);
+                                socket.send(gson.toJson(response));
+                                response.clear();
+                                break;
+                            }
+                        case "add_habit":
+                            LinkedTreeMap<String, Object> habit1 = new LinkedTreeMap<String, Object>();
+                            habit1.put("frequency", 0.0);
+                            habit1.put("id", 1);
+                            habit1.put("name", reply.get("habit_name"));
+                            habit1.put("is_complete", false);
+                            map.add(habit1);
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
+                        case "complete_habits":
+                            map.get(0).replace("is_complete", true);
+                            response.put(succ, 00);
+                            response.put("coins", 70);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
+                        case "retrieve_data":
+                            response.put("habits", map);
+                            response.put("coins", 70);
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
+                    }
+    
+                    responses++;
+                }   
+            }
+        }
+    }
     @Test
-    void testOneHabit(){
-        ServerCommunicator communicator = new ServerServerCommunicator();
+    void testOneHabit() {
+        TrueMockServer server = new TrueMockServer();
+        ServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5551");
         Random rand = new Random();
         String username = rand.nextInt() + "";
+        server.start();
         communicator.registerCredentials(username, "password", "email");
 
         communicator.validateLogin(username, "password");
         Habit habit = new Habit("text", Frequency.DAILY);
         communicator.addHabit(habit);
         communicator.completeHabit(habit);
-
+        int coins = communicator.getCoins();
         List<Habit> habits = communicator.getHabits();
+        server.interrupt();
         assertEquals(true, habits.get(0).isComplete());
-        assertEquals(70, communicator.getCoins());
+        assertEquals(70, coins);
     }
 }

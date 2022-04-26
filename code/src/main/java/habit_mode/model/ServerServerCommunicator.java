@@ -35,7 +35,6 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
     private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
     private static final String REQUEST_TYPE_RETRIEVE_DATA = "retrieve_data";
-    private static final String TCP_CONNECTION_ADDRESS = "tcp://127.0.0.1:5555";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
@@ -60,6 +59,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private String jsonMessage;
     private HashMap<String, Object> response;
     private String authenticationToken;
+    private String tcpAddress;
     private String jsonResponse;
     private String[] fields;
     private int coins;
@@ -77,11 +77,29 @@ public class ServerServerCommunicator extends ServerCommunicator {
      */
     public ServerServerCommunicator() {
         this.socket = CONTEXT.createSocket(SocketType.REQ);
+        this.tcpAddress = "tcp://127.0.0.1:5555";
         this.gson = new Gson();
         this.message = new HashMap<String, Object>();
         this.authenticationToken = "";
         this.fields = new String[1];
         this.coins = 0;
+    }
+
+    /**
+     * An overloaded constructor for testing purposes. 
+     * 
+     * @precondition tcpAddress != null 
+     * @postcondition this.socket.getSocketType == SocketType.REQ &&
+     *                this.getGson() == new Gson() &&
+     *                this.getMessage() == {} &&
+     *                this.authenticationToken == ""
+     *                this.fields.length == 1;
+     * 
+     * @param tcpAddress The address for the client to connect to.
+     */
+    public ServerServerCommunicator(String tcpAddress) {
+        this();
+        this.tcpAddress = tcpAddress;        
     }
 
     /**
@@ -281,7 +299,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     }
 
     private void sendMessage() {
-        this.socket.connect(TCP_CONNECTION_ADDRESS);
+        this.socket.connect(this.tcpAddress);
 
         this.jsonMessage = this.gson.toJson(this.message);
 
@@ -290,7 +308,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
         this.jsonResponse = this.socket.recvStr();
         this.response = this.gson.fromJson(this.jsonResponse, TYPE);
 
-        this.socket.disconnect(TCP_CONNECTION_ADDRESS);
+        this.socket.disconnect(this.tcpAddress);
         this.message.clear();
     }
 
