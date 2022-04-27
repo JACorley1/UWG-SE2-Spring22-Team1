@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
+import habit_mode.model.local_implementation.LocalServerCommunicator;
 import habit_mode.view_model.HabitViewModel;
 
 class TestRemoveHabit {
     @Test
     void testRemoveDailyHabitParameterWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());      
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.dailySelectedProperty().set(true);
@@ -27,7 +28,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveWeeklyHabitParameterWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());       
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.weeklySelectedProperty().set(true);
@@ -42,7 +43,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveMonthlyHabitParameterWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());       
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.monthlySelectedProperty().set(true);
@@ -58,7 +59,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveHabitWithNullStringProperty() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());      
         viewModel.removeHabitNameProperty().set(null);
 
         assertAll(
@@ -81,7 +82,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveNullHabit() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());       
         assertAll(
                 () -> {
                     assertThrows(
@@ -98,7 +99,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveWeeklyHabitWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());       
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.weeklySelectedProperty().set(true);
@@ -114,7 +115,7 @@ class TestRemoveHabit {
 
     @Test
     void testRemoveDailyHabitWithValidPropertyValues() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());       
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.dailySelectedProperty().set(true);
