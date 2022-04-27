@@ -15,7 +15,7 @@ public class TestSendCompletedHabit {
     @Test
     void testSendCompletedHabit() {
         LocalServerCommunicator.reset();
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());       
         String testString = "Coins: 70";
         Habit habit = new Habit("text", Frequency.MONTHLY);
         viewModel.habitNameProperty().set("text");
@@ -31,7 +31,7 @@ public class TestSendCompletedHabit {
     @Test
     void testSendCompletedHabitWithNullHabit() {
         LocalServerCommunicator.reset();
-        HabitViewModel viewModel = new HabitViewModel(true);
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());
         assertThrows(
                 IllegalArgumentException.class,
                 () -> {
