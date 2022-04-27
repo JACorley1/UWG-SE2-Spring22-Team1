@@ -54,6 +54,9 @@ public class SudokuPuzzle {
      *                this.getDefaultAnswer() == new int[PUZZLE_SIZE][PUZZLE_SIZE] &&
      *                this.getSelectedNumber() == -1 &&
      *                this.moveHistory == new Stack<SudokuMove>()
+     * 
+     * @param numbers The numbers to set the board to.
+     * @param locks The numbers locked on the board.
      */
     public SudokuPuzzle(int[][] numbers, boolean[][] locks) {
         this();
