@@ -227,10 +227,25 @@ public class LocalServerCommunicator extends ServerCommunicator {
         return puzzle;
     }
 
+    /**
+     * Gets the stored puzzle
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return stored puzzle
+     */
     public SudokuPuzzle getStoredPuzzle() {
         return storedPuzzle;
     }
 
+    /**
+     * Sets the stored puzzle
+     * 
+     * @precondition none
+     * @postcondition storedPuzzle = puzzle.
+     * 
+     * @param puzzle the puzzle to be set.
+     */
     public void setStorePuzzle(SudokuPuzzle puzzle) {
         storedPuzzle = puzzle;
     }
