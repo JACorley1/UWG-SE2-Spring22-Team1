@@ -20,10 +20,7 @@ import org.zeromq.ZContext;
  * A proper implementation of the server communication protocol indicated by the 
  * ServerCommunicator abstract class. 
  * Uses ZeroMQ and Gson to facilitate proper communication. 
- * 
- * *NOTE FOR TESTING*
- * Make sure the server is running before pulling tests until a TestDouble is implemented.
- * 
+ *  
  * @author Team 1
  * @version Spring 2022
  */
@@ -35,6 +32,9 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
     private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
     private static final String REQUEST_TYPE_RETRIEVE_DATA = "retrieve_data";
+    private static final String REQUEST_TYPE_GENERATE_PUZZLE = "generate_sudoku_puzzle";
+    private static final String REQUEST_TYPE_UPDATE_PUZZLE = "update_sudoku_puzzle";
+    private static final String REQUEST_TYPE_BUY_HINT = "buy_hint";
     private static final String TCP_CONNECTION_ADDRESS = "tcp://127.0.0.1:5555";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -44,6 +44,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String AUTHENTICATION_TOKEN = "authentication_token";
     private static final String FIELDS = "fields";
     private static final String HABITS = "habits";
+    private static final String PUZZLE = "sudoku_puzzle";
     private static final String HABIT_NAME = "habit_name";
     private static final String HABIT_FREQ = "habit_frequency";
     private static final String HABIT_ID = "habit_id";
@@ -214,6 +215,16 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public SudokuPuzzle getSudokuPuzzle() {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_RETRIEVE_DATA);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.fields[0] = PUZZLE;
+        this.message.put(FIELDS, this.fields);
+
+        this.sendMessage();
+        if (this.response.get("sudoku_puzzle") == null) {
+            return null;
+        }
+        
         return null;
     }
 
@@ -280,6 +291,11 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return SuccessCode.OKAY;
     }
 
+    @Override 
+    public SudokuPuzzle generateSudokuPuzzle() {
+        return null;
+    }
+
     private void sendMessage() {
         this.socket.connect(TCP_CONNECTION_ADDRESS);
 
@@ -317,6 +333,10 @@ public class ServerServerCommunicator extends ServerCommunicator {
             habits.add(habit);
         }
         return habits;
+    }
+
+    private SudokuPuzzle parseSudokuPuzzleResponse() {
+        return null;
     }
 
 }

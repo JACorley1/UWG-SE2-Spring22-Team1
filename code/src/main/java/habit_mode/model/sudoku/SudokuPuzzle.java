@@ -27,7 +27,7 @@ public class SudokuPuzzle {
      * 
      * @precondition None
      * @postcondition this.getNumbers() == new int[PUZZLE_SIZE][PUZZLE_SIZE] &&
-     *                this.gtNumberLocks() ==
+     *                this.getNumberLocks() ==
      *                new boolean[PUZZLE_SIZE][PUZZLE_SIZE] &&
      *                this.getDefaultAnswer() == new int[PUZZLE_SIZE][PUZZLE_SIZE]
      *                &&
@@ -40,6 +40,25 @@ public class SudokuPuzzle {
         this.defaultAnswer = new int[PUZZLE_SIZE][PUZZLE_SIZE];
         this.selectedNumber = -1;
         this.moveHistory = new Stack<SudokuMove>();
+
+    }
+
+    /**
+     * Overloaded Constructor that builds a puzzle using passed in numbers and locks.
+     * 
+     * @precondition numbers != null &&
+     *               locks != null &&
+     *               
+     * @postcondition this.getNumbers() == numbers &&
+     *                this.getNumberLocks() == locks &&
+     *                this.getDefaultAnswer() == new int[PUZZLE_SIZE][PUZZLE_SIZE] &&
+     *                this.getSelectedNumber() == -1 &&
+     *                this.moveHistory == new Stack<SudokuMove>()
+     */
+    public SudokuPuzzle(int[][] numbers, boolean[][] locks) {
+        this();
+        this.numbers = numbers;
+        this.numberLocks = locks;
     }
 
     /**
