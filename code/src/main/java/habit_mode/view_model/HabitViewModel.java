@@ -7,7 +7,6 @@ import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.ServerServerCommunicator;
 import habit_mode.model.SuccessCode;
-import habit_mode.model.local_implementation.LocalServerCommunicator;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -51,20 +50,7 @@ public class HabitViewModel {
      *                 FXCollections.observableArrayList(new HabitManager());
      */
     public HabitViewModel() {
-        this.serverCommunicator = new ServerServerCommunicator();
-        this.dailySelectedProperty = new SimpleBooleanProperty();
-        this.weeklySelectedProperty = new SimpleBooleanProperty();
-        this.monthlySelectedProperty = new SimpleBooleanProperty();
-        this.removeDailySelectedProperty = new SimpleBooleanProperty();
-        this.removeWeeklySelectedProperty = new SimpleBooleanProperty();
-        this.popupVisibleProperty = new SimpleBooleanProperty();
-        this.errorVisibleProperty = new SimpleBooleanProperty();
-        this.selectedHabitProperty = new SimpleObjectProperty<Habit>();
-        this.habitNameProperty = new SimpleStringProperty("");
-        this.removeHabitNameProperty = new SimpleStringProperty("");
-        this.coinsLabelProperty = new SimpleStringProperty("");
-        this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
-        this.completedHabitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
+        this(new ServerServerCommunicator());
     }
 
     /**
@@ -78,10 +64,10 @@ public class HabitViewModel {
      *                this.habitListProperty() ==
      *                FXCollections.observableArrayList(new HabitManager());
      * 
-     * @param dummy A boolean value that exists to allow constructor overloading.
+     * @param serverCommunicator A server communicator to be used in the view model.
      */
-    public HabitViewModel(boolean dummy) {
-        this.serverCommunicator = new LocalServerCommunicator();
+    public HabitViewModel(ServerCommunicator serverCommunicator) {
+        this.serverCommunicator = serverCommunicator;
         this.dailySelectedProperty = new SimpleBooleanProperty();
         this.weeklySelectedProperty = new SimpleBooleanProperty();
         this.monthlySelectedProperty = new SimpleBooleanProperty();
@@ -94,6 +80,7 @@ public class HabitViewModel {
         this.removeHabitNameProperty = new SimpleStringProperty("");
         this.coinsLabelProperty = new SimpleStringProperty("");
         this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
+        this.completedHabitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
     }
 
     /**

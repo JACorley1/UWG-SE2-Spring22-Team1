@@ -48,10 +48,8 @@ public class LoginScreenViewModel {
      * @param dummy A boolean value that exists to allow constructor overloading.
      */
     public LoginScreenViewModel(boolean dummy) {
+        this();
         this.serverCommunicator = new LocalServerCommunicator();
-        this.usernameProperty = new SimpleStringProperty();
-        this.passwordProperty = new SimpleStringProperty();
-        this.emailProperty = new SimpleStringProperty();
     }
 
     /**

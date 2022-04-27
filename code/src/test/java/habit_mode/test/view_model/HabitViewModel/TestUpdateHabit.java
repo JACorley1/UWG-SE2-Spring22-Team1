@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import habit_mode.model.Frequency;
+import habit_mode.model.local_implementation.LocalServerCommunicator;
 import habit_mode.view_model.HabitViewModel;
 
 public class TestUpdateHabit {
     @Test
     void testUpdateHabitWithNewTextAndFrequency() {
-        HabitViewModel viewModel = new HabitViewModel(true);
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.dailySelectedProperty().set(true);
@@ -32,7 +33,7 @@ public class TestUpdateHabit {
 
     @Test
     void testWhenIndexIsGreaterThanTheSizeOfTheHabitList() {
-        HabitViewModel viewModel = new HabitViewModel(true);        
+        HabitViewModel viewModel = new HabitViewModel(new LocalServerCommunicator());       
         String testString = "Hello!";
         viewModel.habitNameProperty().set(testString);
         viewModel.dailySelectedProperty().set(true);
