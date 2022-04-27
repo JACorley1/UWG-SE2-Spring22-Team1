@@ -33,7 +33,14 @@ class UserData:
         Precondition:  isinstance(username, str) and
                        isinstance(password, str) and
                        isinstance(email, str)
-        Postcondition:
+        Postcondition: self.username == username and
+                       self.password == password and
+                       self.email == email and
+                       self.coins == 0 and
+                       self.sudoku_puzzle == None and
+                       self.next_habit_id == 0 and
+                       self.habits == {}
+
         """
         EPOCH_TIME = 30256871
 
