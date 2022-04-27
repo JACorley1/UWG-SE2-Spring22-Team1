@@ -271,7 +271,8 @@ class Server:
     @author Team 1
     @version Spring 2022
     """
-    def run(self, socket_info: Tuple[str, int], service_manager: ServiceManager, authentication_manager: AuthenticationManager) -> None:
+    def run(self, socket_info: Tuple[str, int], service_manager: ServiceManager, 
+            authentication_manager: AuthenticationManager, context: zmq.Context = zmq.Context()) -> None:
         """
         Launches the server with a specified ServiceManager.
         The server will run indefinitely.
@@ -281,8 +282,16 @@ class Server:
                        isinstance(socket_info[0], str) and
                        isinstance(socket_info[1], int) and
                        isinstance(service_manager, ServiceManager) and
-                       isinstance(authentication_manager, AuthenticationManager)
+                       isinstance(authentication_manager, AuthenticationManager) and
+                       isinstance(context, zmq.Context)
         Postcondition: The server becomes active.
+
+        Params:
+            socket_info - A tuple of the form (str, int) containing the hostname and port number
+                            of the server.
+            service_manager - The ServiceManager to use for the server.
+            authentication_manager - The AuthenticationManager to use for the server.
+            context - The context to use for the server.
         """
         if not isinstance(socket_info, tuple):
             raise Exception("socket_info must be a tuple")
@@ -296,9 +305,10 @@ class Server:
             raise Exception("service_manager must be an instance of ServiceManager.")
         if not isinstance(authentication_manager, AuthenticationManager):
             raise Exception("authentication_manager must be an instance of AuthenticationManager.")
+        if not isinstance(context, zmq.Context):
+            raise Exception("context must be an instance of zmq.Context.")
 
         request_handler = _RequestHandler(service_manager, authentication_manager)
-        context = zmq.Context()
         socket = context.socket(zmq.REP)
         socket.bind(f"tcp://{socket_info[0]}:{socket_info[1]}")
 
@@ -311,6 +321,7 @@ class Server:
             print(f"Received request: {request}")
             if request == "exit":
                 print("Server closing...")
+                socket.close()
                 return
             try:
                 response = request_handler.handle_request(request)
