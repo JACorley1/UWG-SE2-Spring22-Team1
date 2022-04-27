@@ -40,7 +40,7 @@ public class TestGetHabits {
                 List<Habit> habits = new ArrayList<Habit>();
                 Gson gson = new Gson();
                 int responses = 0;
-                while (responses < 10) {
+                while (responses < 100) {
                     // Block until a message is received
                     HashMap<String, Object> reply = gson.fromJson(socket.recvStr(), TYPE);
 
@@ -93,6 +93,8 @@ public class TestGetHabits {
     
                     responses++;
                 }   
+            } catch (Exception e) {
+                this.interrupt();
             }
         }
     }
