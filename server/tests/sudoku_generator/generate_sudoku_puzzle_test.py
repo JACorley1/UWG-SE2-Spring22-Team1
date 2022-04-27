@@ -1,3 +1,4 @@
+import random
 import unittest
 
 import backend.sudoku_generator
@@ -14,6 +15,7 @@ class TestGenerateSudokuPuzzle(unittest.TestCase):
         """
         Tests if valid puzzles are generated.
         """
+        random.seed(0)
         for _ in range(3):
             puzzle: SudokuPuzzle = backend.sudoku_generator.generate_sudoku_puzzle()
             self.assertTrue(puzzle.is_solution_valid(), "Check if the generated puzzle is valid")
