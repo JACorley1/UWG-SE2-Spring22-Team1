@@ -141,5 +141,15 @@ public abstract class ServerCommunicator {
      *         or 15 if an unknown error occurs.
      */
     public abstract SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle);
+
+    /**
+     * Requests a hint from the server. 
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return values An array of 4 integers where each index corresponds to number, row, column, coins respectively.
+     */
+    public abstract int[] buyHint();
     
 }

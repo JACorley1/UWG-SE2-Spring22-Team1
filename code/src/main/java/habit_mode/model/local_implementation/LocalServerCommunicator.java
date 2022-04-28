@@ -250,4 +250,14 @@ public class LocalServerCommunicator extends ServerCommunicator {
         storedPuzzle = puzzle;
 
     }
+
+    @Override 
+    public int[] buyHint() {
+        int[] hint = new int[4];
+        hint[0] = 7;
+        hint[1] = 0;
+        hint[2] = 0;
+        hint[3] = coins - 20;
+        return hint;
+    }
 }
