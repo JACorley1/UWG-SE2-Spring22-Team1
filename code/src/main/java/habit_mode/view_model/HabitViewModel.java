@@ -206,7 +206,7 @@ public class HabitViewModel {
         if (index < 0) {
             throw new IllegalArgumentException("the index cannot be less than 0");
         }
-        if (index > this.habitListProperty.getValue().size()) {
+        if (index >= this.habitListProperty.getValue().size()) {
             throw new IllegalArgumentException("the index cannot be greater than the size of the habit list");
         }
         
