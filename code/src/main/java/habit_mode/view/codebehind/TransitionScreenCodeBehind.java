@@ -108,7 +108,6 @@ public class TransitionScreenCodeBehind {
     private void setPaneListener() {
         this.continueSudoku.sceneProperty().addListener((obs, wasNull, exists) -> {
             if (this.continueSudoku.sceneProperty().isNotNull().get()) {
-                System.out.println(this.continueSudoku.getScene().getRoot().getUserData());
                 ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.continueSudoku.getScene().getRoot().getUserData());
                 if (this.viewModel.getServerCommunicator().getSudokuPuzzle() == null) {
                     this.continueSudoku.disableProperty().set(true);
