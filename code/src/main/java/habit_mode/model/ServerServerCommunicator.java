@@ -278,21 +278,10 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public SuccessCode addHabit(Habit habit) {
-        int freqValue;
-        switch(habit.getFrequency()) {
-            case DAILY: freqValue = 0;
-                        break;
-            case WEEKLY: freqValue = 1;
-                        break;
-            case MONTHLY: freqValue = 2;
-                        break;
-            default: freqValue = 3;
-                        break;
-        }
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_ADD_HABIT);
         this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
         this.message.put(HABIT_NAME, habit.getText());
-        this.message.put(HABIT_FREQ, freqValue);
+        this.message.put(HABIT_FREQ, habit.getFrequency().ordinal());
 
         this.sendMessage();
 
