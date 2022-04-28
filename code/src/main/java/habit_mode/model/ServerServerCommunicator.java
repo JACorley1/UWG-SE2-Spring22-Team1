@@ -49,6 +49,9 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String HABIT_ID = "habit_id";
     private static final String HABIT_IDS = "habit_ids";
     private static final String NUMBERS = "numbers";
+    private static final String NUMBER = "number";
+    private static final String ROW = "row";
+    private static final String COL = "col";
     private static final String LOCKS = "number_locks";
     
     
@@ -171,6 +174,23 @@ public class ServerServerCommunicator extends ServerCommunicator {
             return;
         }
         this.authenticationToken = token;
+    }
+
+    @Override
+    public int[] buyHint() {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_BUY_HINT);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+
+        this.sendMessage();
+
+        int[] hint = new int[4];
+
+        hint[0] = ((Double) this.response.get(NUMBER)).intValue();
+        hint[1] = ((Double) this.response.get(ROW)).intValue();
+        hint[2] = ((Double) this.response.get(COL)).intValue();
+        hint[3] = ((Double) this.response.get(COINS)).intValue();
+
+        return hint;
     }
 
     @Override

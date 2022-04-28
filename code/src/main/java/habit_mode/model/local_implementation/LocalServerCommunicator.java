@@ -199,4 +199,9 @@ public class LocalServerCommunicator extends ServerCommunicator {
     public SudokuPuzzle generateSudokuPuzzle() {
         return null;
     }
+
+    @Override 
+    public int[] buyHint() {
+        return null;
+    }
 }
