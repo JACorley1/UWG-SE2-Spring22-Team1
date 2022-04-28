@@ -118,7 +118,7 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void hintButtonClicked(ActionEvent event) {
-        if (this.viewModel.getServerCommunicator().getCoins() - 20 > 0) {
+        if (this.viewModel.getServerCommunicator().getCoins() - 20 >= 0) {
             int[] hint = this.viewModel.getServerCommunicator().buyHint();
             int number = hint[0];
             int row = hint[1];
