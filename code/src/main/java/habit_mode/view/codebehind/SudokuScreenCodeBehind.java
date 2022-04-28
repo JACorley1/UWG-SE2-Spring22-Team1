@@ -163,7 +163,6 @@ public class SudokuScreenCodeBehind {
     @FXML
     void initialize() {
         this.viewModel = new SudokuScreenViewModel();
-        this.puzzle = this.viewModel.getServerCommunicator().getSudokuPuzzle();
         this.sudokuBoard = new Pane[9][9];
         mostRecentlySelectedPane = this.sudokuBoard[0][0];
         assert this.noSelectedHabitLabel != null : "fx:id=\"noSelectedHabitLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
@@ -191,6 +190,7 @@ public class SudokuScreenCodeBehind {
         this.mainPane.sceneProperty().addListener((obs, wasNull, exists) -> {
             if (this.mainPane.sceneProperty().isNotNull().get()) {
                 ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
+                this.puzzle = this.viewModel.getServerCommunicator().getSudokuPuzzle();
             }
         });
     }
