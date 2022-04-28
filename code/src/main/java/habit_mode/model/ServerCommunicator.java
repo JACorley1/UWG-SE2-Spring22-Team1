@@ -73,6 +73,16 @@ public abstract class ServerCommunicator {
      */
     public abstract SudokuPuzzle getSudokuPuzzle();
 
+    /**
+     * Generates a new puzzle for the user on Server side and returns it.
+     * 
+     * @precondition None
+     * @postcondition None
+     * 
+     * @return A new puzzle for the user.
+     */
+    public abstract SudokuPuzzle generateSudokuPuzzle();
+
     /** 
      * Requests that the server sets the user's wallet to have a specified number of coins.
      * 
@@ -108,6 +118,18 @@ public abstract class ServerCommunicator {
      */
     public abstract SuccessCode removeHabit(Habit habit);
 
+    /**
+     * Modifies the specified habit on the server.
+     * 
+     * @precondition habit != null
+     * @postcondition this.getHabits().contains(habit)
+     * 
+     * @param habit The specified habit to modify.
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *        50 if habit does not exist, or 15 if an unknown error occurs.
+     */
+    public abstract SuccessCode modifyHabit(Habit habit);
+
     /** 
      * Marks a specified habit as completed on the server.
      * 
@@ -131,4 +153,15 @@ public abstract class ServerCommunicator {
      *         or 15 if an unknown error occurs.
      */
     public abstract SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle);
+
+    /**
+     * Requests a hint from the server. 
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return values An array of 4 integers where each index corresponds to number, row, column, coins respectively.
+     */
+    public abstract int[] buyHint();
+    
 }

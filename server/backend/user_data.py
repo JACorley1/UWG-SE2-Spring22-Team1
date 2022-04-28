@@ -1,4 +1,4 @@
-from typing import Callable, MutableMapping, Optional
+from typing import Callable, List, MutableMapping, Optional
 from datetime import datetime
 from backend.habit import Habit, CompletionFrequency
 from backend.sudoku_puzzle import SudokuPuzzle
@@ -33,7 +33,14 @@ class UserData:
         Precondition:  isinstance(username, str) and
                        isinstance(password, str) and
                        isinstance(email, str)
-        Postcondition:
+        Postcondition: self.username == username and
+                       self.password == password and
+                       self.email == email and
+                       self.coins == 0 and
+                       self.sudoku_puzzle == None and
+                       self.next_habit_id == 0 and
+                       self.habits == {}
+
         """
         EPOCH_TIME = 30256871
 
@@ -116,7 +123,7 @@ class UserData:
         habit.complete()
         self.coins += 20
 
-        incomplete_habits: list[Habit] = list(
+        incomplete_habits: List[Habit] = list(
             filter(
                 lambda item: not item.is_complete and item.frequency == habit.frequency, 
                 self._habits.values()

@@ -17,22 +17,25 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
-import habit_mode.model.SuccessCode;
+import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.ServerServerCommunicator;
+import habit_mode.model.SuccessCode;
 
-public class TestRegisterCredentials {
-    private class TrueMockServer extends Thread {
-        private final Type TYPE = new TypeToken<HashMap<String, Object>>() { } .getType();
+public class TestModifyHabit {
+    public class TrueMockServer extends Thread {
+        private final Type TYPE = new TypeToken<HashMap<String, Object>>() {
+        }.getType();
         private final String succ = "success_code";
+
         @Override
         public void run() {
-            
+
             try (ZContext context = new ZContext()) {
                 // Socket to talk to clients
                 ZMQ.Socket socket = context.createSocket(SocketType.REP);
-                socket.bind("tcp://*:5550");
+                socket.bind("tcp://*:5558");
                 HashMap<String, Object> map1 = new HashMap<String, Object>();
                 HashMap<String, Object> response = new HashMap<String, Object>();
                 ArrayList<LinkedTreeMap<String, Object>> map = new ArrayList<LinkedTreeMap<String, Object>>();
@@ -52,7 +55,8 @@ public class TestRegisterCredentials {
                             response.clear();
                             break;
                         case "login":
-                            if (map1.containsValue(reply.get("username")) && map1.containsValue(reply.get("password"))) {
+                            if (map1.containsValue(reply.get("username"))
+                                    && map1.containsValue(reply.get("password"))) {
                                 response.put(succ, 00);
                                 response.put("authentication_token", "1");
                                 socket.send(gson.toJson(response));
@@ -75,6 +79,13 @@ public class TestRegisterCredentials {
                             socket.send(gson.toJson(response));
                             response.clear();
                             break;
+                        case "modify_habit":
+                            map.get(0).put("name", reply.get("habit_name"));
+                            map.get(0).put("frequency", reply.get("frequency"));
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
                         case "complete_habits":
                             map.get(0).replace("is_complete", true);
                             response.put(succ, 00);
@@ -90,30 +101,30 @@ public class TestRegisterCredentials {
                             socket.send(gson.toJson(response));
                             response.clear();
                             break;
-                        case "generate_sudoku_puzzle" :
-                            int[][] board = { 
-                                { 0, 9, 2, 0, 0, 0, 0, 8, 6 },
-                                { 0, 0, 3, 0, 2, 7, 0, 5, 9 },
-                                { 0, 5, 1, 3, 0, 6, 0, 2, 4 },
-                                { 2, 6, 0, 9, 7, 3, 8, 4, 1 },
-                                { 4, 0, 9, 5, 0, 1, 2, 0, 3 },
-                                { 3, 1, 7, 4, 0, 2, 9, 6, 5 },
-                                { 0, 3, 6, 7, 0, 8, 5, 0, 2 },
-                                { 0, 7, 0, 2, 0, 0, 6, 0, 0 },
-                                { 0, 2, 0, 6, 0, 0, 4, 0, 0 } 
+                        case "generate_sudoku_puzzle":
+                            int[][] board = {
+                                    { 0, 9, 2, 0, 0, 0, 0, 8, 6 },
+                                    { 0, 0, 3, 0, 2, 7, 0, 5, 9 },
+                                    { 0, 5, 1, 3, 0, 6, 0, 2, 4 },
+                                    { 2, 6, 0, 9, 7, 3, 8, 4, 1 },
+                                    { 4, 0, 9, 5, 0, 1, 2, 0, 3 },
+                                    { 3, 1, 7, 4, 0, 2, 9, 6, 5 },
+                                    { 0, 3, 6, 7, 0, 8, 5, 0, 2 },
+                                    { 0, 7, 0, 2, 0, 0, 6, 0, 0 },
+                                    { 0, 2, 0, 6, 0, 0, 4, 0, 0 }
                             };
-                            boolean[][] numberLocks = { 
-                                { false, true, true, false, false, false, false, true, true },
-                                { false, false, true, false, true, true, false, true, true },
-                                { false, true, true, true, false, true, false, true, true },
-                                { true, true, false, true, true, true, true, true, true },
-                                { true, false, true, true, false, true, true, false, true },
-                                { true, true, true, true, false, true, true, true, true },
-                                { false, true, true, true, false, true, true, false, true },
-                                { false, true, false, true, false, false, true, false, false },
-                                { false, true, false, true, false, false, true, false, false } 
+                            boolean[][] numberLocks = {
+                                    { false, true, true, false, false, false, false, true, true },
+                                    { false, false, true, false, true, true, false, true, true },
+                                    { false, true, true, true, false, true, false, true, true },
+                                    { true, true, false, true, true, true, true, true, true },
+                                    { true, false, true, true, false, true, true, false, true },
+                                    { true, true, true, true, false, true, true, true, true },
+                                    { false, true, true, true, false, true, true, false, true },
+                                    { false, true, false, true, false, false, true, false, false },
+                                    { false, true, false, true, false, false, true, false, false }
                             };
-                            
+
                             puzzle.put("numbers", board);
                             puzzle.put("number_locks", numberLocks);
                             response.put("sudoku_puzzle", puzzle);
@@ -121,18 +132,19 @@ public class TestRegisterCredentials {
                             socket.send(gson.toJson(response));
                             response.clear();
                             break;
-                        case "update_sudoku_puzzle" :
-                            
-                            ArrayList<ArrayList<Double>> numberLists = (ArrayList<ArrayList<Double>>) reply.get("numbers");
-                          
+                        case "update_sudoku_puzzle":
+
+                            ArrayList<ArrayList<Double>> numberLists = (ArrayList<ArrayList<Double>>) reply
+                                    .get("numbers");
+
                             int[][] numbers = new int[numberLists.size()][numberLists.size()];
-                
+
                             for (int row = 0; row < numberLists.size(); row++) {
                                 for (int col = 0; col < numberLists.get(row).size(); col++) {
                                     numbers[row][col] = numberLists.get(row).get(col).intValue();
                                 }
                             }
-                
+
                             puzzle.replace("numbers", numbers);
                             response.put(succ, 00);
                             socket.send(gson.toJson(response));
@@ -145,24 +157,30 @@ public class TestRegisterCredentials {
                             break;
 
                     }
-    
+
                     responses++;
-                }   
+                }
             } catch (Exception e) {
                 this.interrupt();
             }
-        } 
+        }
     }
+
     @Test
-    void testValidCredentials(){
-        ServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5550");
+    public void testModifyHabit() {
+        ServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5558");
         TrueMockServer server = new TrueMockServer();
         server.start();
         Random rand = new Random();
+        String username = rand.nextInt() + "";
+        Habit habit = new Habit("text", Frequency.DAILY);
 
-        SuccessCode code = communicator.registerCredentials(rand.nextInt() + "", "password", "email");
+        communicator.registerCredentials(username, "password", "email");
+        communicator.validateLogin(username, "password");
+        communicator.addHabit(habit);
+
+        assertEquals(SuccessCode.OKAY, communicator.modifyHabit(habit));
+
         server.interrupt();
-        assertEquals(SuccessCode.OKAY, code);
-
     }
 }

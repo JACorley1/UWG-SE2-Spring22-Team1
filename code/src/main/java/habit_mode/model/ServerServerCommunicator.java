@@ -20,10 +20,7 @@ import org.zeromq.ZContext;
  * A proper implementation of the server communication protocol indicated by the 
  * ServerCommunicator abstract class. 
  * Uses ZeroMQ and Gson to facilitate proper communication. 
- * 
- * *NOTE FOR TESTING*
- * Make sure the server is running before pulling tests until a TestDouble is implemented.
- * 
+ *  
  * @author Team 1
  * @version Spring 2022
  */
@@ -33,9 +30,12 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_LOGIN = "login";
     private static final String REQUEST_TYPE_ADD_HABIT = "add_habit";
     private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
+    private static final String REQUEST_TYPE_MODIFY_HABIT = "modify_habit";
     private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
     private static final String REQUEST_TYPE_RETRIEVE_DATA = "retrieve_data";
-    private static final String TCP_CONNECTION_ADDRESS = "tcp://127.0.0.1:5555";
+    private static final String REQUEST_TYPE_GENERATE_PUZZLE = "generate_sudoku_puzzle";
+    private static final String REQUEST_TYPE_UPDATE_PUZZLE = "update_sudoku_puzzle";
+    private static final String REQUEST_TYPE_BUY_HINT = "buy_hint";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
@@ -44,10 +44,16 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String AUTHENTICATION_TOKEN = "authentication_token";
     private static final String FIELDS = "fields";
     private static final String HABITS = "habits";
+    private static final String PUZZLE = "sudoku_puzzle";
     private static final String HABIT_NAME = "habit_name";
     private static final String HABIT_FREQ = "habit_frequency";
     private static final String HABIT_ID = "habit_id";
     private static final String HABIT_IDS = "habit_ids";
+    private static final String NUMBERS = "numbers";
+    private static final String NUMBER = "number";
+    private static final String ROW = "row";
+    private static final String COL = "col";
+    private static final String LOCKS = "number_locks";
     
     
     private static final ZContext CONTEXT = new ZContext();
@@ -62,6 +68,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private String authenticationToken;
     private String jsonResponse;
     private String[] fields;
+    private String tcpAddress;
     private int coins;
 
     /**
@@ -79,9 +86,27 @@ public class ServerServerCommunicator extends ServerCommunicator {
         this.socket = CONTEXT.createSocket(SocketType.REQ);
         this.gson = new Gson();
         this.message = new HashMap<String, Object>();
+        this.tcpAddress = "tcp://127.0.0.1:5555";
         this.authenticationToken = "";
         this.fields = new String[1];
         this.coins = 0;
+    }
+
+    /**
+     * An overloaded constructor for testing purposes. 
+     * 
+     * @precondition tcpAddress != null 
+     * @postcondition this.socket.getSocketType == SocketType.REQ &&
+     *                this.getGson() == new Gson() &&
+     *                this.getMessage() == {} &&
+     *                this.authenticationToken == ""
+     *                this.fields.length == 1;
+     * 
+     * @param tcpAddress The address for the client to connect to.
+     */
+    public ServerServerCommunicator(String tcpAddress) {
+        this();
+        this.tcpAddress = tcpAddress;        
     }
 
     /**
@@ -153,6 +178,23 @@ public class ServerServerCommunicator extends ServerCommunicator {
     }
 
     @Override
+    public int[] buyHint() {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_BUY_HINT);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+
+        this.sendMessage();
+
+        int[] hint = new int[4];
+
+        hint[0] = ((Double) this.response.get(NUMBER)).intValue();
+        hint[1] = ((Double) this.response.get(ROW)).intValue();
+        hint[2] = ((Double) this.response.get(COL)).intValue();
+        hint[3] = ((Double) this.response.get(COINS)).intValue();
+
+        return hint;
+    }
+
+    @Override
     public SuccessCode registerCredentials(String username, String password, String email) {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_REGISTER_USER);
         this.message.put(USERNAME, username);
@@ -165,7 +207,6 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
         return this.successCode;
     }
-
 
     @Override
     public SuccessCode validateLogin(String username, String password) {
@@ -197,7 +238,6 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return this.coins;
     }
     
-
     @Override
     public List<Habit> getHabits() {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_RETRIEVE_DATA);
@@ -214,7 +254,17 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public SudokuPuzzle getSudokuPuzzle() {
-        return null;
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_RETRIEVE_DATA);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.fields[0] = PUZZLE;
+        this.message.put(FIELDS, this.fields);
+
+        this.sendMessage();
+        if (this.response.get("sudoku_puzzle") == null) {
+            return null;
+        }
+        
+        return this.parseSudokuPuzzleResponse();
     }
 
     @Override
@@ -261,6 +311,19 @@ public class ServerServerCommunicator extends ServerCommunicator {
     }
 
     @Override
+    public SuccessCode modifyHabit(Habit habit) {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_MODIFY_HABIT);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.message.put(HABIT_NAME, habit.getText());
+        this.message.put(HABIT_FREQ, habit.getFrequency().ordinal());
+        this.message.put(HABIT_ID, habit.getId());
+        
+        this.sendMessage();
+
+        return SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
+    }
+
+    @Override
     public SuccessCode completeHabit(Habit habit) {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_COMPLETE_HABIT);
         this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
@@ -277,11 +340,29 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        return SuccessCode.OKAY;
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_UPDATE_PUZZLE);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.message.put(NUMBERS, puzzle.getNumbers());
+
+        this.sendMessage();
+
+        SuccessCode code = SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
+
+        return code;
+    }
+
+    @Override 
+    public SudokuPuzzle generateSudokuPuzzle() {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_GENERATE_PUZZLE);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+
+        this.sendMessage();
+
+        return this.parseSudokuPuzzleResponse();
     }
 
     private void sendMessage() {
-        this.socket.connect(TCP_CONNECTION_ADDRESS);
+        this.socket.connect(this.tcpAddress);
 
         this.jsonMessage = this.gson.toJson(this.message);
 
@@ -290,7 +371,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
         this.jsonResponse = this.socket.recvStr();
         this.response = this.gson.fromJson(this.jsonResponse, TYPE);
 
-        this.socket.disconnect(TCP_CONNECTION_ADDRESS);
+        this.socket.disconnect(this.tcpAddress);
         this.message.clear();
     }
 
@@ -317,6 +398,30 @@ public class ServerServerCommunicator extends ServerCommunicator {
             habits.add(habit);
         }
         return habits;
+    }
+
+    private SudokuPuzzle parseSudokuPuzzleResponse() {
+        LinkedTreeMap<String, Object> puzzleMap = (LinkedTreeMap<String, Object>) this.response.get(PUZZLE);
+        ArrayList<ArrayList<Double>> numberLists = (ArrayList<ArrayList<Double>>) puzzleMap.get(NUMBERS);
+        ArrayList<ArrayList<Boolean>> numberLocks = (ArrayList<ArrayList<Boolean>>) puzzleMap.get(LOCKS);
+        
+        int[][] numbers = new int[numberLists.size()][numberLists.size()];
+        boolean[][] locks = new boolean[numberLists.size()][numberLists.size()];
+
+        for (int row = 0; row < numberLists.size(); row++) {
+            for (int col = 0; col < numberLists.get(row).size(); col++) {
+                numbers[row][col] = numberLists.get(row).get(col).intValue();
+            }
+        }
+
+        for (int row = 0; row < numberLocks.size(); row++) {
+            for (int col = 0; col < numberLocks.get(row).size(); col++) {
+                locks[row][col] = numberLocks.get(row).get(col).booleanValue();
+            }
+        }
+        
+        SudokuPuzzle puzzle = new SudokuPuzzle(numbers, locks);
+        return puzzle;
     }
 
 }

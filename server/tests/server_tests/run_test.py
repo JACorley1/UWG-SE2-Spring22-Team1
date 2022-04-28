@@ -1,4 +1,6 @@
 import json
+from socket import socket
+from typing import Tuple
 import unittest
 import zmq
 import threading
@@ -13,8 +15,47 @@ def create_client_socket():
     socket.connect("tcp://127.0.0.1:5555")
     return socket
 
-def run_server(server: Server):
-    server.run(("127.0.0.1", 5555), ServiceManager(), AuthenticationManager())
+def run_server(server: Server, socket_info: Tuple[str, int] = ("127.0.0.1", 5555), context: zmq.Context = zmq.Context()):
+    server.run(socket_info, ServiceManager(), AuthenticationManager(), context)
+
+class ExceptionContext(zmq.Context):
+    exception_socket = None
+
+    def socket(self, socket_type, **kwargs):
+        self.exception_socket = ExceptionSocket()
+        return self.exception_socket
+
+class ExceptionSocket(zmq.Socket):
+    hits = 0
+    responses = []
+
+    def __init__(self, *a, **kw):
+        pass
+
+    def recv_string(self):
+        if self.hits == 0:
+            self.hits += 1
+            return json.dumps({
+                "request_type": "register_user", 
+                "username": "test", 
+                "password": "test", 
+                "email": "email@email.com"
+            })
+        else:
+            return json.dumps("exit")
+    
+    def bind(self, addr):
+        pass
+
+    def close(self, linger=None):
+        pass
+    
+    def send_string(self, string, flags=0, copy=True, track=False):
+        self.responses.append(string)
+
+class ExceptionServiceManager(ServiceManager):
+    def create_user(self, username: str, password: str, email: str) -> int:
+        raise Exception()
 
 class TestRun(unittest.TestCase):    
     """
@@ -102,3 +143,35 @@ class TestRun(unittest.TestCase):
         server = Server()
         with self.assertRaises(Exception):
             server.run(("localhost", 5555), ServiceManager(), "not an AuthenticationManager")
+
+    def test_context_is_none(self):
+        """
+        Tests that the server raises an error if the context is None
+        """
+        server = Server()
+        with self.assertRaises(Exception):
+            server.run(("localhost", 5555), ServiceManager(), AuthenticationManager(), None)
+    
+    def test_context_is_not_context(self):
+        """
+        Tests that the server raises an error if the context is not a context
+        """
+        server = Server()
+        with self.assertRaises(Exception):
+            server.run(("localhost", 5555), ServiceManager(), AuthenticationManager(), "not a context")
+
+    def test_request_causes_exception(self):
+        """
+        Tests if the server handles exceptions correctly
+        """
+        server = Server()
+        context = ExceptionContext()
+        server.run(("localhost", 5555), ExceptionServiceManager(), AuthenticationManager(), context)
+        
+        response = context.exception_socket.responses[0]
+        json_response = json.loads(response)
+        success_code = json_response["success_code"]
+        error_message = json_response["error_message"]
+
+        self.assertEqual(success_code, 15, "Success code is 15")
+        self.assertEqual(error_message, "Unknown error (Exception thrown)", "Check if error message is correct")
