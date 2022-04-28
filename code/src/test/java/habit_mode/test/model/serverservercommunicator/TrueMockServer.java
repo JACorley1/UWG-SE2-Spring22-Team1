@@ -75,6 +75,13 @@ class TrueMockServer extends Thread {
                         socket.send(gson.toJson(response));
                         response.clear();
                         break;
+                    case "modify_habit":
+                        map.get(0).put("name", reply.get("habit_name"));
+                        map.get(0).put("frequency", reply.get("frequency"));
+                        response.put(succ, 00);
+                        socket.send(gson.toJson(response));
+                        response.clear();
+                        break;
                     case "complete_habits":
                         map.get(0).replace("is_complete", true);
                         response.put(succ, 00);
