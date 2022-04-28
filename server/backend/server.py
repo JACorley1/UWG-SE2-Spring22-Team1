@@ -318,6 +318,7 @@ class Server:
             json_request = socket.recv_string()
             request = json.loads(json_request)
             json_response: str
+            print("*"*20)
             print(f"Received request: {request}")
             if request == "exit":
                 print("Server closing...")
@@ -333,6 +334,10 @@ class Server:
                     "error_message": "Unknown error (Exception thrown)"
                 }
             json_response = json.dumps(response)
+            print(f"Sending response: {json_response}")
+            print("*"*20)
+
+            print()
 
             #  Send reply back to client
             socket.send_string(json_response)

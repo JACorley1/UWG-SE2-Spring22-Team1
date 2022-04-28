@@ -224,8 +224,6 @@ public class HabitScreenCodeBehind {
         this.addHabitBackgroundAnchorPane.setVisible(false);
     }
 
-
-
     @FXML
     void addButtonClicked(ActionEvent event) {
         this.addHabitBackgroundAnchorPane.setVisible(true);
@@ -233,8 +231,6 @@ public class HabitScreenCodeBehind {
         this.removeHabitAnchorPane.setVisible(false);
         this.completeHabitAnchorPane.setVisible(false);
     }
-
-    
 
     @FXML
     void backButtonClicked(ActionEvent event) {
