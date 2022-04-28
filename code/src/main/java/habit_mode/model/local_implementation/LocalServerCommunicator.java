@@ -194,4 +194,9 @@ public class LocalServerCommunicator extends ServerCommunicator {
         }
         return successCode;
     }
+
+    @Override
+    public SudokuPuzzle generateSudokuPuzzle() {
+        return null;
+    }
 }

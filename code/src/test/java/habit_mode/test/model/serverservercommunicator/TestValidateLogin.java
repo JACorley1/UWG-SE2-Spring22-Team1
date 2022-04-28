@@ -31,10 +31,11 @@ public class TestValidateLogin {
             try (ZContext context = new ZContext()) {
                 // Socket to talk to clients
                 ZMQ.Socket socket = context.createSocket(SocketType.REP);
-                socket.bind("tcp://*:5553");
+                socket.bind("tcp://*:5555");
                 HashMap<String, Object> map1 = new HashMap<String, Object>();
                 HashMap<String, Object> response = new HashMap<String, Object>();
                 ArrayList<LinkedTreeMap<String, Object>> map = new ArrayList<LinkedTreeMap<String, Object>>();
+                LinkedTreeMap<String, Object> puzzle = new LinkedTreeMap<String, Object>();
                 List<Habit> habits = new ArrayList<Habit>();
                 Gson gson = new Gson();
                 int responses = 0;
@@ -81,12 +82,67 @@ public class TestValidateLogin {
                             response.clear();
                             break;
                         case "retrieve_data":
+                            response.put("sudoku_puzzle", puzzle);
                             response.put("habits", map);
                             response.put("coins", 70);
                             response.put(succ, 00);
                             socket.send(gson.toJson(response));
                             response.clear();
                             break;
+                        case "generate_sudoku_puzzle" :
+                            int[][] board = { 
+                                { 0, 9, 2, 0, 0, 0, 0, 8, 6 },
+                                { 0, 0, 3, 0, 2, 7, 0, 5, 9 },
+                                { 0, 5, 1, 3, 0, 6, 0, 2, 4 },
+                                { 2, 6, 0, 9, 7, 3, 8, 4, 1 },
+                                { 4, 0, 9, 5, 0, 1, 2, 0, 3 },
+                                { 3, 1, 7, 4, 0, 2, 9, 6, 5 },
+                                { 0, 3, 6, 7, 0, 8, 5, 0, 2 },
+                                { 0, 7, 0, 2, 0, 0, 6, 0, 0 },
+                                { 0, 2, 0, 6, 0, 0, 4, 0, 0 } 
+                            };
+                            boolean[][] numberLocks = { 
+                                { false, true, true, false, false, false, false, true, true },
+                                { false, false, true, false, true, true, false, true, true },
+                                { false, true, true, true, false, true, false, true, true },
+                                { true, true, false, true, true, true, true, true, true },
+                                { true, false, true, true, false, true, true, false, true },
+                                { true, true, true, true, false, true, true, true, true },
+                                { false, true, true, true, false, true, true, false, true },
+                                { false, true, false, true, false, false, true, false, false },
+                                { false, true, false, true, false, false, true, false, false } 
+                            };
+                            
+                            puzzle.put("numbers", board);
+                            puzzle.put("number_locks", numberLocks);
+                            response.put("sudoku_puzzle", puzzle);
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
+                        case "update_sudoku_puzzle" :
+                            
+                            ArrayList<ArrayList<Double>> numberLists = (ArrayList<ArrayList<Double>>) reply.get("numbers");
+                          
+                            int[][] numbers = new int[numberLists.size()][numberLists.size()];
+                
+                            for (int row = 0; row < numberLists.size(); row++) {
+                                for (int col = 0; col < numberLists.get(row).size(); col++) {
+                                    numbers[row][col] = numberLists.get(row).get(col).intValue();
+                                }
+                            }
+                
+                            puzzle.replace("numbers", numbers);
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            break;
+                        case "remove_habit":
+                            map.clear();
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
+
                     }
     
                     responses++;
@@ -94,11 +150,11 @@ public class TestValidateLogin {
             } catch (Exception e) {
                 this.interrupt();
             }
-        }
+        } 
     }
     @Test
     void testValidCredentials(){
-        ServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5553");
+        ServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5555");
 
         TrueMockServer server = new TrueMockServer();
         server.start();

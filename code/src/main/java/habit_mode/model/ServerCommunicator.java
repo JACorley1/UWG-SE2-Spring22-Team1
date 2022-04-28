@@ -73,6 +73,16 @@ public abstract class ServerCommunicator {
      */
     public abstract SudokuPuzzle getSudokuPuzzle();
 
+    /**
+     * Generates a new puzzle for the user on Server side and returns it.
+     * 
+     * @precondition None
+     * @postcondition None
+     * 
+     * @return A new puzzle for the user.
+     */
+    public abstract SudokuPuzzle generateSudokuPuzzle();
+
     /** 
      * Requests that the server sets the user's wallet to have a specified number of coins.
      * 
@@ -131,4 +141,5 @@ public abstract class ServerCommunicator {
      *         or 15 if an unknown error occurs.
      */
     public abstract SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle);
+    
 }
