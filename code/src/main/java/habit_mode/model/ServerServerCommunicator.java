@@ -49,6 +49,8 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String HABIT_FREQ = "habit_frequency";
     private static final String HABIT_ID = "habit_id";
     private static final String HABIT_IDS = "habit_ids";
+    private static final String NUMBERS = "numbers";
+    private static final String LOCKS = "number_locks";
     
     
     private static final ZContext CONTEXT = new ZContext();
@@ -61,9 +63,9 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private String jsonMessage;
     private HashMap<String, Object> response;
     private String authenticationToken;
-    private String tcpAddress;
     private String jsonResponse;
     private String[] fields;
+    private String tcpAddress;
     private int coins;
 
     /**
@@ -79,9 +81,9 @@ public class ServerServerCommunicator extends ServerCommunicator {
      */
     public ServerServerCommunicator() {
         this.socket = CONTEXT.createSocket(SocketType.REQ);
-        this.tcpAddress = "tcp://127.0.0.1:5555";
         this.gson = new Gson();
         this.message = new HashMap<String, Object>();
+        this.tcpAddress = "tcp://127.0.0.1:5555";
         this.authenticationToken = "";
         this.fields = new String[1];
         this.coins = 0;
@@ -244,7 +246,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
             return null;
         }
         
-        return null;
+        return this.parseSudokuPuzzleResponse();
     }
 
     @Override
@@ -307,7 +309,25 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        return SuccessCode.OKAY;
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_UPDATE_PUZZLE);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.message.put(NUMBERS, puzzle.getNumbers());
+
+        this.sendMessage();
+
+        SuccessCode code = SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
+
+        return code;
+    }
+
+    @Override 
+    public SudokuPuzzle generateSudokuPuzzle() {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_GENERATE_PUZZLE);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+
+        this.sendMessage();
+
+        return this.parseSudokuPuzzleResponse();
     }
 
     @Override 
@@ -355,7 +375,27 @@ public class ServerServerCommunicator extends ServerCommunicator {
     }
 
     private SudokuPuzzle parseSudokuPuzzleResponse() {
-        return null;
+        LinkedTreeMap<String, Object> puzzleMap = (LinkedTreeMap<String, Object>) this.response.get(PUZZLE);
+        ArrayList<ArrayList<Double>> numberLists = (ArrayList<ArrayList<Double>>) puzzleMap.get(NUMBERS);
+        ArrayList<ArrayList<Boolean>> numberLocks = (ArrayList<ArrayList<Boolean>>) puzzleMap.get(LOCKS);
+        
+        int[][] numbers = new int[numberLists.size()][numberLists.size()];
+        boolean[][] locks = new boolean[numberLists.size()][numberLists.size()];
+
+        for (int row = 0; row < numberLists.size(); row++) {
+            for (int col = 0; col < numberLists.get(row).size(); col++) {
+                numbers[row][col] = numberLists.get(row).get(col).intValue();
+            }
+        }
+
+        for (int row = 0; row < numberLocks.size(); row++) {
+            for (int col = 0; col < numberLocks.get(row).size(); col++) {
+                locks[row][col] = numberLocks.get(row).get(col).booleanValue();
+            }
+        }
+        
+        SudokuPuzzle puzzle = new SudokuPuzzle(numbers, locks);
+        return puzzle;
     }
 
 }

@@ -141,4 +141,5 @@ public abstract class ServerCommunicator {
      *         or 15 if an unknown error occurs.
      */
     public abstract SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle);
+    
 }

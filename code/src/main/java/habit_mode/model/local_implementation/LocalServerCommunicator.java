@@ -248,5 +248,6 @@ public class LocalServerCommunicator extends ServerCommunicator {
      */
     public void setStorePuzzle(SudokuPuzzle puzzle) {
         storedPuzzle = puzzle;
+
     }
 }

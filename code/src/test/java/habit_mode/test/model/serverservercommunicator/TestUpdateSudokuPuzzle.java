@@ -18,11 +18,12 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
 import habit_mode.model.SuccessCode;
+import habit_mode.model.sudoku.SudokuPuzzle;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
 import habit_mode.model.ServerServerCommunicator;
 
-public class TestRegisterCredentials {
+public class TestUpdateSudokuPuzzle {
     private class TrueMockServer extends Thread {
         private final Type TYPE = new TypeToken<HashMap<String, Object>>() { } .getType();
         private final String succ = "success_code";
@@ -32,7 +33,7 @@ public class TestRegisterCredentials {
             try (ZContext context = new ZContext()) {
                 // Socket to talk to clients
                 ZMQ.Socket socket = context.createSocket(SocketType.REP);
-                socket.bind("tcp://*:5550");
+                socket.bind("tcp://*:5556");
                 HashMap<String, Object> map1 = new HashMap<String, Object>();
                 HashMap<String, Object> response = new HashMap<String, Object>();
                 ArrayList<LinkedTreeMap<String, Object>> map = new ArrayList<LinkedTreeMap<String, Object>>();
@@ -153,16 +154,18 @@ public class TestRegisterCredentials {
             }
         } 
     }
+
     @Test
-    void testValidCredentials(){
-        ServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5550");
+    void testUpdatePuzzle() {
         TrueMockServer server = new TrueMockServer();
+        ServerServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5556");
         server.start();
-        Random rand = new Random();
+        SudokuPuzzle puzzle = communicator.generateSudokuPuzzle();
 
-        SuccessCode code = communicator.registerCredentials(rand.nextInt() + "", "password", "email");
-        server.interrupt();
-        assertEquals(SuccessCode.OKAY, code);
+        communicator.updateSudokuPuzzle(puzzle);
+        int size = communicator.getSudokuPuzzle().getNumbers().length;
 
+        assertEquals(puzzle.getNumbers().length, size);
     }
+    
 }
