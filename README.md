@@ -9,8 +9,6 @@ Habit Mode is a habit-reinforcement application that encourages the development 
   - The `coverage` and `pytest` modules must be installed through pip to run the script.
   - Coverage can be checked by opening `server/tests/htmlcov/index.html`.
   - Adding `-o` will display the code coverage in a webpage immediately after finishing.
-- **NOTE ABOUT TESTING SERVERSERVERCOMMUNICATOR**
-  - Currently, there is not a test double implemented for ServerServerCommunicator. Its tests will only pass if the server is currently running.
 
 ## Running
 1. Ensure python's zmq module is installed by running `pip install zmq`.
@@ -21,8 +19,3 @@ Habit Mode is a habit-reinforcement application that encourages the development 
 4. Launch the client by with `mvn javafx:run`.
 5. On the title screen, register for an account.
 6. Once the account has been successfully registered, you will be logged in automatically.
-7. - **NOTE ABOUT DEMOING UI FEATURES**
-  - Need to adjust contstructors in the Habit and Login codebehinds to demo features as the integration with server and client currently
-  - does not allow for testing of features in the HabitScreen UI.
-  - Adjustment to make: 
-  -   In the initialize methods in HabitScreenCodeBehind.java and LoginScreen.java pass in "true" as shown: this.(relatedvalue)Model(true);. 
