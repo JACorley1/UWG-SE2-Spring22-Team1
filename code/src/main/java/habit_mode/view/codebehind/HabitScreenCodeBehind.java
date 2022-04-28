@@ -262,9 +262,9 @@ public class HabitScreenCodeBehind {
 
     @FXML
     void sudokuButtonSelected(ActionEvent event) throws IOException {
-        Parent loader = FXMLLoader.load(getClass().getResource("SudokuScreen.fxml"));
+        Parent loader = FXMLLoader.load(getClass().getResource("TransitionScreen.fxml"));
         loader.setUserData(this.viewModel.getAuthenticationToken());
-
+        System.out.println(this.viewModel.getAuthenticationToken());
 
         Scene scene = new Scene(loader);
 
