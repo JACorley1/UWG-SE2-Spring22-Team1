@@ -33,7 +33,7 @@ public class TestGetSudokuPuzzle {
             try (ZContext context = new ZContext()) {
                 // Socket to talk to clients
                 ZMQ.Socket socket = context.createSocket(SocketType.REP);
-                socket.bind("tcp://*:5552");
+                socket.bind("tcp://*:5554");
                 HashMap<String, Object> map1 = new HashMap<String, Object>();
                 HashMap<String, Object> response = new HashMap<String, Object>();
                 ArrayList<LinkedTreeMap<String, Object>> map = new ArrayList<LinkedTreeMap<String, Object>>();
@@ -122,6 +122,29 @@ public class TestGetSudokuPuzzle {
                             socket.send(gson.toJson(response));
                             response.clear();
                             break;
+                        case "update_sudoku_puzzle" :
+                            
+                            ArrayList<ArrayList<Double>> numberLists = (ArrayList<ArrayList<Double>>) reply.get("numbers");
+                          
+                            int[][] numbers = new int[numberLists.size()][numberLists.size()];
+                
+                            for (int row = 0; row < numberLists.size(); row++) {
+                                for (int col = 0; col < numberLists.get(row).size(); col++) {
+                                    numbers[row][col] = numberLists.get(row).get(col).intValue();
+                                }
+                            }
+                
+                            puzzle.replace("numbers", numbers);
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            break;
+                        case "remove_habit":
+                            map.clear();
+                            response.put(succ, 00);
+                            socket.send(gson.toJson(response));
+                            response.clear();
+                            break;
+
                     }
     
                     responses++;
@@ -136,7 +159,7 @@ public class TestGetSudokuPuzzle {
     void testGetPuzzle() {
         TrueMockServer server = new TrueMockServer();
         server.start();
-        ServerServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5552");
+        ServerServerCommunicator communicator = new ServerServerCommunicator("tcp://*:5554");
         SudokuPuzzle puzzle = communicator.generateSudokuPuzzle();
         SudokuPuzzle puzzle1 = communicator.getSudokuPuzzle();
 

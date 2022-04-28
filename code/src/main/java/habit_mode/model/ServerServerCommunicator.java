@@ -308,7 +308,15 @@ public class ServerServerCommunicator extends ServerCommunicator {
 
     @Override
     public SuccessCode updateSudokuPuzzle(SudokuPuzzle puzzle) {
-        return SuccessCode.OKAY;
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_UPDATE_PUZZLE);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.message.put(NUMBERS, puzzle.getNumbers());
+
+        this.sendMessage();
+
+        SuccessCode code = SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
+
+        return code;
     }
 
     @Override 
