@@ -75,11 +75,6 @@ public class TransitionScreenCodeBehind {
     void initialize() {
         this.viewModel = new TransitionScreenViewModel();
         
-        if (this.viewModel.getServerCommunicator().getSudokuPuzzle() == null) {
-            this.continueSudoku.disableProperty().set(true);
-        } else {
-            this.continueSudoku.disableProperty().set(false);
-        }
         assert this.mainPane != null : "fx:id=\"mainPane\" was not injected: check your FXML file 'TransitionScreen.fxml'.";
         assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'TransitionScreen.fxml'.";
         assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'TransitionScreen.fxml'.";
@@ -87,6 +82,7 @@ public class TransitionScreenCodeBehind {
         assert this.continueSudoku != null : "fx:id=\"continueSudoku\" was not injected: check your FXML file 'TransitionScreen.fxml'.";
         assert this.startNewGame != null : "fx:id=\"startNewGame\" was not injected: check your FXML file 'TransitionScreen.fxml'.";
         this.setPaneListener();
+        
     }
 
     @FXML
@@ -110,9 +106,15 @@ public class TransitionScreenCodeBehind {
     }
 
     private void setPaneListener() {
-        this.mainPane.sceneProperty().addListener((obs, wasNull, exists) -> {
-            if (this.mainPane.sceneProperty().isNotNull().get()) {
-                ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
+        this.continueSudoku.sceneProperty().addListener((obs, wasNull, exists) -> {
+            if (this.continueSudoku.sceneProperty().isNotNull().get()) {
+                System.out.println(this.continueSudoku.getScene().getRoot().getUserData());
+                ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.continueSudoku.getScene().getRoot().getUserData());
+                if (this.viewModel.getServerCommunicator().getSudokuPuzzle() == null) {
+                    this.continueSudoku.disableProperty().set(true);
+                } else {
+                    this.continueSudoku.disableProperty().set(false);
+                }
             }
         });
     }
