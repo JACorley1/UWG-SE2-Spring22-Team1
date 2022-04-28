@@ -118,6 +118,18 @@ public abstract class ServerCommunicator {
      */
     public abstract SuccessCode removeHabit(Habit habit);
 
+    /**
+     * Modifies the specified habit on the server.
+     * 
+     * @precondition habit != null
+     * @postcondition this.getHabits().contains(habit)
+     * 
+     * @param habit The specified habit to modify.
+     * @return A SuccessCode determined by response from server: 0 if successful, 10-13 if request breaks,
+     *        50 if habit does not exist, or 15 if an unknown error occurs.
+     */
+    public abstract SuccessCode modifyHabit(Habit habit);
+
     /** 
      * Marks a specified habit as completed on the server.
      * 
