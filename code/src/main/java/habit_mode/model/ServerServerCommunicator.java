@@ -35,6 +35,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_GENERATE_PUZZLE = "generate_sudoku_puzzle";
     private static final String REQUEST_TYPE_UPDATE_PUZZLE = "update_sudoku_puzzle";
     private static final String REQUEST_TYPE_BUY_HINT = "buy_hint";
+    private static final String TCP_CONNECTION_ADDRESS = "tcp://127.0.0.1:5555";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
