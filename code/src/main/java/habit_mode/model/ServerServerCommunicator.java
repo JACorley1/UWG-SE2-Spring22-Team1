@@ -330,11 +330,6 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return this.parseSudokuPuzzleResponse();
     }
 
-    @Override 
-    public SudokuPuzzle generateSudokuPuzzle() {
-        return null;
-    }
-
     private void sendMessage() {
         this.socket.connect(this.tcpAddress);
 
