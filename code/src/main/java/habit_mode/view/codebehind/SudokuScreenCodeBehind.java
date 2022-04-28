@@ -118,7 +118,19 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void hintButtonClicked(ActionEvent event) {
-
+        if (this.viewModel.getServerCommunicator().getCoins() - 20 > 0) {
+            int[] hint = this.viewModel.getServerCommunicator().buyHint();
+            int number = hint[0];
+            int row = hint[1];
+            int col = hint[2];
+            int coins = hint[3];
+            this.viewModel.getServerCommunicator().setCoins(coins);
+            Pane pane = this.sudokuBoard[row][col];
+            Label label = (Label) pane.getChildren().get(0);
+            pane.disableProperty().set(true);
+            label.setText(String.valueOf(number));
+            this.coinsLabel.setText(String.valueOf("Coins: " + this.viewModel.getServerCommunicator().getCoins()));
+        }
     }
 
     @FXML
@@ -219,6 +231,8 @@ public class SudokuScreenCodeBehind {
             if (this.mainPane.sceneProperty().isNotNull().get()) {
                 ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
                 this.puzzle = this.viewModel.getServerCommunicator().getSudokuPuzzle();
+                this.viewModel.setPuzzle(this.viewModel.getServerCommunicator().getSudokuPuzzle());
+                this.coinsLabel.setText("Coins: " + String.valueOf(this.viewModel.getServerCommunicator().getCoins()));
                 this.addPanes();
             }
         });
@@ -227,7 +241,6 @@ public class SudokuScreenCodeBehind {
 
 
     private void addPanes() {
-        boolean[][] numberLocks = this.viewModel.getPuzzle().getNumberLocks();
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane pane = new Pane();
@@ -237,8 +250,7 @@ public class SudokuScreenCodeBehind {
                 label.setFont(Font.font(15));
                 if (this.puzzle.getNumber(row, column) != 0) {
                     label.setText(String.valueOf(this.puzzle.getNumber(row, column)));
-                    if (this.viewModel.getPuzzle().isNumberLocked(column, row)) {
-                        System.out.println(this.viewModel.getPuzzle().isNumberLocked(column, row));
+                    if (this.viewModel.getPuzzle().isNumberLocked(row, column)) {
                         pane.disableProperty().set(true);
                     }
                 }

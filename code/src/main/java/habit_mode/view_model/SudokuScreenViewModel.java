@@ -63,4 +63,16 @@ public class SudokuScreenViewModel {
     public void convertLabelsToPuzzle(String text, int row, int column) {
         this.puzzle.setNumber(Integer.parseInt(text), row, column);
     }
+
+     /**
+     * Sets the puzzle.
+     * 
+     * @precondition None.
+     * @postcondition this.puzzle = puzzle.
+     * 
+     * @param puzzle The puzzle to be set to the viewmodels puzzle.
+     */
+    public void setPuzzle(SudokuPuzzle puzzle) {
+        this.puzzle = puzzle;
+    }
 }
