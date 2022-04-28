@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,7 +29,6 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import habit_mode.model.ServerServerCommunicator;
 import habit_mode.model.sudoku.SudokuPuzzle;
-import javafx.scene.input.MouseEvent;
 
 
 
@@ -50,7 +50,7 @@ public class SudokuScreenCodeBehind {
     private URL location;
 
     @FXML
-    private Label noSelectedHabitLabel;
+    private Label winLabel;
 
     @FXML
     private Button habitListButton;
@@ -110,13 +110,27 @@ public class SudokuScreenCodeBehind {
 
     private SudokuScreenViewModel viewModel;
 
+    private static Button mostRecentlySelectedButton;
+    
     private SudokuPuzzle puzzle;
 
     private static Pane mostRecentlySelectedPane;
 
     @FXML
     void hintButtonClicked(ActionEvent event) {
-
+        if (this.viewModel.getServerCommunicator().getCoins() - 20 >= 0) {
+            int[] hint = this.viewModel.getServerCommunicator().buyHint();
+            int number = hint[0];
+            int row = hint[1];
+            int col = hint[2];
+            int coins = hint[3];
+            this.viewModel.getServerCommunicator().setCoins(coins);
+            Pane pane = this.sudokuBoard[row][col];
+            Label label = (Label) pane.getChildren().get(0);
+            pane.disableProperty().set(true);
+            label.setText(String.valueOf(number));
+            this.coinsLabel.setText(String.valueOf("Coins: " + this.viewModel.getServerCommunicator().getCoins()));
+        }
     }
 
     @FXML
@@ -131,7 +145,15 @@ public class SudokuScreenCodeBehind {
 
     @FXML
     void habitButtonClicked(ActionEvent event) throws IOException {
-
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Label label = (Label) this.sudokuBoard[row][column].getChildren().get(0);
+                if (!label.getText().isEmpty()) {
+                    this.viewModel.convertLabelsToPuzzle(label.getText(), row, column);
+                }
+            }
+        }
+        this.viewModel.getServerCommunicator().updateSudokuPuzzle(this.viewModel.getPuzzle());
         Parent loader = FXMLLoader.load(getClass().getResource("HabitScreen.fxml"));
         loader.setUserData(this.viewModel.getAuthenticationToken());
 
@@ -141,12 +163,15 @@ public class SudokuScreenCodeBehind {
         app_stage.setScene(scene); 
 
         app_stage.show();
+
         
     }
 
     @FXML
     void numberButtonClicked(ActionEvent event) {
-    
+        Button number = (Button) event.getSource();
+        mostRecentlySelectedButton = number;
+        
 
     }
 
@@ -165,7 +190,8 @@ public class SudokuScreenCodeBehind {
         this.viewModel = new SudokuScreenViewModel();
         this.sudokuBoard = new Pane[9][9];
         mostRecentlySelectedPane = this.sudokuBoard[0][0];
-        assert this.noSelectedHabitLabel != null : "fx:id=\"noSelectedHabitLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
+        mostRecentlySelectedButton = null;
+        assert this.winLabel != null : "fx:id=\"winLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.habitListButton != null : "fx:id=\"habitListButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.settingsButton != null : "fx:id=\"settingsButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.coinsLabel != null : "fx:id=\"coinsLabel\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
@@ -185,25 +211,48 @@ public class SudokuScreenCodeBehind {
 
     }
 
+    @FXML
+    void mouseEvent(MouseEvent event) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                Label label = (Label) this.sudokuBoard[row][column].getChildren().get(0);
+                if (!label.getText().isEmpty()) {
+                    this.viewModel.convertLabelsToPuzzle(label.getText(), row, column);
+                    if (this.viewModel.getPuzzle().isComplete()) {
+                        this.winLabel.setVisible(true);
+                    }
+                }
+            }
+        }
+    }
+
     private void setUpPanes() {
         this.mainPane.sceneProperty().addListener((obs, wasNull, exists) -> {
             if (this.mainPane.sceneProperty().isNotNull().get()) {
                 ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
                 this.puzzle = this.viewModel.getServerCommunicator().getSudokuPuzzle();
+                this.viewModel.setPuzzle(this.viewModel.getServerCommunicator().getSudokuPuzzle());
+                this.coinsLabel.setText("Coins: " + String.valueOf(this.viewModel.getServerCommunicator().getCoins()));
                 this.addPanes();
             }
         });
     }
+    
+
 
     private void addPanes() {
         for (int row = 0; row < 9; row++) {
             for (int column = 0; column < 9; column++) {
                 Pane pane = new Pane();
                 Label label = new Label();
+                               
                 label.alignmentProperty().set(Pos.CENTER);
                 label.setFont(Font.font(15));
                 if (this.puzzle.getNumber(row, column) != 0) {
                     label.setText(String.valueOf(this.puzzle.getNumber(row, column)));
+                    if (this.viewModel.getPuzzle().isNumberLocked(row, column)) {
+                        pane.disableProperty().set(true);
+                    }
                 }
                 this.setLabelsAndPanes(pane, label);
                 EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
@@ -212,17 +261,23 @@ public class SudokuScreenCodeBehind {
                             SudokuScreenCodeBehind.mostRecentlySelectedPane = (Pane) event.getSource();
                             var list = SudokuScreenCodeBehind.mostRecentlySelectedPane.getChildren();
                             Label label = (Label) list.get(0);
-                            System.out.print(label.getText());        
-                        } 
+                            if (SudokuScreenCodeBehind.mostRecentlySelectedButton != null) {
+                            label.setText(SudokuScreenCodeBehind.mostRecentlySelectedButton.getText());
+                            }
+                        }
                     };
                 pane.setOnMouseClicked(eventHandler);
-                this.sudokuPane.setLayoutX(50);
-                this.sudokuBoard[row][column] = pane;
-                this.sudokuPane.setHgap(15);
-                this.sudokuPane.setVgap(30);              
-                this.sudokuPane.add(pane, row, column);
+                this.setSudokuPane(row, column, pane);
             }
         }
+    }
+
+    private void setSudokuPane(int row, int column, Pane pane) {
+        this.sudokuPane.setLayoutX(50);
+        this.sudokuBoard[row][column] = pane;
+        this.sudokuPane.setHgap(15);
+        this.sudokuPane.setVgap(30);              
+        this.sudokuPane.add(pane, row, column);
     }
 
     private void setLabelsAndPanes(Pane pane, Label label) {
