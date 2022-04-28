@@ -192,6 +192,7 @@ public class HabitViewModel {
     public String getAuthenticationToken() {
         return ((ServerServerCommunicator) this.serverCommunicator).getToken();
     }
+    
     /**
      * Updates the currently selected habit
      * 
@@ -208,10 +209,12 @@ public class HabitViewModel {
         if (index > this.habitListProperty.getValue().size()) {
             throw new IllegalArgumentException("the index cannot be greater than the size of the habit list");
         }
-        Habit updatedHabit = new Habit(this.removeHabitNameProperty().getValue(), this.determineRemoveFrequency());
-        this.removeHabit(this.habitListProperty.getValue().get(index));
-        this.habitListProperty.getValue().add(index, updatedHabit);
-        this.getServerCommunicator().addHabit(updatedHabit);
+        
+        Habit curHabit = this.habitListProperty.getValue().get(index);
+        curHabit.setFrequency(this.determineRemoveFrequency());
+        curHabit.textProperty().set(this.removeHabitNameProperty.get());
+
+        this.getServerCommunicator().modifyHabit(curHabit);
     }
 
      /**
@@ -448,6 +451,7 @@ public class HabitViewModel {
         if (habit == null) {
             throw new IllegalArgumentException("habit cannot be null");
         }
+        
         if (this.serverCommunicator.completeHabit(habit) == SuccessCode.OKAY) {
             this.updateCoins();
         }

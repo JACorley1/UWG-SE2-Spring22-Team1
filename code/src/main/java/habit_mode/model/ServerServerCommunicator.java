@@ -30,6 +30,7 @@ public class ServerServerCommunicator extends ServerCommunicator {
     private static final String REQUEST_TYPE_LOGIN = "login";
     private static final String REQUEST_TYPE_ADD_HABIT = "add_habit";
     private static final String REQUEST_TYPE_REMOVE_HABIT = "remove_habit";
+    private static final String REQUEST_TYPE_MODIFY_HABIT = "modify_habit";
     private static final String REQUEST_TYPE_COMPLETE_HABIT = "complete_habits";
     private static final String REQUEST_TYPE_RETRIEVE_DATA = "retrieve_data";
     private static final String REQUEST_TYPE_GENERATE_PUZZLE = "generate_sudoku_puzzle";
@@ -187,7 +188,6 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return this.successCode;
     }
 
-
     @Override
     public SuccessCode validateLogin(String username, String password) {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_LOGIN);
@@ -218,7 +218,6 @@ public class ServerServerCommunicator extends ServerCommunicator {
         return this.coins;
     }
     
-
     @Override
     public List<Habit> getHabits() {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_RETRIEVE_DATA);
@@ -284,6 +283,19 @@ public class ServerServerCommunicator extends ServerCommunicator {
     public SuccessCode removeHabit(Habit habit) {
         this.message.put(REQUEST_TYPE, REQUEST_TYPE_REMOVE_HABIT);
         this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.message.put(HABIT_ID, habit.getId());
+        
+        this.sendMessage();
+
+        return SuccessCode.checkValues(this.response.get(SUCCESS_CODE));
+    }
+
+    @Override
+    public SuccessCode modifyHabit(Habit habit) {
+        this.message.put(REQUEST_TYPE, REQUEST_TYPE_MODIFY_HABIT);
+        this.message.put(AUTHENTICATION_TOKEN, this.authenticationToken);
+        this.message.put(HABIT_NAME, habit.getText());
+        this.message.put(HABIT_FREQ, habit.getFrequency().ordinal());
         this.message.put(HABIT_ID, habit.getId());
         
         this.sendMessage();

@@ -112,6 +112,32 @@ public class LocalServerCommunicator extends ServerCommunicator {
     }
 
     @Override
+    public SuccessCode modifyHabit(Habit habit) {
+        if (habit == null) {
+            successCode = SuccessCode.INVALID_HABIT_NAME;
+            return successCode;
+        }
+        Habit matchedHabit = null;
+        for (Habit curHabit : habits) {
+            if (curHabit.getId() == habit.getId()) {
+                matchedHabit = curHabit;
+                break;
+            }
+        }
+
+        if (matchedHabit == null) {
+            successCode = SuccessCode.NO_HABIT_FOUND;
+            return successCode;
+        }
+
+        matchedHabit.textProperty().set(habit.getText());
+        matchedHabit.setFrequency(habit.getFrequency());
+
+        successCode = SuccessCode.OKAY;
+        return successCode;
+    }
+
+    @Override
     public SuccessCode completeHabit(Habit habit) {
         if (habit == null) {
             successCode = SuccessCode.INVALID_HABIT_NAME;
