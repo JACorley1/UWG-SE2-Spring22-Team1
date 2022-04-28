@@ -1,5 +1,5 @@
 import unittest
-import server.authentication_manager as authentication_manager
+import backend.authentication_manager as authentication_manager
 
 class TestGenerateAndStoreKeyForUsername(unittest.TestCase):    
     """

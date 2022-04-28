@@ -1,9 +1,12 @@
 package habit_mode.view_model;
 
+import java.util.List;
+
 import habit_mode.model.Frequency;
 import habit_mode.model.Habit;
 import habit_mode.model.ServerCommunicator;
-import habit_mode.model.local_implementation.LocalServerCommunicator;
+import habit_mode.model.ServerServerCommunicator;
+import habit_mode.model.SuccessCode;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -31,6 +34,10 @@ public class HabitViewModel {
     private StringProperty coinsLabelProperty;
     private ObjectProperty<Habit> selectedHabitProperty;
     private ListProperty<Habit> habitListProperty;
+    private ListProperty<Habit> completedHabitListProperty;
+    private BooleanProperty removeDailySelectedProperty;
+    private BooleanProperty removeWeeklySelectedProperty;
+    private StringProperty removeHabitNameProperty;
 
     /**
      * Creates a new habit view model.
@@ -43,16 +50,37 @@ public class HabitViewModel {
      *                 FXCollections.observableArrayList(new HabitManager());
      */
     public HabitViewModel() {
-        this.serverCommunicator = new LocalServerCommunicator();
+        this(new ServerServerCommunicator());
+    }
+
+    /**
+     * A special constructor for use during tests.
+     * 
+     * @precondition none
+     * @postcondition this.serverCommunicator.getClass().equals(LocalServerCommunicator.class) &&
+     *                this.frequencyProperty() == new
+     *                SimpleObjectProperty<Frequency>(), this.habitNameProperty()
+     *                == new SimpleStringProperty(""),
+     *                this.habitListProperty() ==
+     *                FXCollections.observableArrayList(new HabitManager());
+     * 
+     * @param serverCommunicator A server communicator to be used in the view model.
+     */
+    public HabitViewModel(ServerCommunicator serverCommunicator) {
+        this.serverCommunicator = serverCommunicator;
         this.dailySelectedProperty = new SimpleBooleanProperty();
         this.weeklySelectedProperty = new SimpleBooleanProperty();
         this.monthlySelectedProperty = new SimpleBooleanProperty();
+        this.removeDailySelectedProperty = new SimpleBooleanProperty();
+        this.removeWeeklySelectedProperty = new SimpleBooleanProperty();
         this.popupVisibleProperty = new SimpleBooleanProperty();
         this.errorVisibleProperty = new SimpleBooleanProperty();
         this.selectedHabitProperty = new SimpleObjectProperty<Habit>();
         this.habitNameProperty = new SimpleStringProperty("");
+        this.removeHabitNameProperty = new SimpleStringProperty("");
         this.coinsLabelProperty = new SimpleStringProperty("");
         this.habitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
+        this.completedHabitListProperty = new SimpleListProperty<Habit>(FXCollections.observableArrayList());
     }
 
     /**
@@ -73,18 +101,153 @@ public class HabitViewModel {
         }
 
         Habit habit = new Habit(this.habitNameProperty.getValue(), this.determineFrequency());
-        if (this.serverCommunicator.addHabit(habit)) {
-            this.habitListProperty.add(habit);
+        if (this.serverCommunicator.addHabit(habit) == SuccessCode.OKAY) {
+            List<Habit> habits = this.serverCommunicator.getHabits();
+            this.habitListProperty.add(habits.get(habits.size() - 1));
             this.closePopup();
         }
 
     }
 
-    private Frequency determineFrequency() {
+    /**
+     * Gets the list of habits currently stored in the server and updates the list property.
+     *
+     * @postcondition this.habitListProperty().getValue().size() == 
+     *                numberOfHabitsOnServer 
+     */
+    public void getHabitsFromServer() {
+        List<Habit> habits = this.serverCommunicator.getHabits();
+        for (Habit habit : habits) {
+            if (habit.isComplete()) {
+                this.completedHabitListProperty.add(habit);
+            } else {
+                this.habitListProperty.add(habit);
+            }
+        }
+    }
+
+     /**
+     * Gets the server communicator.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return the server communicator
+     */
+    public ServerCommunicator getServerCommunicator() {
+        return this.serverCommunicator;
+    }
+
+    /**
+     * Removes a habit from the system
+     * 
+     * @precondition this.habitNameProperty.getValue() != null;
+     * @postcondition this.habitListProperty().getValue().size() ==
+     *                this.habitListProperty().getValue().size() @pre - 1;
+     */
+    public void removeHabit() {
+        if (this.removeHabitNameProperty.getValue() == null) {
+            this.errorVisibleProperty.set(true);
+            throw new IllegalArgumentException(Habit.NULL_TEXT_ERROR);
+        }
+        Habit removedHabit = null;
+        for (Habit habit : this.habitListProperty) {
+
+            if (habit.getText() == this.removeHabitNameProperty.getValue() && habit.getFrequency() == this.determineRemoveFrequency()) {
+                removedHabit = habit;
+            }
+        }
+        if (this.serverCommunicator.removeHabit(removedHabit) == SuccessCode.OKAY) {
+            this.habitListProperty.remove(removedHabit);
+            this.closePopup();
+        }
+
+    }
+
+     /**
+     * Removes a habit from the system
+     * 
+     * @precondition habitToRemove != null;
+     * @postcondition this.habitListProperty().getValue().size() ==
+     *                this.habitListProperty().getValue().size() @pre - 1;
+     * 
+     * @param habitToRemove the habit to remove.
+     */
+    public void removeHabit(Habit habitToRemove) {
+        if (habitToRemove == null) {
+            throw new IllegalArgumentException("habit can't be null");
+        }
+        if (this.serverCommunicator.removeHabit(habitToRemove) == SuccessCode.OKAY) {
+            this.habitListProperty.remove(habitToRemove);
+            this.closePopup();
+        }
+
+    }
+
+    /**
+     * Basic getter for transferring the authentication token.
+     * 
+     * @return The user's authentication token as a string.
+     */
+    public String getAuthenticationToken() {
+        return ((ServerServerCommunicator) this.serverCommunicator).getToken();
+    }
+    
+    /**
+     * Updates the currently selected habit
+     * 
+     * @precondition index >= 0 & index < this.habitListProperty().getValue().size();
+     * @postcondition this.selectedHabitProperty().getText() == this.removeHabitNameProperty()
+     *                this.selectedHabitProperty().getFrequency() == the selected frequency property;
+     * 
+     * @param index the index of the habit to update.
+     */
+    public void updateHabit(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("the index cannot be less than 0");
+        }
+        if (index >= this.habitListProperty.getValue().size()) {
+            throw new IllegalArgumentException("the index cannot be greater than the size of the habit list");
+        }
+        
+        Habit curHabit = this.habitListProperty.getValue().get(index);
+        curHabit.setFrequency(this.determineRemoveFrequency());
+        curHabit.textProperty().set(this.removeHabitNameProperty.get());
+
+        this.getServerCommunicator().modifyHabit(curHabit);
+    }
+
+     /**
+     * Gets the currently selected frequency.
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return Frequency.
+     */
+    public Frequency determineFrequency() {
         if (this.dailySelectedProperty.getValue()) {
             return Frequency.DAILY;
         }
         if (this.weeklySelectedProperty.getValue()) {
+            return Frequency.WEEKLY;
+        }
+        return Frequency.MONTHLY;
+    }
+
+    /**
+     * Gets the currently selected remove frequency.
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return Frequency.
+     */
+    public Frequency determineRemoveFrequency() {
+        if (this.removeDailySelectedProperty.getValue()) {
+            return Frequency.DAILY;
+        }
+        if (this.removeWeeklySelectedProperty.getValue()) {
             return Frequency.WEEKLY;
         }
         return Frequency.MONTHLY;
@@ -104,7 +267,6 @@ public class HabitViewModel {
      *                this.habitNameProperty().getValue().equals("")
      */
     public void closePopup() {
-        this.dailySelectedProperty.set(true);
         this.errorVisibleProperty.set(false);
         this.popupVisibleProperty.set(false);
         this.habitNameProperty.set("");
@@ -142,6 +304,30 @@ public class HabitViewModel {
      */
     public ObjectProperty<Habit> selectedHabitProperty() {
         return this.selectedHabitProperty;
+    }
+
+    /**
+     * The remove daily selected property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove daily selected property.
+     */
+    public BooleanProperty removeDailySelectedProperty() {
+        return this.removeDailySelectedProperty;
+    }
+
+     /**
+     * The remove weekly selected property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove weekly selected property.
+     */
+    public BooleanProperty removeWeeklySelectedProperty() {
+        return this.removeWeeklySelectedProperty;
     }
 
     /**
@@ -229,6 +415,18 @@ public class HabitViewModel {
     }
 
     /**
+     * The remove habit name property.
+     * 
+     * @precondition None.
+     * @postcondition None.
+     * 
+     * @return The remove habit name property.
+     */
+    public StringProperty removeHabitNameProperty() {
+        return this.removeHabitNameProperty;
+    }
+
+    /**
      * The habit name property.
      * 
      * @precondition None.
@@ -253,10 +451,33 @@ public class HabitViewModel {
         if (habit == null) {
             throw new IllegalArgumentException("habit cannot be null");
         }
-        if (this.serverCommunicator.completeHabit(habit)) {
-            this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
+        
+        if (this.serverCommunicator.completeHabit(habit) == SuccessCode.OKAY) {
+            this.updateCoins();
         }
     }
 
+    /**
+     * Simple updater for the value of the coin label.
+     * 
+     * @precondition none
+     * @postconition none
+     * 
+     */
+    public void updateCoins() {
+        this.coinsLabelProperty.setValue("Coins: " + this.serverCommunicator.getCoins());
+    }
+
+    /**
+     * Simple getter for the completed habits list
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return The completed habit list property.
+     */
+    public ListProperty<Habit> completedHabitListProperty() {
+        return this.completedHabitListProperty;
+    }
 
 }

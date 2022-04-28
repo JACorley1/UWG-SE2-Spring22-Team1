@@ -1,5 +1,6 @@
 package habit_mode.model.sudoku;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 /**
@@ -26,7 +27,7 @@ public class SudokuPuzzle {
      * 
      * @precondition None
      * @postcondition this.getNumbers() == new int[PUZZLE_SIZE][PUZZLE_SIZE] &&
-     *                this.gtNumberLocks() ==
+     *                this.getNumberLocks() ==
      *                new boolean[PUZZLE_SIZE][PUZZLE_SIZE] &&
      *                this.getDefaultAnswer() == new int[PUZZLE_SIZE][PUZZLE_SIZE]
      *                &&
@@ -39,6 +40,28 @@ public class SudokuPuzzle {
         this.defaultAnswer = new int[PUZZLE_SIZE][PUZZLE_SIZE];
         this.selectedNumber = -1;
         this.moveHistory = new Stack<SudokuMove>();
+
+    }
+
+    /**
+     * Overloaded Constructor that builds a puzzle using passed in numbers and locks.
+     * 
+     * @precondition numbers != null &&
+     *               locks != null &&
+     *               
+     * @postcondition this.getNumbers() == numbers &&
+     *                this.getNumberLocks() == locks &&
+     *                this.getDefaultAnswer() == new int[PUZZLE_SIZE][PUZZLE_SIZE] &&
+     *                this.getSelectedNumber() == -1 &&
+     *                this.moveHistory == new Stack<SudokuMove>()
+     * 
+     * @param numbers The numbers to set the board to.
+     * @param locks The numbers locked on the board.
+     */
+    public SudokuPuzzle(int[][] numbers, boolean[][] locks) {
+        this();
+        this.numbers = numbers;
+        this.numberLocks = locks;
     }
 
     /**
@@ -153,6 +176,19 @@ public class SudokuPuzzle {
     }
 
     /**
+     * Sets the numbers matrix
+     * 
+     * 
+     * @postcondition this.numbers == puzzle
+     * 
+     * @param puzzle  The puzzle being set to numbers
+     *
+     */
+    public void setNumbers(int[][] puzzle) {
+        this.numbers = puzzle;
+    }
+
+    /**
      * Sets the lock at the specified point.
      * 
      * @precondition column >= MIN_INDEX && column < MAX_INDEX && row >= MIN_INDEX
@@ -191,7 +227,7 @@ public class SudokuPuzzle {
     }
 
     /**
-     * Checks to see if game is comple.
+     * Checks to see if game is complete.
      * 
      * @precondition None
      * @postcondition None
@@ -199,8 +235,76 @@ public class SudokuPuzzle {
      * @return [true] iff the game has been completed, otherwise [false]
      */
     public boolean isComplete() {
-        return this.numbers.equals(this.defaultAnswer);
+        if (!this.isinRange(this.numbers)) {
+            return false;
+        } 
+
+        boolean[] unique = new boolean[PUZZLE_SIZE + 1];
+ 
+        if (!this.checkUniqueValues(unique)) {
+            return false;
+        }
+        for (int column = 0; column < PUZZLE_SIZE - 2; column += 3) {
+            for (int row = 0; row < PUZZLE_SIZE - 2; row += 3) {
+                Arrays.fill(unique, false);
+                for (int squareColumn = 0; squareColumn < 3; squareColumn++) {
+                    for (int squareRow = 0; squareRow < 3; squareRow++) {
+                        
+                        int x = column + squareColumn;
+                        int y = row + squareRow;
+                        int value = this.numbers[x][y];
+                        if (unique[value]) {
+                            return false;
+                        }
+                        unique[value] = true;
+                    }
+                }
+            }
+        }
+    
+        return true;
     }
+
+    private boolean checkUniqueValues(boolean[] unique) {
+        for (int x = 0; x < PUZZLE_SIZE; x++) {
+            Arrays.fill(unique, false);
+
+            for (int y = 0; y < PUZZLE_SIZE; y++) {
+                int value = this.numbers[x][y];
+                if (unique[value]) {
+                    return false;
+                }
+                unique[value] = true;
+            }
+        }
+        for (int y = 0; y < PUZZLE_SIZE; y++) {
+            Arrays.fill(unique, false);
+    
+            for (int x = 0; x < PUZZLE_SIZE; x++) {
+
+                int value = this.numbers[x][y];
+
+                if (unique[value]) {
+                    return false;
+                }
+                unique[value] = true;
+            }
+        }
+        return true;
+    }
+
+    private boolean isinRange(int[][] puzzle) {
+        for (int x = 0; x < PUZZLE_SIZE; x++) {
+            for (int y = 0; y < PUZZLE_SIZE; y++) {
+                
+                if (puzzle[x][y] <= 0 || puzzle[x][y] > 9) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     /**
      * Checks to see if number is locked.

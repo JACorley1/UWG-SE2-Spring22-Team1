@@ -1,6 +1,6 @@
 import unittest
-from server.service_manager import ServiceManager
-from server.user_data import UserData
+from backend.service_manager import ServiceManager
+from backend.user_data import UserData
 
 class TestGetDataForUser(unittest.TestCase):    
     """
@@ -35,5 +35,3 @@ class TestGetDataForUser(unittest.TestCase):
         result = service_manager.get_data_for_user("username")
 
         self.assertTrue(result is None, "Checks if None was returned")
-    
-    

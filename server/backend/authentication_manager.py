@@ -1,4 +1,4 @@
-from typing import MutableMapping
+from typing import Any, MutableMapping
 import string
 import random
 
@@ -18,7 +18,7 @@ class AuthenticationManager:
         self._tokens_to_usernames = {}
         self._usernames_to_tokens = {}
     
-    def get_username_for_token(self, token: str) -> str:
+    def get_username_for_token(self, token: str) -> Any:
         """
         Gets the username associated with a token. If the token is invalid, or if no
         username is associated with the token, None will be returned.
@@ -33,7 +33,7 @@ class AuthenticationManager:
             return self._tokens_to_usernames[token]
         return None
 
-    def get_token_for_username(self, username: str) -> str:
+    def get_token_for_username(self, username: str) -> Any:
         """
         Gets the token associated with a username. If the username is invalid, or if no
         token is associated with the username, None will be returned.

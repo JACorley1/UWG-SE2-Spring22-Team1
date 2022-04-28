@@ -1,5 +1,5 @@
 import unittest
-from server.authentication_manager import AuthenticationManager
+from backend.authentication_manager import AuthenticationManager
 
 class TestGetTOkenForUsername(unittest.TestCase):    
     """

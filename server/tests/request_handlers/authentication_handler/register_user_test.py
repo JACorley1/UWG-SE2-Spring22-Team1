@@ -1,12 +1,11 @@
 import unittest
-from server.authentication_manager import AuthenticationManager
-from server.server import _RequestHandler
-from server.service_manager import ServiceManager
-from server.user_data import UserData
+from backend.service_manager import ServiceManager
+from backend.user_data import UserData
+import backend.request_handler.authentication_handler as authentication_handler
 
-class TestRegisterUser(unittest.TestCase):
+class TestConstructor(unittest.TestCase):    
     """
-    Tests for the _register_user method.
+    Tests for the register_user method.
 
     @author Team 1
     @version Spring 2022
@@ -14,14 +13,15 @@ class TestRegisterUser(unittest.TestCase):
 
     def test_valid_request(self):
         """
-        Checks if the RequestHandler registers a valid user.
+        Checks if the authentication_handler registers a valid user.
         """
+        service_manager = ServiceManager()
         username = "username"
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
-        user_data: UserData = request_handler._service_manager._user_information[username]
+
+        result = authentication_handler.register_user(service_manager, username, password, email)
+        user_data: UserData = service_manager._user_information[username]
 
         self.assertEqual(result["success_code"], 0, "Check if success_code is correct")
         self.assertEqual(user_data.username, username, "Check if the username is correct")
@@ -30,14 +30,15 @@ class TestRegisterUser(unittest.TestCase):
 
     def test_duplicate_username(self):
         """
-        Checks if the correct success code and error message are returned when using a duplicate username.
+        Checks if the authentication_handler registers a valid user.
         """
+        service_manager = ServiceManager()
         username = "username"
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        request_handler._register_user(username, password, email)
-        result = request_handler._register_user(username, password, email)
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 20, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) already exists")
@@ -49,8 +50,10 @@ class TestRegisterUser(unittest.TestCase):
         username = ""
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 21, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) is invalid", "Check if error_message is correct")
@@ -62,8 +65,10 @@ class TestRegisterUser(unittest.TestCase):
         username = None
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 21, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) is invalid", "Check if error_message is correct")
@@ -75,8 +80,10 @@ class TestRegisterUser(unittest.TestCase):
         username = 0
         password = "password"
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 21, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Username ({username}) is invalid", "Check if error_message is correct")
@@ -88,8 +95,10 @@ class TestRegisterUser(unittest.TestCase):
         username = "username"
         password = ""
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 22, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Password is invalid")
@@ -101,8 +110,10 @@ class TestRegisterUser(unittest.TestCase):
         username = "username"
         password = None
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 22, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Password is invalid")
@@ -114,8 +125,10 @@ class TestRegisterUser(unittest.TestCase):
         username = "username"
         password = 0
         email = "email@email.com"
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 22, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Password is invalid")
@@ -127,8 +140,10 @@ class TestRegisterUser(unittest.TestCase):
         username = "username"
         password = "password"
         email = ""
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 23, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Email ({email}) is invalid")
@@ -140,8 +155,10 @@ class TestRegisterUser(unittest.TestCase):
         username = "username"
         password = "password"
         email = None
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 23, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Email ({email}) is invalid")
@@ -153,8 +170,42 @@ class TestRegisterUser(unittest.TestCase):
         username = "username"
         password = "password"
         email = 0
-        request_handler = _RequestHandler(ServiceManager(), AuthenticationManager())
-        result = request_handler._register_user(username, password, email)
+        service_manager = ServiceManager()
+
+        authentication_handler.register_user(service_manager, username, password, email)
+        result = authentication_handler.register_user(service_manager, username, password, email)
 
         self.assertEqual(result["success_code"], 23, "Check if success_code is correct")
         self.assertEqual(result["error_message"], f"Email ({email}) is invalid")
+
+    def test_service_manager_is_none(self):
+        """
+        Checks if the the success code and error message are correct when the service manager is None.
+        """
+        username = "username"
+        password = "password"
+        email = "email@email.com"
+        service_manager = None
+
+        self.assertRaises(
+            TypeError, 
+            authentication_handler.register_user, 
+            (service_manager, username, password, email),
+            "Check if the function raises a TypeError when the service manager is None"
+        )
+
+    def test_service_manager_is_not_a_service_manager(self):
+        """
+        Checks if the the success code and error message are correct when the service manager is not a service manager.
+        """
+        username = "username"
+        password = "password"
+        email = "email@email.com"
+        service_manager = 0
+
+        self.assertRaises(
+            TypeError,
+            authentication_handler.register_user,
+            (service_manager, username, password, email),
+            "Check if the function raises a TypeError when the service manager is not a service manager"
+        )

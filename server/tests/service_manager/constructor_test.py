@@ -1,5 +1,5 @@
 import unittest
-from server.service_manager import ServiceManager
+from backend.service_manager import ServiceManager
 
 class TestConstructor(unittest.TestCase):    
     """

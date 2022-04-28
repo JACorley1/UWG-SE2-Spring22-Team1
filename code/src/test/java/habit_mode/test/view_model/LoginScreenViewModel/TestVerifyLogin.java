@@ -1,10 +1,10 @@
 package habit_mode.test.view_model.LoginScreenViewModel;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import habit_mode.model.SuccessCode;
 import habit_mode.view_model.LoginScreenViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
 public class TestVerifyLogin {
     @Test
     void testValidLogin() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
 
@@ -22,12 +22,14 @@ public class TestVerifyLogin {
         usernameProperty.setValue("username");
         passwordProperty.setValue("password");
 
-        assertTrue(viewModel.validateLogin(), "Check if the login credentials are correctly verified");
+        viewModel.getServerCommunicator().registerCredentials("username", "password", "email");
+
+        assertEquals(SuccessCode.OKAY, viewModel.validateLogin(), "Check if the login credentials are correctly verified");
     }
 
     @Test
     void testBlankUsername() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
 
@@ -37,16 +39,13 @@ public class TestVerifyLogin {
         usernameProperty.setValue("");
         passwordProperty.setValue("password");
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> {viewModel.validateLogin();},
-            "Check if an exception is thrown when the username is blank."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, viewModel.validateLogin());
+
     }
 
     @Test
     void testBlankPassword() {
-        LoginScreenViewModel viewModel = new LoginScreenViewModel();
+        LoginScreenViewModel viewModel = new LoginScreenViewModel(true);
         StringProperty usernameProperty = new SimpleStringProperty();
         StringProperty passwordProperty = new SimpleStringProperty();
 
@@ -56,10 +55,6 @@ public class TestVerifyLogin {
         usernameProperty.setValue("username");
         passwordProperty.setValue("");
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> {viewModel.validateLogin();},
-            "Check if an exception is thrown when the password is blank."
-        );
+        assertEquals(SuccessCode.INVALID_LOGIN_CREDENTIALS, viewModel.validateLogin());
     }
 }
