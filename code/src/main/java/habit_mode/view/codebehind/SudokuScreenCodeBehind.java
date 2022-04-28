@@ -27,6 +27,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import habit_mode.model.ServerServerCommunicator;
+import habit_mode.model.sudoku.SudokuPuzzle;
 import javafx.scene.input.MouseEvent;
 
 
@@ -109,6 +110,8 @@ public class SudokuScreenCodeBehind {
 
     private SudokuScreenViewModel viewModel;
 
+    private SudokuPuzzle puzzle;
+
     private static Pane mostRecentlySelectedPane;
 
     @FXML
@@ -178,15 +181,16 @@ public class SudokuScreenCodeBehind {
         assert this.sevenButton != null : "fx:id=\"sevenButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.eightButton != null : "fx:id=\"eightButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
         assert this.nineButton != null : "fx:id=\"nineButton\" was not injected: check your FXML file 'SudokuScreen.fxml'.";
-        this.addPanes();
-        this.setPaneListener();
+        this.setUpPanes();
 
     }
 
-    private void setPaneListener() {
+    private void setUpPanes() {
         this.mainPane.sceneProperty().addListener((obs, wasNull, exists) -> {
             if (this.mainPane.sceneProperty().isNotNull().get()) {
                 ((ServerServerCommunicator) this.viewModel.getServerCommunicator()).setToken((String) this.mainPane.getScene().getRoot().getUserData());
+                this.puzzle = this.viewModel.getServerCommunicator().getSudokuPuzzle();
+                this.addPanes();
             }
         });
     }
@@ -198,14 +202,10 @@ public class SudokuScreenCodeBehind {
                 Label label = new Label();
                 label.alignmentProperty().set(Pos.CENTER);
                 label.setFont(Font.font(15));
-                label.textAlignmentProperty().set(TextAlignment.CENTER);
-                label.layoutXProperty().bind(pane.widthProperty().subtract(label.widthProperty()).divide(2));
-                label.layoutYProperty().bind(pane.heightProperty().subtract(label.heightProperty()).divide(2));
-                pane.getChildren().add(label);
-                pane.setBackground(new Background(new BackgroundFill(Color.web("#D3D3D3"), CornerRadii.EMPTY, Insets.EMPTY)));
-                pane.setStyle("-fx-border-color: black");
-                pane.setMinHeight(35);
-                pane.setMinWidth(35);
+                if (this.puzzle.getNumber(row, column) != 0) {
+                    label.setText(String.valueOf(this.puzzle.getNumber(row, column)));
+                }
+                this.setLabelsAndPanes(pane, label);
                 EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
                     @Override 
                     public void handle(MouseEvent event) { 
@@ -223,6 +223,17 @@ public class SudokuScreenCodeBehind {
                 this.sudokuPane.add(pane, row, column);
             }
         }
+    }
+
+    private void setLabelsAndPanes(Pane pane, Label label) {
+        label.textAlignmentProperty().set(TextAlignment.CENTER);
+        label.layoutXProperty().bind(pane.widthProperty().subtract(label.widthProperty()).divide(2));
+        label.layoutYProperty().bind(pane.heightProperty().subtract(label.heightProperty()).divide(2));
+        pane.getChildren().add(label);
+        pane.setBackground(new Background(new BackgroundFill(Color.web("#D3D3D3"), CornerRadii.EMPTY, Insets.EMPTY)));
+        pane.setStyle("-fx-border-color: black");
+        pane.setMinHeight(35);
+        pane.setMinWidth(35);
     }
 
   

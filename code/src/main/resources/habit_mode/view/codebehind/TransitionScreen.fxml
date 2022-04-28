@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane id="screenLabel" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="709.0" prefWidth="496.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="habit_mode.view.codebehind.TransitionScreenCodeBehind">
+   <children>
+      <Line endX="202.0" layoutX="294.0" layoutY="602.0" startX="-294.0" />
+      <Button id="habitListButton" fx:id="habitListButton" layoutX="192.0" layoutY="619.0" mnemonicParsing="false" onAction="#habitButtonClicked" prefHeight="65.0" prefWidth="98.0" text="Habit List" />
+      <Button id="settingsButton" fx:id="settingsButton" layoutX="344.0" layoutY="620.0" mnemonicParsing="false" onAction="#settingsButtonClicked" prefHeight="65.0" prefWidth="98.0" text="Settings" />
+      <Button id="sudokuButton" fx:id="sudokuButton" layoutX="36.0" layoutY="620.0" mnemonicParsing="false" onAction="#sudokuButtonSelected" prefHeight="65.0" prefWidth="98.0" text="Sudoku" />
+      <Button fx:id="continueSudoku" layoutX="181.0" layoutY="184.0" mnemonicParsing="false" onAction="#continueClicked" prefHeight="71.0" prefWidth="134.0" text="Continue" />
+      <Button fx:id="startNewGame" layoutX="181.0" layoutY="355.0" mnemonicParsing="false" onAction="#startNewGameClicked" prefHeight="71.0" prefWidth="134.0" text="Start New Game" />
+   </children>
+</AnchorPane>
