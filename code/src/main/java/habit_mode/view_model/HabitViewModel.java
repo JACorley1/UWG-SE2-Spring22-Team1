@@ -102,7 +102,8 @@ public class HabitViewModel {
 
         Habit habit = new Habit(this.habitNameProperty.getValue(), this.determineFrequency());
         if (this.serverCommunicator.addHabit(habit) == SuccessCode.OKAY) {
-            this.habitListProperty.add(habit);
+            List<Habit> habits = this.serverCommunicator.getHabits();
+            this.habitListProperty.add(habits.get(habits.size() - 1));
             this.closePopup();
         }
 
@@ -124,7 +125,6 @@ public class HabitViewModel {
             }
         }
     }
-
 
      /**
      * Gets the server communicator.
