@@ -253,6 +253,11 @@ public class LocalServerCommunicator extends ServerCommunicator {
 
     @Override 
     public int[] buyHint() {
-        return null;
+        int[] hint = new int[4];
+        hint[0] = 7;
+        hint[1] = 0;
+        hint[2] = 0;
+        hint[3] = coins - 20;
+        return hint;
     }
 }
